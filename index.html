@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de PET - Condomínio Village dos Buritis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --primary-hover: #1b5e20;
+      --accent-color: #81c784;
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --border-color: #e0e0e0;
+      --error-color: #d32f2f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    header h1 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    label .optional {
+      font-weight: normal;
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    input, select, textarea {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-color);
+    }
+
+    .pet-card {
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .pet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .btn-remove {
+      background: #ffebee;
+      color: var(--error-color);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .btn-remove:hover {
+      background: #ffcdd2;
+    }
+
+    .btn-add {
+      background: #e8f5e9;
+      color: var(--primary-color);
+      border: 1px dashed var(--primary-color);
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 25px;
+      transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+      background: #c8e6c9;
+    }
+
+    .btn-submit {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-submit:disabled {
+      background: #a5d6a7;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 15px;
+      display: none;
+      text-align: center;
+    }
+
+    .alert-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .alert-error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Condomínio Village dos Buritis</h1>
+      <p>Formulário de Cadastro de Animais de Estimação (PETs)</p>
+    </header>
+
+    <form id="petForm">
+      <!-- Seção Tutor -->
+      <div class="section-title">👤 Informações do Tutor / Responsável</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nomeTutor">Nome do Tutor (Responsável) *</label>
+          <input type="text" id="nomeTutor" name="nomeTutor" required placeholder="Ex: João da Silva">
+        </div>
+
+        <div class="form-group">
+          <label for="numeroResidencia">Nº da Casa / Apartamento *</label>
+          <input type="text" id="numeroResidencia" name="numeroResidencia" required placeholder="Ex: Casa 45 / Bloco B Apt 201">
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone para Emergência *</label>
+          <input type="tel" id="telefone" name="telefone" required placeholder="Ex: (62) 99999-9999">
+        </div>
+
+        <div class="form-group">
+          <label for="qtdAnimais">Quantidade Total de Animais *</label>
+          <input type="number" id="qtdAnimais" name="qtdAnimais" min="1" value="1" required>
+        </div>
+      </div>
+
+      <!-- Seção PETs -->
+      <div class="section-title">🐾 Cadastro dos PETs</div>
+      <div id="petsContainer"></div>
+
+      <button type="button" class="btn-add" id="addPetBtn">+ Adicionar Outro PET</button>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Enviar Cadastro</button>
+      
+      <div id="alertMessage" class="alert"></div>
+    </form>
+  </div>
+
+  <script>
+    // URL do seu Google Apps Script (Substitua após publicar o script no Google Sheets)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3jqhFX_icQ0XPaH_YADa2rMO0yMIKL8Dg-6l3clPkBsEK59MfEQX7Y6PET-na-3Ly/exec";
+
+    let petCount = 0;
+
+    function createPetCard(index) {
+      const petCard = document.createElement('div');
+      petCard.className = 'pet-card';
+      petCard.dataset.index = index;
+
+      petCard.innerHTML = `
+        <div class="pet-header">
+          <strong>PET #${index + 1}</strong>
+          ${index > 0 ? `<button type="button" class="btn-remove" onclick="removePetCard(this)">Remover</button>` : ''}
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nome do Animal *</label>
+            <input type="text" name="nomeAnimal" required placeholder="Ex: Rex">
+          </div>
+
+          <div class="form-group">
+            <label>Sexo *</label>
+            <select name="sexo" required>
+              <option value="">Selecione...</option>
+              <option value="Macho">Macho</option>
+              <option value="Fêmea">Fêmea</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Espécie / Tipo de Pet *</label>
+            <select name="especie" onchange="toggleOutros(this)" required>
+              <option value="">Selecione...</option>
+              <option value="Cachorro">Cachorro</option>
+              <option value="Gato">Gato</option>
+              <option value="Aves">Aves</option>
+              <option value="Coelho">Coelho</option>
+              <option value="Hamster">Hamster</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+
+          <div class="form-group outros-especie-group" style="display: none;">
+            <label>Especifique Outro Tipo *</label>
+            <input type="text" name="outrosEspecie" placeholder="Ex: Tartaruga">
+          </div>
+
+          <div class="form-group">
+            <label>Raça <span class="optional">(Opcional)</span></label>
+            <input type="text" name="raca" placeholder="Ex: Vira-lata, Poodle">
+          </div>
+
+          <div class="form-group">
+            <label>Porte *</label>
+            <select name="porte" required>
+              <option value="">Selecione...</option>
+              <option value="Pequeno">Pequeno</option>
+              <option value="Médio">Médio</option>
+              <option value="Grande">Grande</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Idade do Pet <span class="optional">(Opcional)</span></label>
+            <input type="text" name="idade" placeholder="Ex: 3 anos / 6 meses">
+          </div>
+
+          <div class="form-group">
+            <label>Vacinado recentemente? *</label>
+            <select name="vacinadoRecente" required>
+              <option value="">Selecione...</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Situação da Vacinação <span class="optional">(Opcional)</span></label>
+            <input type="text" name="situacaoVacina" placeholder="Ex: Vacinas em dia, falta V10">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Enviar Fotos do Pet <span class="optional">(Pode selecionar várias fotos)</span></label>
+            <input type="file" name="fotos" accept="image/*" multiple>
+          </div>
+        </div>
+      `;
+
+      return petCard;
+    }
+
+    function addPet() {
+      const container = document.getElementById('petsContainer');
+      container.appendChild(createPetCard(petCount));
+      petCount++;
+      document.getElementById('qtdAnimais').value = petCount;
+    }
+
+    function removePetCard(button) {
+      const card = button.closest('.pet-card');
+      card.remove();
+      petCount--;
+      document.getElementById('qtdAnimais').value = petCount;
+      updatePetHeaders();
+    }
+
+    function updatePetHeaders() {
+      const cards = document.querySelectorAll('.pet-card');
+      cards.forEach((card, idx) => {
+        card.dataset.index = idx;
+        card.querySelector('.pet-header strong').innerText = `PET #${idx + 1}`;
+      });
+    }
+
+    function toggleOutros(selectElement) {
+      const card = selectElement.closest('.pet-card');
+      const outrosGroup = card.querySelector('.outros-especie-group');
+      const outrosInput = outrosGroup.querySelector('input');
+      
+      if (selectElement.value === 'Outros') {
+        outrosGroup.style.display = 'flex';
+        outrosInput.required = true;
+      } else {
+        outrosGroup.style.display = 'none';
+        outrosInput.required = false;
+        outrosInput.value = '';
+      }
+    }
+
+    // Adiciona o primeiro PET por padrão
+    addPet();
+
+    document.getElementById('addPetBtn').addEventListener('click', addPet);
+
+    // Converte arquivo para Base64 para envio via JSON
+    const fileToBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve({
+        name: file.name,
+        type: file.type,
+        base64: reader.result.split(',')[1]
+      });
+      reader.onerror = error => reject(error);
+    });
+
+    // Envio do formulário
+    document.getElementById('petForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (SCRIPT_URL === "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI") {
+        alert("Por favor, configure a URL do seu Google Apps Script no código HTML antes de enviar.");
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const alertMsg = document.getElementById('alertMessage');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Enviando cadastro e fotos...";
+      alertMsg.style.display = 'none';
+
+      try {
+        const nomeTutor = document.getElementById('nomeTutor').value;
+        const numeroResidencia = document.getElementById('numeroResidencia').value;
+        const telefone = document.getElementById('telefone').value;
+        const qtdAnimais = document.getElementById('qtdAnimais').value;
+
+        const petCards = document.querySelectorAll('.pet-card');
+        const petsData = [];
+
+        for (const card of petCards) {
+          const fotosInput = card.querySelector('input[name="fotos"]');
+          const filesArray = Array.from(fotosInput.files);
+          const fotosBase64 = await Promise.all(filesArray.map(fileToBase64));
+
+          const especieVal = card.querySelector('select[name="especie"]').value;
+          const outrosEspecieVal = card.querySelector('input[name="outrosEspecie"]').value;
+
+          petsData.push({
+            nomeAnimal: card.querySelector('input[name="nomeAnimal"]').value,
+            sexo: card.querySelector('select[name="sexo"]').value,
+            especie: especieVal === 'Outros' ? outrosEspecieVal : especieVal,
+            raca: card.querySelector('input[name="raca"]').value || 'Não informada',
+            porte: card.querySelector('select[name="porte"]').value,
+            idade: card.querySelector('input[name="idade"]').value || 'Não informada',
+            vacinadoRecente: card.querySelector('select[name="vacinadoRecente"]').value,
+            situacaoVacina: card.querySelector('input[name="situacaoVacina"]').value || 'Não informada',
+            fotos: fotosBase64
+          });
+        }
+
+        const payload = {
+          nomeTutor,
+          numeroResidencia,
+          telefone,
+          qtdAnimais,
+          pets: petsData
+        };
+
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        alertMsg.className = 'alert alert-success';
+        alertMsg.innerText = 'Cadastro realizado com sucesso!';
+        alertMsg.style.display = 'block';
+
+        // Resetar formulário
+        document.getElementById('petForm').reset();
+        document.getElementById('petsContainer').innerHTML = '';
+        petCount = 0;
+        addPet();
+
+      } catch (err) {
+        console.error(err);
+        alertMsg.className = 'alert alert-error';
+        alertMsg.innerText = 'Ocorreu um erro ao enviar o formulário. Tente novamente.';
+        alertMsg.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Enviar Cadastro";
+      }
+    });
+  </script>
+</body>
+</html>
