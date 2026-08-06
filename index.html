@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Onboarding LifeApps</title>
   
-  <!-- EmailJS SDK para envio de emails -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  
   <style>
     :root {
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
+      --danger: #ef4444;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -20,216 +18,77 @@
       --success: #10b981;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+    .container { max-width: 850px; width: 100%; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    header h1 { font-size: 1.2rem; color: var(--primary); }
+    
+    .btn-secret { background: transparent; border: 1px dashed var(--text-muted); color: var(--text-muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+    .btn-secret:hover { border-color: var(--primary); color: var(--primary); }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
+    .card { background: var(--card-bg); padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
+    
+    .btn { background-color: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; display: inline-block; }
+    .btn:hover { background-color: var(--primary-hover); }
+    .btn-danger { background-color: var(--danger); }
+    .btn-danger:hover { background-color: #dc2626; }
+    
+    /* Progresso */
+    .progress-container { margin: 20px 0; }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
+    .progress-bar-bg { height: 10px; background-color: var(--border); border-radius: 6px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.3s ease; }
 
-    .container {
-      max-width: 800px;
-      width: 100%;
-      margin: 0 auto;
-    }
+    /* Etapas */
+    .step-item { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
+    .step-content { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .step-content.active { display: block; }
 
-    header {
-      text-align: center;
-      margin-bottom: 24px;
-      padding: 20px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+    th { background-color: #f1f5f9; }
 
-    header h1 {
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--primary);
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.2s;
-    }
-
-    button:hover {
-      background-color: var(--primary-hover);
-    }
-
-    /* Barra de Progresso */
-    .progress-container {
-      margin: 20px 0;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .progress-bar-bg {
-      height: 12px;
-      background-color: var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background-color: var(--success);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    /* Trilha de Aprendizagem */
-    .step-item {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 12px;
-      background-color: #fff;
-    }
-
-    .step-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-
-    .step-title {
-      font-weight: 600;
-      font-size: 1.05rem;
-    }
-
-    .step-content {
-      display: none;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    .step-content.active {
-      display: block;
-    }
-
-    .media-placeholder {
-      background-color: #f1f5f9;
-      border: 1px dashed var(--border);
-      padding: 16px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .checkbox-container input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .completion-badge {
-      background-color: #d1fae5;
-      color: #065f46;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
+    .hidden { display: none !important; }
+    .badge { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <h1>Onboarding LifeApps</h1>
-    <p>Bem-vindo à nossa trilha de aprendizagem e integração!</p>
+    <h1>LifeApps Onboarding</h1>
+    <button class="btn-secret" onclick="openAdminModal()">🔒 Painel do Gestor</button>
   </header>
 
-  <!-- Formulário Inicial / Login de Progresso -->
-  <div id="auth-card" class="card">
-    <h2>Seus Dados</h2>
-    <p style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
-      Digite seu e-mail para iniciar ou continuar de onde parou.
+  <!-- VISTA 1: ENTRADA DO COLABORADOR -->
+  <div id="view-welcome" class="card">
+    <h2>Acesso do Colaborador</h2>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+      Digite seu e-mail para começar ou continuar de onde parou.
     </p>
-    <form id="user-form">
+    <form id="form-user">
       <div class="form-group">
-        <label for="email">E-mail corporativo *</label>
-        <input type="email" id="email" required placeholder="seu.nome@lifeapps.com.br">
+        <label>E-mail corporativo *</label>
+        <input type="email" id="u-email" required placeholder="seu.nome@lifeapps.com.br">
       </div>
       <div class="form-group">
-        <label for="name">Nome Completo *</label>
-        <input type="text" id="name" required placeholder="Nome e Sobrenome">
+        <label>Nome Completo *</label>
+        <input type="text" id="u-name" required placeholder="Nome e Sobrenome">
       </div>
       <div class="form-group">
-        <label for="phone">Telefone/WhatsApp *</label>
-        <input type="tel" id="phone" required placeholder="(00) 00000-0000">
+        <label>Telefone/WhatsApp *</label>
+        <input type="tel" id="u-phone" required placeholder="(00) 00000-0000">
       </div>
       <div class="form-group">
-        <label for="role">Função/Cargo *</label>
-        <select id="role" required>
-          <option value="">Selecione sua função...</option>
+        <label>Função/Cargo *</label>
+        <select id="u-role" required>
+          <option value="">Selecione...</option>
           <option value="SDR">SDR</option>
           <option value="BDR">BDR</option>
           <option value="Inside Sales">Inside Sales</option>
@@ -238,18 +97,20 @@
           <option value="Gerente">Gerente</option>
         </select>
       </div>
-      <button type="submit">Acessar Trilha</button>
+      <button type="submit" class="btn" style="width: 100%;">Acessar Trilha</button>
     </form>
   </div>
 
-  <!-- Trilha de Aprendizagem (Inicialmente oculta) -->
-  <div id="trail-card" class="card hidden">
-    <div id="user-welcome" style="margin-bottom: 16px;"></div>
+  <!-- VISTA 2: TRILHA DE APRENDIZAGEM -->
+  <div id="view-trail" class="card hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div id="user-info"></div>
+      <button class="btn-secret" onclick="exitTrail()">Sair / Trocar Usuário</button>
+    </div>
 
-    <!-- Progresso Geral -->
     <div class="progress-container">
       <div class="progress-header">
-        <span>Progresso Geral</span>
+        <span>Progresso da Trilha</span>
         <span id="progress-text">0%</span>
       </div>
       <div class="progress-bar-bg">
@@ -257,223 +118,291 @@
       </div>
     </div>
 
-    <!-- Etapas da Trilha -->
-    <div id="steps-container"></div>
+    <div id="steps-list"></div>
   </div>
+
+  <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
+  <div id="view-admin" class="card hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <h2>Painel Exclusivo de Gestão</h2>
+      <button class="btn" style="background:#64748b;" onclick="closeAdmin()">Sair da Gestão</button>
+    </div>
+
+    <!-- 1. ADICIONAR/CRIAR CONTEÚDO -->
+    <details style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
+      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">➕ Adicionar Nova Etapa / Conteúdo</summary>
+      <form id="form-add-step" style="margin-top: 15px;">
+        <label>Título do Módulo</label>
+        <input type="text" id="new-title" placeholder="Ex: 7. Cultura e Benefícios" required>
+        
+        <label>Descrição/Instruções</label>
+        <textarea id="new-desc" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
+        
+        <label>Link do Vídeo (YouTube Embed)</label>
+        <input type="url" id="new-video" placeholder="https://www.youtube.com/embed/...">
+        
+        <label>Link do Documento (PDF / Notion / Drive)</label>
+        <input type="url" id="new-doc" placeholder="https://...">
+
+        <button type="submit" class="btn">Cadastrar Módulo</button>
+      </form>
+    </details>
+
+    <!-- 2. GERENCIAR COLABORADORES E EXCLUIR -->
+    <h3>Colaboradores Cadastrados</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted);">Aqui você visualiza quem entrou e pode apagar os dados se precisar.</p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Cargo</th>
+          <th>Progresso</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="admin-users-table">
+        <!-- Preenchido dinamicamente -->
+      </tbody>
+    </table>
+  </div>
+
 </div>
 
 <script>
-  // Configuração das 6 etapas da trilha
-  const STEPS = [
-    {
-      id: 1,
-      title: "1. Quem somos. A história da LifeApps",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Exemplo de vídeo
-      docUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Exemplo de PDF
-      desc: "Conheça a fundação, nossos valores e a visão de futuro da LifeApps."
-    },
-    {
-      id: 2,
-      title: "2. Segmento Atacado Distribuidor",
-      videoUrl: "",
-      docUrl: "#",
-      desc: "Entenda a fundo a dinâmica, dores e termos técnicos do mercado atacadista."
-    },
-    {
-      id: 3,
-      title: "3. Departamento Comercial",
-      videoUrl: "",
-      docUrl: "#",
-      desc: "Como nossa equipe comercial se organiza, processos internos e fluxos de trabalho."
-    },
-    {
-      id: 4,
-      title: "4. Sistemas e plataformas do Comercial",
-      videoUrl: "",
-      docUrl: "#",
-      desc: "Treinamento prático sobre CRM, ferramentas de prospecção e plataformas internas."
-    },
-    {
-      id: 5,
-      title: "5. Metas e Objetivos",
-      videoUrl: "",
-      docUrl: "#",
-      desc: "Indicadores (KPIs), metas individuais e coletivas para a sua função."
-    },
-    {
-      id: 6,
-      title: "6. Onboarding DP/RH",
-      videoUrl: "",
-      docUrl: "#",
-      desc: "Regras internas, benefícios, cultura e procedimentos operacionais de RH."
-    }
+  // ==========================================
+  // CONFIGURAÇÕES GERAIS
+  // ==========================================
+  
+  // 🔑 ALTERE SUA SENHA AQUI:
+  const SENHA_MESTRA = "lifeapps123"; 
+
+  // Etapas Iniciais Padrão
+  const DEFAULT_STEPS = [
+    { id: "1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "" },
+    { id: "2", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "" },
+    { id: "3", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "" },
+    { id: "4", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "" },
+    { id: "5", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "" },
+    { id: "6", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "" }
   ];
 
-  let currentUser = null;
-  let userProgress = {};
+  let currentStudent = null;
 
-  // Inicialização do EmailJS (Substitua pelo seu USER_ID / PUBLIC_KEY do EmailJS)
-  (function() {
-      // emailjs.init("Lo8xuv_pQzssHvz3o");
-  })();
+  // Carregar Módulos (se tiver adicionado novos, carrega do navegador)
+  function getSteps() {
+    const saved = localStorage.getItem('lifeapps_custom_steps');
+    return saved ? JSON.parse(saved) : DEFAULT_STEPS;
+  }
 
-  const userForm = document.getElementById('user-form');
-  const authCard = document.getElementById('auth-card');
-  const trailCard = document.getElementById('trail-card');
-  const stepsContainer = document.getElementById('steps-container');
+  function saveSteps(steps) {
+    localStorage.setItem('lifeapps_custom_steps', JSON.stringify(steps));
+  }
 
-  // Buscar usuário no localStorage se o email for digitado
-  document.getElementById('email').addEventListener('blur', (e) => {
+  // Carregar Banco de Usuários
+  function getUsers() {
+    const saved = localStorage.getItem('lifeapps_all_users');
+    return saved ? JSON.parse(saved) : {};
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem('lifeapps_all_users', JSON.stringify(users));
+  }
+
+  // ==========================================
+  // ÁREA DO COLABORADOR
+  // ==========================================
+
+  // Auto-preencher dados ao digitar e-mail
+  document.getElementById('u-email').addEventListener('blur', (e) => {
     const email = e.target.value.toLowerCase().trim();
-    if (email) {
-      const savedData = localStorage.getItem(`lifeapps_user_${email}`);
-      if (savedData) {
-        const parsed = JSON.parse(savedData);
-        document.getElementById('name').value = parsed.name || '';
-        document.getElementById('phone').value = parsed.phone || '';
-        document.getElementById('role').value = parsed.role || '';
-      }
+    const users = getUsers();
+    if (users[email]) {
+      document.getElementById('u-name').value = users[email].name || '';
+      document.getElementById('u-phone').value = users[email].phone || '';
+      document.getElementById('u-role').value = users[email].role || '';
     }
   });
 
-  // Salvar/Iniciar Sessão
-  userForm.addEventListener('submit', (e) => {
+  // Login do colaborador
+  document.getElementById('form-user').addEventListener('submit', (e) => {
     e.preventDefault();
+    const email = document.getElementById('u-email').value.toLowerCase().trim();
     
-    currentUser = {
-      email: document.getElementById('email').value.toLowerCase().trim(),
-      name: document.getElementById('name').value,
-      phone: document.getElementById('phone').value,
-      role: document.getElementById('role').value
-    };
+    const users = getUsers();
+    if (!users[email]) {
+      users[email] = { progress: {} };
+    }
 
-    // Salvar/Atualizar dados do usuário
-    localStorage.setItem(`lifeapps_user_${currentUser.email}`, JSON.stringify(currentUser));
+    users[email].name = document.getElementById('u-name').value;
+    users[email].phone = document.getElementById('u-phone').value;
+    users[email].role = document.getElementById('u-role').value;
+    users[email].email = email;
 
-    // Carregar progresso existente
-    const savedProgress = localStorage.getItem(`lifeapps_progress_${currentUser.email}`);
-    userProgress = savedProgress ? JSON.parse(savedProgress) : {};
+    saveUsers(users);
+    currentStudent = users[email];
 
-    authCard.classList.add('hidden');
-    trailCard.classList.remove('hidden');
+    document.getElementById('view-welcome').classList.add('hidden');
+    document.getElementById('view-trail').classList.remove('hidden');
 
     renderTrail();
   });
 
-  // Renderizar Trilha de Aprendizagem
+  function exitTrail() {
+    currentStudent = null;
+    document.getElementById('view-trail').classList.add('hidden');
+    document.getElementById('view-welcome').classList.remove('hidden');
+  }
+
+  // Renderizar a trilha na tela
   function renderTrail() {
-    document.getElementById('user-welcome').innerHTML = `
-      <h3>Olá, ${currentUser.name}!</h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Cargo: <strong>${currentUser.role}</strong> | ${currentUser.email}</p>
+    document.getElementById('user-info').innerHTML = `
+      <h3>Olá, ${currentStudent.name}!</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">${currentStudent.role} | ${currentStudent.email}</p>
     `;
 
-    stepsContainer.innerHTML = '';
+    const steps = getSteps();
+    const listContainer = document.getElementById('steps-list');
+    listContainer.innerHTML = '';
 
-    STEPS.forEach((step) => {
-      const isCompleted = !!userProgress[step.id];
-      
-      const stepEl = document.createElement('div');
-      stepEl.className = 'step-item';
-      stepEl.innerHTML = `
-        <div class="step-header" onclick="toggleStep(${step.id})">
-          <span class="step-title">${step.title}</span>
-          ${isCompleted ? '<span class="completion-badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Ver conteúdo ▾</span>'}
+    let completedCount = 0;
+
+    steps.forEach((step) => {
+      const isDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
+      if (isDone) completedCount++;
+
+      const el = document.createElement('div');
+      el.className = 'step-item';
+      el.innerHTML = `
+        <div class="step-header" onclick="toggleContent('step-${step.id}')">
+          <span>${step.title}</span>
+          ${isDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Ver aula ▾</span>'}
         </div>
-        <div class="step-content" id="step-content-${step.id}">
-          <p style="margin-bottom: 12px;">${step.desc}</p>
-          
-          <div class="media-placeholder">
-            <strong>Vídeo da etapa:</strong><br>
-            ${step.videoUrl 
-              ? `<iframe width="100%" height="250" src="${step.videoUrl}" frameborder="0" allowfullscreen style="margin-top:8px; border-radius:6px;"></iframe>` 
-              : '<i>Insira o link ou embed do vídeo aqui.</i>'}
-          </div>
-
-          <div class="media-placeholder">
-            <strong>Documentos e Materiais:</strong><br>
-            ${step.docUrl !== '#' 
-              ? `<a href="${step.docUrl}" target="_blank" style="color: var(--primary);">📄 Acessar Documento de Apoio</a>` 
-              : '<i>Links para PDFs ou Notion.</i>'}
-          </div>
-
-          <div class="checkbox-container">
-            <input type="checkbox" id="chk-${step.id}" ${isCompleted ? 'checked' : ''} onchange="toggleComplete(${step.id})">
-            <label for="chk-${step.id}">Marcar esta etapa como concluída</label>
+        <div class="step-content" id="step-${step.id}">
+          <p style="margin-bottom:10px;">${step.desc}</p>
+          ${step.videoUrl ? `<iframe width="100%" height="240" src="${step.videoUrl}" style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
+          ${step.docUrl ? `<p><a href="${step.docUrl}" target="_blank" style="color:var(--primary);">📄 Documento de Apoio</a></p>` : ''}
+          <div style="margin-top: 12px;">
+            <label style="font-weight:normal; cursor:pointer;">
+              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
+              Marcar esta etapa como concluída
+            </label>
           </div>
         </div>
       `;
-      stepsContainer.appendChild(stepEl);
+      listContainer.appendChild(el);
     });
 
-    updateProgressBar();
-  }
+    // Atualizar Porcentagem %
+    const pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
+    document.getElementById('progress-bar').style.width = `${pct}%`;
+    document.getElementById('progress-text').innerText = `${pct}%`;
 
-  // Expandir/Recolher Conteúdo da Etapa
-  window.toggleStep = function(stepId) {
-    const content = document.getElementById(`step-content-${stepId}`);
-    content.classList.toggle('active');
-  };
-
-  // Alterar Status de Conclusão da Etapa
-  window.toggleComplete = function(stepId) {
-    const isChecked = document.getElementById(`chk-${stepId}`).checked;
-    userProgress[stepId] = isChecked;
-
-    // Salva o progresso no localStorage vinculado ao e-mail
-    localStorage.setItem(`lifeapps_progress_${currentUser.email}`, JSON.stringify(userProgress));
-
-    updateProgressBar();
-    renderTrail(); // Atualiza os badges visuais
-
-    // Se concluiu todas as etapas, dispara o e-mail
-    checkCompletion();
-  };
-
-  // Atualizar Barra de Progresso em %
-  function updateProgressBar() {
-    const totalSteps = STEPS.length;
-    const completedSteps = Object.values(userProgress).filter(Boolean).length;
-    const percentage = Math.round((completedSteps / totalSteps) * 100);
-
-    document.getElementById('progress-bar').style.width = `${percentage}%`;
-    document.getElementById('progress-text').innerText = `${percentage}%`;
-  }
-
-  // Checar e disparar e-mail de conclusão
-  function checkCompletion() {
-    const completedSteps = Object.values(userProgress).filter(Boolean).length;
-    
-    if (completedSteps === STEPS.length) {
-      alert('🎉 Parabéns! Você concluiu todas as etapas do Onboarding LifeApps!');
-      sendCompletionEmail();
+    // Atualiza progresso do usuário no banco
+    const users = getUsers();
+    if(users[currentStudent.email]) {
+      users[currentStudent.email].pct = pct;
+      saveUsers(users);
     }
   }
 
-  // Envio do EmailJS
-  function sendCompletionEmail() {
-    /* 
-      Para ativar o envio real por e-mail no EmailJS:
-      1. Crie uma conta em https://www.emailjs.com/
-      2. Crie um Email Service e um Email Template.
-      3. Descomente as linhas abaixo com suas chaves:
-
-      const templateParams = {
-        user_name: currentUser.name,
-        user_email: currentUser.email,
-        user_phone: currentUser.phone,
-        user_role: currentUser.role,
-        completion_date: new Date().toLocaleDateString('pt-BR')
-      };
-
-      emailjs.send('service_3b4gjt3', 'template_jujun5z', templateParams)
-        .then(() => {
-          console.log('E-mail enviado com sucesso!');
-        }, (err) => {
-          console.error('Erro ao enviar e-mail:', err);
-        });
-    */
-    console.log('Sinalizador de conclusão enviado para:', currentUser);
+  function toggleContent(id) {
+    document.getElementById(id).classList.toggle('active');
   }
+
+  function markStep(stepId, isChecked) {
+    if (!currentStudent.progress) currentStudent.progress = {};
+    currentStudent.progress[stepId] = isChecked;
+
+    const users = getUsers();
+    users[currentStudent.email].progress = currentStudent.progress;
+    saveUsers(users);
+
+    renderTrail();
+  }
+
+  // ==========================================
+  // ÁREA DE GESTÃO RESTRITA (COM SENHA)
+  // ==========================================
+
+  function openAdminModal() {
+    const inputPass = prompt("🔐 Digite a senha de Gestão para continuar:");
+    
+    if (inputPass === SENHA_MESTRA) {
+      document.getElementById('view-welcome').classList.add('hidden');
+      document.getElementById('view-trail').classList.add('hidden');
+      document.getElementById('view-admin').classList.remove('hidden');
+      renderAdminDashboard();
+    } else if (inputPass !== null) {
+      alert("❌ Senha incorreta!");
+    }
+  }
+
+  function closeAdmin() {
+    document.getElementById('view-admin').classList.add('hidden');
+    document.getElementById('view-welcome').classList.remove('hidden');
+  }
+
+  // Tabela de Colaboradores
+  function renderAdminDashboard() {
+    const users = getUsers();
+    const tbody = document.getElementById('admin-users-table');
+    tbody.innerHTML = '';
+
+    const userKeys = Object.keys(users);
+
+    if (userKeys.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado ainda.</td></tr>`;
+      return;
+    }
+
+    userKeys.forEach(email => {
+      const u = users[email];
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${u.name || '-'}</td>
+        <td>${u.email}</td>
+        <td>${u.role || '-'}</td>
+        <td><strong>${u.pct || 0}%</strong></td>
+        <td>
+          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteUser('${u.email}')">Excluir</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // EXCLUIR USUÁRIO
+  function deleteUser(email) {
+    if (confirm(`Tem certeza que deseja apagar os dados de ${email}?`)) {
+      const users = getUsers();
+      delete users[email];
+      saveUsers(users);
+      renderAdminDashboard();
+    }
+  }
+
+  // ADICIONAR NOVO MÓDULO/AULA
+  document.getElementById('form-add-step').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const steps = getSteps();
+
+    const newStep = {
+      id: Date.now().toString(),
+      title: document.getElementById('new-title').value,
+      desc: document.getElementById('new-desc').value,
+      videoUrl: document.getElementById('new-video').value,
+      docUrl: document.getElementById('new-doc').value
+    };
+
+    steps.push(newStep);
+    saveSteps(steps);
+
+    alert("✅ Nova etapa cadastrada com sucesso!");
+    document.getElementById('form-add-step').reset();
+  });
 </script>
+
 </body>
 </html>
