@@ -3,479 +3,477 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de PET - Condomínio Village dos Buritis</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Onboarding LifeApps</title>
+  
+  <!-- EmailJS SDK para envio de emails -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
   <style>
     :root {
-      --primary-color: #2e7d32;
-      --primary-hover: #1b5e20;
-      --accent-color: #81c784;
-      --bg-color: #f4f6f8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
       --card-bg: #ffffff;
-      --text-color: #333333;
-      --border-color: #e0e0e0;
-      --error-color: #d32f2f;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
       padding: 20px;
-      line-height: 1.6;
+      display: flex;
+      justify-content: center;
     }
 
     .container {
       max-width: 800px;
+      width: 100%;
       margin: 0 auto;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
     header {
       text-align: center;
-      margin-bottom: 30px;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 20px;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     header h1 {
-      color: var(--primary-color);
-      font-size: 1.8rem;
+      color: var(--primary);
       margin-bottom: 8px;
     }
 
-    header p {
-      color: #666;
-      font-size: 0.95rem;
-    }
-
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
+    .card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-group.full-width {
-      grid-column: 1 / -1;
+      margin-bottom: 16px;
     }
 
     label {
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: #444;
-    }
-
-    label .optional {
-      font-weight: normal;
-      font-size: 0.8rem;
-      color: #888;
-    }
-
-    input, select, textarea {
-      padding: 10px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary-color);
-    }
-
-    .pet-card {
-      background: #fafafa;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .pet-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .btn-remove {
-      background: #ffebee;
-      color: var(--error-color);
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 0.85rem;
-    }
-
-    .btn-remove:hover {
-      background: #ffcdd2;
-    }
-
-    .btn-add {
-      background: #e8f5e9;
-      color: var(--primary-color);
-      border: 1px dashed var(--primary-color);
-      padding: 12px;
-      width: 100%;
-      border-radius: 6px;
-      cursor: pointer;
+      display: block;
+      margin-bottom: 6px;
       font-weight: 600;
-      margin-bottom: 25px;
-      transition: background 0.2s;
+      font-size: 0.9rem;
     }
 
-    .btn-add:hover {
-      background: #c8e6c9;
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
     }
 
-    .btn-submit {
-      background: var(--primary-color);
+    input:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    button {
+      background-color: var(--primary);
       color: white;
       border: none;
-      padding: 14px 28px;
-      font-size: 1rem;
-      font-weight: 600;
+      padding: 12px 20px;
       border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
       width: 100%;
-      transition: background 0.2s;
+      transition: background-color 0.2s;
     }
 
-    .btn-submit:hover {
-      background: var(--primary-hover);
+    button:hover {
+      background-color: var(--primary-hover);
     }
 
-    .btn-submit:disabled {
-      background: #a5d6a7;
-      cursor: not-allowed;
+    /* Barra de Progresso */
+    .progress-container {
+      margin: 20px 0;
     }
 
-    .alert {
-      padding: 12px;
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      height: 12px;
+      background-color: var(--border);
       border-radius: 6px;
-      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--success);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Trilha de Aprendizagem */
+    .step-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      background-color: #fff;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .step-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .step-content {
       display: none;
-      text-align: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
     }
 
-    .alert-success {
-      background: #e8f5e9;
-      color: #2e7d32;
-      border: 1px solid #c8e6c9;
+    .step-content.active {
+      display: block;
     }
 
-    .alert-error {
-      background: #ffebee;
-      color: #c62828;
-      border: 1px solid #ffcdd2;
+    .media-placeholder {
+      background-color: #f1f5f9;
+      border: 1px dashed var(--border);
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .completion-badge {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <h1>Condomínio Village dos Buritis</h1>
-      <p>Formulário de Cadastro de Animais de Estimação (PETs)</p>
-    </header>
+<div class="container">
+  <header>
+    <h1>Onboarding LifeApps</h1>
+    <p>Bem-vindo à nossa trilha de aprendizagem e integração!</p>
+  </header>
 
-    <form id="petForm">
-      <!-- Seção Tutor -->
-      <div class="section-title">👤 Informações do Tutor / Responsável</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="nomeTutor">Nome do Tutor (Responsável) *</label>
-          <input type="text" id="nomeTutor" name="nomeTutor" required placeholder="Ex: João da Silva">
-        </div>
-
-        <div class="form-group">
-          <label for="numeroResidencia">Nº da Casa / Apartamento *</label>
-          <input type="text" id="numeroResidencia" name="numeroResidencia" required placeholder="Ex: Casa 45 / Bloco B Apt 201">
-        </div>
-
-        <div class="form-group">
-          <label for="telefone">Telefone para Emergência *</label>
-          <input type="tel" id="telefone" name="telefone" required placeholder="Ex: (62) 99999-9999">
-        </div>
-
-        <div class="form-group">
-          <label for="qtdAnimais">Quantidade Total de Animais *</label>
-          <input type="number" id="qtdAnimais" name="qtdAnimais" min="1" value="1" required>
-        </div>
+  <!-- Formulário Inicial / Login de Progresso -->
+  <div id="auth-card" class="card">
+    <h2>Seus Dados</h2>
+    <p style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
+      Digite seu e-mail para iniciar ou continuar de onde parou.
+    </p>
+    <form id="user-form">
+      <div class="form-group">
+        <label for="email">E-mail corporativo *</label>
+        <input type="email" id="email" required placeholder="seu.nome@lifeapps.com.br">
       </div>
-
-      <!-- Seção PETs -->
-      <div class="section-title">🐾 Cadastro dos PETs</div>
-      <div id="petsContainer"></div>
-
-      <button type="button" class="btn-add" id="addPetBtn">+ Adicionar Outro PET</button>
-
-      <button type="submit" class="btn-submit" id="submitBtn">Enviar Cadastro</button>
-      
-      <div id="alertMessage" class="alert"></div>
+      <div class="form-group">
+        <label for="name">Nome Completo *</label>
+        <input type="text" id="name" required placeholder="Nome e Sobrenome">
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefone/WhatsApp *</label>
+        <input type="tel" id="phone" required placeholder="(00) 00000-0000">
+      </div>
+      <div class="form-group">
+        <label for="role">Função/Cargo *</label>
+        <select id="role" required>
+          <option value="">Selecione sua função...</option>
+          <option value="SDR">SDR</option>
+          <option value="BDR">BDR</option>
+          <option value="Inside Sales">Inside Sales</option>
+          <option value="Field Sales">Field Sales</option>
+          <option value="Coordenador">Coordenador</option>
+          <option value="Gerente">Gerente</option>
+        </select>
+      </div>
+      <button type="submit">Acessar Trilha</button>
     </form>
   </div>
 
-  <script>
-    // URL do seu Google Apps Script (Substitua após publicar o script no Google Sheets)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3jqhFX_icQ0XPaH_YADa2rMO0yMIKL8Dg-6l3clPkBsEK59MfEQX7Y6PET-na-3Ly/exec";
+  <!-- Trilha de Aprendizagem (Inicialmente oculta) -->
+  <div id="trail-card" class="card hidden">
+    <div id="user-welcome" style="margin-bottom: 16px;"></div>
 
-    let petCount = 0;
+    <!-- Progresso Geral -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Progresso Geral</span>
+        <span id="progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+      </div>
+    </div>
 
-    function createPetCard(index) {
-      const petCard = document.createElement('div');
-      petCard.className = 'pet-card';
-      petCard.dataset.index = index;
+    <!-- Etapas da Trilha -->
+    <div id="steps-container"></div>
+  </div>
+</div>
 
-      petCard.innerHTML = `
-        <div class="pet-header">
-          <strong>PET #${index + 1}</strong>
-          ${index > 0 ? `<button type="button" class="btn-remove" onclick="removePetCard(this)">Remover</button>` : ''}
+<script>
+  // Configuração das 6 etapas da trilha
+  const STEPS = [
+    {
+      id: 1,
+      title: "1. Quem somos. A história da LifeApps",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Exemplo de vídeo
+      docUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Exemplo de PDF
+      desc: "Conheça a fundação, nossos valores e a visão de futuro da LifeApps."
+    },
+    {
+      id: 2,
+      title: "2. Segmento Atacado Distribuidor",
+      videoUrl: "",
+      docUrl: "#",
+      desc: "Entenda a fundo a dinâmica, dores e termos técnicos do mercado atacadista."
+    },
+    {
+      id: 3,
+      title: "3. Departamento Comercial",
+      videoUrl: "",
+      docUrl: "#",
+      desc: "Como nossa equipe comercial se organiza, processos internos e fluxos de trabalho."
+    },
+    {
+      id: 4,
+      title: "4. Sistemas e plataformas do Comercial",
+      videoUrl: "",
+      docUrl: "#",
+      desc: "Treinamento prático sobre CRM, ferramentas de prospecção e plataformas internas."
+    },
+    {
+      id: 5,
+      title: "5. Metas e Objetivos",
+      videoUrl: "",
+      docUrl: "#",
+      desc: "Indicadores (KPIs), metas individuais e coletivas para a sua função."
+    },
+    {
+      id: 6,
+      title: "6. Onboarding DP/RH",
+      videoUrl: "",
+      docUrl: "#",
+      desc: "Regras internas, benefícios, cultura e procedimentos operacionais de RH."
+    }
+  ];
+
+  let currentUser = null;
+  let userProgress = {};
+
+  // Inicialização do EmailJS (Substitua pelo seu USER_ID / PUBLIC_KEY do EmailJS)
+  (function() {
+      // emailjs.init("SEU_PUBLIC_KEY_AQUI");
+  })();
+
+  const userForm = document.getElementById('user-form');
+  const authCard = document.getElementById('auth-card');
+  const trailCard = document.getElementById('trail-card');
+  const stepsContainer = document.getElementById('steps-container');
+
+  // Buscar usuário no localStorage se o email for digitado
+  document.getElementById('email').addEventListener('blur', (e) => {
+    const email = e.target.value.toLowerCase().trim();
+    if (email) {
+      const savedData = localStorage.getItem(`lifeapps_user_${email}`);
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        document.getElementById('name').value = parsed.name || '';
+        document.getElementById('phone').value = parsed.phone || '';
+        document.getElementById('role').value = parsed.role || '';
+      }
+    }
+  });
+
+  // Salvar/Iniciar Sessão
+  userForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    currentUser = {
+      email: document.getElementById('email').value.toLowerCase().trim(),
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      role: document.getElementById('role').value
+    };
+
+    // Salvar/Atualizar dados do usuário
+    localStorage.setItem(`lifeapps_user_${currentUser.email}`, JSON.stringify(currentUser));
+
+    // Carregar progresso existente
+    const savedProgress = localStorage.getItem(`lifeapps_progress_${currentUser.email}`);
+    userProgress = savedProgress ? JSON.parse(savedProgress) : {};
+
+    authCard.classList.add('hidden');
+    trailCard.classList.remove('hidden');
+
+    renderTrail();
+  });
+
+  // Renderizar Trilha de Aprendizagem
+  function renderTrail() {
+    document.getElementById('user-welcome').innerHTML = `
+      <h3>Olá, ${currentUser.name}!</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Cargo: <strong>${currentUser.role}</strong> | ${currentUser.email}</p>
+    `;
+
+    stepsContainer.innerHTML = '';
+
+    STEPS.forEach((step) => {
+      const isCompleted = !!userProgress[step.id];
+      
+      const stepEl = document.createElement('div');
+      stepEl.className = 'step-item';
+      stepEl.innerHTML = `
+        <div class="step-header" onclick="toggleStep(${step.id})">
+          <span class="step-title">${step.title}</span>
+          ${isCompleted ? '<span class="completion-badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Ver conteúdo ▾</span>'}
         </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Nome do Animal *</label>
-            <input type="text" name="nomeAnimal" required placeholder="Ex: Rex">
+        <div class="step-content" id="step-content-${step.id}">
+          <p style="margin-bottom: 12px;">${step.desc}</p>
+          
+          <div class="media-placeholder">
+            <strong>Vídeo da etapa:</strong><br>
+            ${step.videoUrl 
+              ? `<iframe width="100%" height="250" src="${step.videoUrl}" frameborder="0" allowfullscreen style="margin-top:8px; border-radius:6px;"></iframe>` 
+              : '<i>Insira o link ou embed do vídeo aqui.</i>'}
           </div>
 
-          <div class="form-group">
-            <label>Sexo *</label>
-            <select name="sexo" required>
-              <option value="">Selecione...</option>
-              <option value="Macho">Macho</option>
-              <option value="Fêmea">Fêmea</option>
-            </select>
+          <div class="media-placeholder">
+            <strong>Documentos e Materiais:</strong><br>
+            ${step.docUrl !== '#' 
+              ? `<a href="${step.docUrl}" target="_blank" style="color: var(--primary);">📄 Acessar Documento de Apoio</a>` 
+              : '<i>Links para PDFs ou Notion.</i>'}
           </div>
 
-          <div class="form-group">
-            <label>Espécie / Tipo de Pet *</label>
-            <select name="especie" onchange="toggleOutros(this)" required>
-              <option value="">Selecione...</option>
-              <option value="Cachorro">Cachorro</option>
-              <option value="Gato">Gato</option>
-              <option value="Aves">Aves</option>
-              <option value="Coelho">Coelho</option>
-              <option value="Hamster">Hamster</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
-
-          <div class="form-group outros-especie-group" style="display: none;">
-            <label>Especifique Outro Tipo *</label>
-            <input type="text" name="outrosEspecie" placeholder="Ex: Tartaruga">
-          </div>
-
-          <div class="form-group">
-            <label>Raça <span class="optional">(Opcional)</span></label>
-            <input type="text" name="raca" placeholder="Ex: Vira-lata, Poodle">
-          </div>
-
-          <div class="form-group">
-            <label>Porte *</label>
-            <select name="porte" required>
-              <option value="">Selecione...</option>
-              <option value="Pequeno">Pequeno</option>
-              <option value="Médio">Médio</option>
-              <option value="Grande">Grande</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Idade do Pet <span class="optional">(Opcional)</span></label>
-            <input type="text" name="idade" placeholder="Ex: 3 anos / 6 meses">
-          </div>
-
-          <div class="form-group">
-            <label>Vacinado recentemente? *</label>
-            <select name="vacinadoRecente" required>
-              <option value="">Selecione...</option>
-              <option value="Sim">Sim</option>
-              <option value="Não">Não</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Situação da Vacinação <span class="optional">(Opcional)</span></label>
-            <input type="text" name="situacaoVacina" placeholder="Ex: Vacinas em dia, falta V10">
-          </div>
-
-          <div class="form-group full-width">
-            <label>Enviar Fotos do Pet <span class="optional">(Pode selecionar várias fotos)</span></label>
-            <input type="file" name="fotos" accept="image/*" multiple>
+          <div class="checkbox-container">
+            <input type="checkbox" id="chk-${step.id}" ${isCompleted ? 'checked' : ''} onchange="toggleComplete(${step.id})">
+            <label for="chk-${step.id}">Marcar esta etapa como concluída</label>
           </div>
         </div>
       `;
-
-      return petCard;
-    }
-
-    function addPet() {
-      const container = document.getElementById('petsContainer');
-      container.appendChild(createPetCard(petCount));
-      petCount++;
-      document.getElementById('qtdAnimais').value = petCount;
-    }
-
-    function removePetCard(button) {
-      const card = button.closest('.pet-card');
-      card.remove();
-      petCount--;
-      document.getElementById('qtdAnimais').value = petCount;
-      updatePetHeaders();
-    }
-
-    function updatePetHeaders() {
-      const cards = document.querySelectorAll('.pet-card');
-      cards.forEach((card, idx) => {
-        card.dataset.index = idx;
-        card.querySelector('.pet-header strong').innerText = `PET #${idx + 1}`;
-      });
-    }
-
-    function toggleOutros(selectElement) {
-      const card = selectElement.closest('.pet-card');
-      const outrosGroup = card.querySelector('.outros-especie-group');
-      const outrosInput = outrosGroup.querySelector('input');
-      
-      if (selectElement.value === 'Outros') {
-        outrosGroup.style.display = 'flex';
-        outrosInput.required = true;
-      } else {
-        outrosGroup.style.display = 'none';
-        outrosInput.required = false;
-        outrosInput.value = '';
-      }
-    }
-
-    // Adiciona o primeiro PET por padrão
-    addPet();
-
-    document.getElementById('addPetBtn').addEventListener('click', addPet);
-
-    // Converte arquivo para Base64 para envio via JSON
-    const fileToBase64 = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve({
-        name: file.name,
-        type: file.type,
-        base64: reader.result.split(',')[1]
-      });
-      reader.onerror = error => reject(error);
+      stepsContainer.appendChild(stepEl);
     });
 
-    // Envio do formulário
-    document.getElementById('petForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+    updateProgressBar();
+  }
 
-      if (SCRIPT_URL === "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI") {
-        alert("Por favor, configure a URL do seu Google Apps Script no código HTML antes de enviar.");
-        return;
-      }
+  // Expandir/Recolher Conteúdo da Etapa
+  window.toggleStep = function(stepId) {
+    const content = document.getElementById(`step-content-${stepId}`);
+    content.classList.toggle('active');
+  };
 
-      const submitBtn = document.getElementById('submitBtn');
-      const alertMsg = document.getElementById('alertMessage');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Enviando cadastro e fotos...";
-      alertMsg.style.display = 'none';
+  // Alterar Status de Conclusão da Etapa
+  window.toggleComplete = function(stepId) {
+    const isChecked = document.getElementById(`chk-${stepId}`).checked;
+    userProgress[stepId] = isChecked;
 
-      try {
-        const nomeTutor = document.getElementById('nomeTutor').value;
-        const numeroResidencia = document.getElementById('numeroResidencia').value;
-        const telefone = document.getElementById('telefone').value;
-        const qtdAnimais = document.getElementById('qtdAnimais').value;
+    // Salva o progresso no localStorage vinculado ao e-mail
+    localStorage.setItem(`lifeapps_progress_${currentUser.email}`, JSON.stringify(userProgress));
 
-        const petCards = document.querySelectorAll('.pet-card');
-        const petsData = [];
+    updateProgressBar();
+    renderTrail(); // Atualiza os badges visuais
 
-        for (const card of petCards) {
-          const fotosInput = card.querySelector('input[name="fotos"]');
-          const filesArray = Array.from(fotosInput.files);
-          const fotosBase64 = await Promise.all(filesArray.map(fileToBase64));
+    // Se concluiu todas as etapas, dispara o e-mail
+    checkCompletion();
+  };
 
-          const especieVal = card.querySelector('select[name="especie"]').value;
-          const outrosEspecieVal = card.querySelector('input[name="outrosEspecie"]').value;
+  // Atualizar Barra de Progresso em %
+  function updateProgressBar() {
+    const totalSteps = STEPS.length;
+    const completedSteps = Object.values(userProgress).filter(Boolean).length;
+    const percentage = Math.round((completedSteps / totalSteps) * 100);
 
-          petsData.push({
-            nomeAnimal: card.querySelector('input[name="nomeAnimal"]').value,
-            sexo: card.querySelector('select[name="sexo"]').value,
-            especie: especieVal === 'Outros' ? outrosEspecieVal : especieVal,
-            raca: card.querySelector('input[name="raca"]').value || 'Não informada',
-            porte: card.querySelector('select[name="porte"]').value,
-            idade: card.querySelector('input[name="idade"]').value || 'Não informada',
-            vacinadoRecente: card.querySelector('select[name="vacinadoRecente"]').value,
-            situacaoVacina: card.querySelector('input[name="situacaoVacina"]').value || 'Não informada',
-            fotos: fotosBase64
-          });
-        }
+    document.getElementById('progress-bar').style.width = `${percentage}%`;
+    document.getElementById('progress-text').innerText = `${percentage}%`;
+  }
 
-        const payload = {
-          nomeTutor,
-          numeroResidencia,
-          telefone,
-          qtdAnimais,
-          pets: petsData
-        };
+  // Checar e disparar e-mail de conclusão
+  function checkCompletion() {
+    const completedSteps = Object.values(userProgress).filter(Boolean).length;
+    
+    if (completedSteps === STEPS.length) {
+      alert('🎉 Parabéns! Você concluiu todas as etapas do Onboarding LifeApps!');
+      sendCompletionEmail();
+    }
+  }
 
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+  // Envio do EmailJS
+  function sendCompletionEmail() {
+    /* 
+      Para ativar o envio real por e-mail no EmailJS:
+      1. Crie uma conta em https://www.emailjs.com/
+      2. Crie um Email Service e um Email Template.
+      3. Descomente as linhas abaixo com suas chaves:
+
+      const templateParams = {
+        user_name: currentUser.name,
+        user_email: currentUser.email,
+        user_phone: currentUser.phone,
+        user_role: currentUser.role,
+        completion_date: new Date().toLocaleDateString('pt-BR')
+      };
+
+      emailjs.send('SEU_SERVICE_ID', 'SEU_TEMPLATE_ID', templateParams)
+        .then(() => {
+          console.log('E-mail enviado com sucesso!');
+        }, (err) => {
+          console.error('Erro ao enviar e-mail:', err);
         });
-
-        alertMsg.className = 'alert alert-success';
-        alertMsg.innerText = 'Cadastro realizado com sucesso!';
-        alertMsg.style.display = 'block';
-
-        // Resetar formulário
-        document.getElementById('petForm').reset();
-        document.getElementById('petsContainer').innerHTML = '';
-        petCount = 0;
-        addPet();
-
-      } catch (err) {
-        console.error(err);
-        alertMsg.className = 'alert alert-error';
-        alertMsg.innerText = 'Ocorreu um erro ao enviar o formulário. Tente novamente.';
-        alertMsg.style.display = 'block';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Enviar Cadastro";
-      }
-    });
-  </script>
+    */
+    console.log('Sinalizador de conclusão enviado para:', currentUser);
+  }
+</script>
 </body>
 </html>
