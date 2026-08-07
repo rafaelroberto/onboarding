@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v1.0 Cloud</title>
+  <title>LifeApps Academy v2.0 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@
       min-height: 100vh;
     }
 
-    .container { max-width: 900px; width: 100%; }
+    .container { max-width: 920px; width: 100%; }
     
     header { 
       position: relative;
@@ -184,8 +184,8 @@
     .badge-locked { background: #f1f5f9; color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
     .badge-inactive { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
-    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-    .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; }
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; }
+    .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 0.85rem; }
 
     footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); width: 100%; border-top: 1px solid #e2e8f0; }
     footer p { margin-bottom: 6px; }
@@ -254,8 +254,10 @@
     <!-- ABA 1: COLABORADORES -->
     <div id="tab-users" class="tab-content active">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
-        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);">Cadastrar Novo Colaborador</h3>
+        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);" id="form-user-title">Cadastrar Novo Colaborador</h3>
         <form id="form-add-user">
+          <input type="hidden" id="edit-user-original-email" value="">
+          
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
             <div>
               <label>Nome Completo *</label>
@@ -284,7 +286,10 @@
           <label style="margin-top:12px;">Matricular nos Cursos:</label>
           <div class="checkbox-grid" id="admin-courses-enroll-checkboxes"></div>
 
-          <button type="submit" class="btn" style="margin-top:15px;">Cadastrar Colaborador</button>
+          <div style="display:flex; gap:10px; margin-top:15px;">
+            <button type="submit" class="btn" id="btn-save-user">Cadastrar Colaborador</button>
+            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit-user" onclick="resetUserForm()">Cancelar Edição</button>
+          </div>
         </form>
       </div>
 
@@ -295,7 +300,7 @@
             <th>Colaborador</th>
             <th>E-mail / Depto</th>
             <th>Status</th>
-            <th>Cursos Matriculados e Progresso</th>
+            <th>Cursos e Progresso</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -303,13 +308,23 @@
       </table>
     </div>
 
-    <!-- ABA 2: CURSOS -->
+    <!-- ABA 2: CURSOS (CRIAR E EDITAR CURSO E COMPOSIÇÃO DE MÓDULOS) -->
     <div id="tab-courses" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
-        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);">Criar Novo Curso</h3>
-        <form id="form-add-course" style="display:flex; gap:10px;">
-          <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
-          <button type="submit" class="btn" style="white-space:nowrap;">Criar Curso</button>
+        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);" id="form-course-title">Criar Novo Curso</h3>
+        <form id="form-add-course">
+          <input type="hidden" id="edit-course-id" value="">
+          
+          <div style="display:flex; gap:10px; margin-bottom:12px;">
+            <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
+            <button type="submit" class="btn" id="btn-save-course" style="white-space:nowrap;">Criar Curso</button>
+            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit-course" onclick="resetCourseForm()">Cancelar</button>
+          </div>
+
+          <div id="course-modules-selection-box" class="hidden" style="margin-top:12px; padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:8px;">
+            <label style="color:var(--primary); margin-bottom:8px;">Selecione os módulos que compõem este curso:</label>
+            <div class="checkbox-grid" id="course-modules-checkboxes"></div>
+          </div>
         </form>
       </div>
 
@@ -373,7 +388,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 1.0 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.0 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -390,7 +405,7 @@
 
 <script>
   // ==========================================
-  // CONFIGURAÇÃO DO FIREBASE
+  // CONFIGURAÇÃO DO FIREBASE (COM SUAS CREDENCIAIS)
   // ==========================================
   const firebaseConfig = {
     apiKey: "AIzaSyDHsLURW9stnnXCHDdmHnjCgW4Dxwswg1Q",
@@ -461,12 +476,9 @@
     }
   }
 
-  // SUPORTE UNIVERSAL A VÍDEOS (YOUTUBE E GOOGLE DRIVE)
   function convertToEmbedUrl(url) {
     if (!url) return "";
     let videoId = "";
-    
-    // Suporte Google Drive
     if (url.includes("drive.google.com")) {
       if (url.includes("/file/d/")) {
         const fileId = url.split("/file/d/")[1].split("/")[0];
@@ -474,8 +486,6 @@
       }
       return url;
     }
-
-    // Suporte YouTube
     if (url.includes("watch?v=")) videoId = url.split("watch?v=")[1].split("&")[0];
     else if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
     else if (url.includes("embed/")) return url;
@@ -774,17 +784,37 @@
     renderUsersManagement();
   }
 
-  // 1. GESTÃO DE CURSOS
+  // 1. GESTÃO E EDIÇÃO DE CURSOS
   document.getElementById('form-add-course').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('new-course-title').value.trim();
-    const newCourse = { id: `c_${Date.now()}`, title: title, status: "ativo" };
+    const editId = document.getElementById('edit-course-id').value;
 
-    await db.collection('courses').doc(newCourse.id).set(newCourse);
+    const courseId = editId ? editId : `c_${Date.now()}`;
+
+    const courseData = {
+      id: courseId,
+      title: title,
+      status: "ativo"
+    };
+
+    await db.collection('courses').doc(courseId).set(courseData, { merge: true });
+
+    // Atualiza vínculos dos Módulos se estiver editando
+    if (editId) {
+      const selectedModuleIds = Array.from(document.querySelectorAll('input[name="course-modules"]:checked')).map(cb => cb.value);
+      for (let step of cachedSteps) {
+        if (selectedModuleIds.includes(step.id)) {
+          await db.collection('steps').doc(step.id).update({ courseId: courseId });
+        } else if (step.courseId === courseId && !selectedModuleIds.includes(step.id)) {
+          await db.collection('steps').doc(step.id).update({ courseId: "" });
+        }
+      }
+    }
+
     await loadCloudData();
-
-    alert("✅ Curso criado com sucesso!");
-    document.getElementById('form-add-course').reset();
+    alert(editId ? "✅ Curso atualizado com sucesso!" : "✅ Curso criado com sucesso!");
+    resetCourseForm();
     renderAdminDashboard();
   });
 
@@ -794,20 +824,60 @@
 
     cachedCourses.forEach(c => {
       const isActive = c.status !== "inativo";
+      const moduleCount = cachedSteps.filter(s => s.courseId === c.id).length;
+
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
         <div>
           <strong>🎓 ${c.title}</strong>
-          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-left:8px;">${isActive ? 'Ativo' : 'Inativo'}</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); display:block;">(${moduleCount} Módulo(s) associados)</span>
+          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-top:4px; display:inline-block;">${isActive ? 'Ativo' : 'Inativo'}</span>
         </div>
         <div style="display:flex; gap:6px;">
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editCourse('${c.id}')">✏️ Editar</button>
           <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleCourseStatus('${c.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
           <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteCourse('${c.id}')">Excluir</button>
         </div>
       `;
       container.appendChild(item);
     });
+  }
+
+  function editCourse(courseId) {
+    const course = cachedCourses.find(c => c.id === courseId);
+    if (!course) return;
+
+    document.getElementById('edit-course-id').value = course.id;
+    document.getElementById('new-course-title').value = course.title;
+    document.getElementById('form-course-title').innerText = `✏️ Editando Curso: ${course.title}`;
+    document.getElementById('btn-save-course').innerText = "Atualizar Curso";
+    document.getElementById('btn-cancel-edit-course').classList.remove('hidden');
+
+    // Exibe lista de módulos com checkbox para o gestor escolher quais pertencem ao curso
+    const box = document.getElementById('course-modules-selection-box');
+    const container = document.getElementById('course-modules-checkboxes');
+    box.classList.remove('hidden');
+    container.innerHTML = '';
+
+    cachedSteps.forEach(s => {
+      const isBelonging = s.courseId === course.id;
+      container.innerHTML += `
+        <label>
+          <input type="checkbox" name="course-modules" value="${s.id}" ${isBelonging ? 'checked' : ''}>
+          ${s.title}
+        </label>
+      `;
+    });
+  }
+
+  function resetCourseForm() {
+    document.getElementById('edit-course-id').value = '';
+    document.getElementById('form-add-course').reset();
+    document.getElementById('form-course-title').innerText = "Criar Novo Curso";
+    document.getElementById('btn-save-course').innerText = "Criar Curso";
+    document.getElementById('btn-cancel-edit-course').classList.add('hidden');
+    document.getElementById('course-modules-selection-box').classList.add('hidden');
   }
 
   async function toggleCourseStatus(courseId) {
@@ -972,14 +1042,20 @@
     switchAdminTab('modules-list');
   });
 
-  // 3. CADASTRAR / GERENCIAR ALUNOS E CERTIFICADOS
+  // 3. CADASTRAR / EDITAR / RESETAR / GERENCIAR ALUNOS E CERTIFICADOS
   document.getElementById('form-add-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
     const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
     const dept = document.getElementById('admin-user-dept').value;
+    const originalEmail = document.getElementById('edit-user-original-email').value;
 
     const selectedCourses = Array.from(document.querySelectorAll('input[name="enroll-courses"]:checked')).map(cb => cb.value);
+
+    // Se estiver editando e alterou o e-mail, apaga o registro do e-mail antigo
+    if (originalEmail && originalEmail !== email) {
+      await db.collection('users').doc(originalEmail).delete();
+    }
 
     const userData = {
       name: name,
@@ -987,16 +1063,110 @@
       dept: dept,
       status: "ativo",
       enrolledCourses: selectedCourses,
-      progress: {}, times: {}, notes: {}
+      progress: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].progress : {},
+      times: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].times : {},
+      notes: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].notes : {}
     };
 
     await db.collection('users').doc(email).set(userData, { merge: true });
     await loadCloudData();
 
-    alert(`✅ Colaborador ${name} cadastrado e salvo na nuvem!`);
-    document.getElementById('form-add-user').reset();
+    alert(originalEmail ? `✅ Dados de ${name} atualizados com sucesso!` : `✅ Colaborador ${name} cadastrado com sucesso!`);
+    resetUserForm();
     renderUsersManagement();
   });
+
+  function editUser(email) {
+    const u = cachedUsers[email];
+    if (!u) return;
+
+    document.getElementById('edit-user-original-email').value = u.email;
+    document.getElementById('admin-user-name').value = u.name || '';
+    document.getElementById('admin-user-email').value = u.email || '';
+    document.getElementById('admin-user-dept').value = u.dept || '';
+
+    // Selecionar cursos matriculados
+    const enrolled = u.enrolledCourses || [];
+    document.querySelectorAll('input[name="enroll-courses"]').forEach(cb => {
+      cb.checked = enrolled.includes(cb.value);
+    });
+
+    document.getElementById('form-user-title').innerText = `✏️ Editando Colaborador: ${u.name}`;
+    document.getElementById('btn-save-user').innerText = "Atualizar Dados";
+    document.getElementById('btn-cancel-edit-user').classList.remove('hidden');
+
+    switchAdminTab('users');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetUserForm() {
+    document.getElementById('edit-user-original-email').value = '';
+    document.getElementById('form-add-user').reset();
+    document.getElementById('form-user-title').innerText = "Cadastrar Novo Colaborador";
+    document.getElementById('btn-save-user').innerText = "Cadastrar Colaborador";
+    document.getElementById('btn-cancel-edit-user').classList.add('hidden');
+    renderAdminEnrollCheckboxes();
+  }
+
+  // REFRESH E RESET DE CURSOS E MÓDULOS ESPECÍFICOS DO USUÁRIO
+  async function resetUserOptions(email) {
+    const u = cachedUsers[email];
+    if (!u) return;
+
+    const actionType = prompt(
+      `🔄 OPÇÕES DE RESET - ${u.name.toUpperCase()}\n\n` +
+      `Digite a opção desejada:\n` +
+      `1 - Resetar um CURSO COMPLETO\n` +
+      `2 - Resetar APENAS UM MÓDULO Específico\n\n` +
+      `Digite 1 ou 2:`
+    );
+
+    if (actionType === '1') {
+      const userCourses = cachedCourses.filter(c => (u.enrolledCourses || []).includes(c.id));
+      let msg = `Selecione o número do CURSO que deseja resetar para ${u.name}:\n\n`;
+      userCourses.forEach((c, idx) => { msg += `${idx + 1}. ${c.title}\n`; });
+
+      const choice = prompt(msg);
+      const chosenIdx = parseInt(choice) - 1;
+
+      if (!isNaN(chosenIdx) && userCourses[chosenIdx]) {
+        const targetCourse = userCourses[chosenIdx];
+        if (confirm(`Resetar todo o curso "${targetCourse.title}" para ${u.name}?`)) {
+          const courseSteps = cachedSteps.filter(s => s.courseId === targetCourse.id);
+          courseSteps.forEach(s => {
+            if (u.progress) { delete u.progress[s.id]; delete u.progress[`${s.id}_sub`]; }
+            if (u.times) delete u.times[s.id];
+            if (u.notes) delete u.notes[s.id];
+          });
+
+          await db.collection('users').doc(email).set(u);
+          await loadCloudData();
+          alert(`✅ Curso "${targetCourse.title}" resetado para ${u.name}!`);
+          renderUsersManagement();
+        }
+      }
+    } else if (actionType === '2') {
+      let msg = `Selecione o número do MÓDULO que deseja resetar para ${u.name}:\n\n`;
+      cachedSteps.forEach((s, idx) => { msg += `${idx + 1}. ${s.title}\n`; });
+
+      const choice = prompt(msg);
+      const chosenIdx = parseInt(choice) - 1;
+
+      if (!isNaN(chosenIdx) && cachedSteps[chosenIdx]) {
+        const targetStep = cachedSteps[chosenIdx];
+        if (confirm(`Resetar apenas o módulo "${targetStep.title}" para ${u.name}?`)) {
+          if (u.progress) { delete u.progress[targetStep.id]; delete u.progress[`${targetStep.id}_sub`]; }
+          if (u.times) delete u.times[targetStep.id];
+          if (u.notes) delete u.notes[targetStep.id];
+
+          await db.collection('users').doc(email).set(u);
+          await loadCloudData();
+          alert(`✅ Módulo "${targetStep.title}" resetado para ${u.name}!`);
+          renderUsersManagement();
+        }
+      }
+    }
+  }
 
   function renderUsersManagement() {
     const tbody = document.getElementById('admin-users-table');
@@ -1043,9 +1213,11 @@
         <td><strong>${u.name || '-'}</strong></td>
         <td>${u.email}<br><span style="font-size:0.75rem; color:var(--text-muted);">${u.dept || 'Geral'}</span></td>
         <td><span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span></td>
-        <td style="min-width:280px;">${coursesHtml || 'Nenhum curso'}</td>
+        <td style="min-width:260px;">${coursesHtml || 'Nenhum curso'}</td>
         <td>
           <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editUser('${u.email}')">✏️ Editar</button>
+            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem;" onclick="resetUserOptions('${u.email}')">🔄 Resetar</button>
             <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleUserStatus('${u.email}')">${isActive ? 'Inativar' : 'Ativar'}</button>
             <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
           </div>
