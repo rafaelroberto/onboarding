@@ -54,6 +54,17 @@
     th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
     th { background-color: #f1f5f9; }
 
+    .module-manage-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      background-color: #fafafa;
+    }
+
     .hidden { display: none !important; }
     .badge { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
   </style>
@@ -128,9 +139,17 @@
       <button class="btn" style="background:#64748b;" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. ADICIONAR/CRIAR CONTEÚDO -->
+    <!-- 1. GERENCIAR E EXCLUIR MÓDULOS -->
+    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
+      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">📚 Gerenciar e Excluir Módulos Existentes</summary>
+      <div id="admin-modules-list" style="margin-top: 15px;">
+        <!-- Módulos carregados aqui com botão excluir -->
+      </div>
+    </details>
+
+    <!-- 2. ADICIONAR NOVO MÓDULO -->
     <details style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
-      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">➕ Adicionar Nova Etapa / Conteúdo</summary>
+      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">➕ Adicionar Novo Módulo</summary>
       <form id="form-add-step" style="margin-top: 15px;">
         <label>Título do Módulo</label>
         <input type="text" id="new-title" placeholder="Ex: 7. Cultura e Benefícios" required>
@@ -138,8 +157,8 @@
         <label>Descrição/Instruções</label>
         <textarea id="new-desc" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
         
-        <label>Link do Vídeo (YouTube Embed)</label>
-        <input type="url" id="new-video" placeholder="https://www.youtube.com/embed/...">
+        <label>Link do Vídeo do YouTube (Pode colar o link normal do YouTube)</label>
+        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=... ou https://youtu.be/...">
         
         <label>Link do Documento (PDF / Notion / Drive)</label>
         <input type="url" id="new-doc" placeholder="https://...">
@@ -148,9 +167,9 @@
       </form>
     </details>
 
-    <!-- 2. GERENCIAR COLABORADORES E EXCLUIR -->
+    <!-- 3. GERENCIAR COLABORADORES E EXCLUIR -->
     <h3>Colaboradores Cadastrados</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted);">Aqui você visualiza quem entrou e pode apagar os dados se precisar.</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 10px;">Aqui você visualiza quem entrou e pode apagar os dados se precisar.</p>
     
     <table>
       <thead>
@@ -175,10 +194,8 @@
   // CONFIGURAÇÕES GERAIS
   // ==========================================
   
-  // 🔑 ALTERE SUA SENHA AQUI:
   const SENHA_MESTRA = "lifeapps123"; 
 
-  // Etapas Iniciais Padrão
   const DEFAULT_STEPS = [
     { id: "1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "" },
     { id: "2", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "" },
@@ -190,7 +207,27 @@
 
   let currentStudent = null;
 
-  // Carregar Módulos (se tiver adicionado novos, carrega do navegador)
+  // Função auxiliar para converter qualquer link do YouTube no formato Embed válido
+  function convertToEmbedUrl(url) {
+    if (!url) return "";
+    let videoId = "";
+    
+    // Suporta links como: https://www.youtube.com/watch?v=ID
+    if (url.includes("watch?v=")) {
+      videoId = url.split("watch?v=")[1].split("&")[0];
+    } 
+    // Suporta links curtos como: https://youtu.be/ID
+    else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1].split("?")[0];
+    }
+    // Suporta links que já estejam como embed
+    else if (url.includes("embed/")) {
+      return url;
+    }
+
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  }
+
   function getSteps() {
     const saved = localStorage.getItem('lifeapps_custom_steps');
     return saved ? JSON.parse(saved) : DEFAULT_STEPS;
@@ -200,7 +237,6 @@
     localStorage.setItem('lifeapps_custom_steps', JSON.stringify(steps));
   }
 
-  // Carregar Banco de Usuários
   function getUsers() {
     const saved = localStorage.getItem('lifeapps_all_users');
     return saved ? JSON.parse(saved) : {};
@@ -214,7 +250,6 @@
   // ÁREA DO COLABORADOR
   // ==========================================
 
-  // Auto-preencher dados ao digitar e-mail
   document.getElementById('u-email').addEventListener('blur', (e) => {
     const email = e.target.value.toLowerCase().trim();
     const users = getUsers();
@@ -225,7 +260,6 @@
     }
   });
 
-  // Login do colaborador
   document.getElementById('form-user').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('u-email').value.toLowerCase().trim();
@@ -255,7 +289,6 @@
     document.getElementById('view-welcome').classList.remove('hidden');
   }
 
-  // Renderizar a trilha na tela
   function renderTrail() {
     document.getElementById('user-info').innerHTML = `
       <h3>Olá, ${currentStudent.name}!</h3>
@@ -272,6 +305,8 @@
       const isDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
       if (isDone) completedCount++;
 
+      const embedVideo = convertToEmbedUrl(step.videoUrl);
+
       const el = document.createElement('div');
       el.className = 'step-item';
       el.innerHTML = `
@@ -281,8 +316,8 @@
         </div>
         <div class="step-content" id="step-${step.id}">
           <p style="margin-bottom:10px;">${step.desc}</p>
-          ${step.videoUrl ? `<iframe width="100%" height="240" src="${step.videoUrl}" style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
-          ${step.docUrl ? `<p><a href="${step.docUrl}" target="_blank" style="color:var(--primary);">📄 Documento de Apoio</a></p>` : ''}
+          ${embedVideo ? `<iframe width="100%" height="280" src="${embedVideo}" allowfullscreen style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
+          ${step.docUrl ? `<p><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600;">📄 Acessar Documento de Apoio</a></p>` : ''}
           <div style="margin-top: 12px;">
             <label style="font-weight:normal; cursor:pointer;">
               <input type="checkbox" ${isDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
@@ -294,12 +329,10 @@
       listContainer.appendChild(el);
     });
 
-    // Atualizar Porcentagem %
     const pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
     document.getElementById('progress-bar').style.width = `${pct}%`;
     document.getElementById('progress-text').innerText = `${pct}%`;
 
-    // Atualiza progresso do usuário no banco
     const users = getUsers();
     if(users[currentStudent.email]) {
       users[currentStudent.email].pct = pct;
@@ -323,7 +356,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA (COM SENHA)
+  // ÁREA DE GESTÃO RESTRITA (PAINEL DO GESTOR)
   // ==========================================
 
   function openAdminModal() {
@@ -344,8 +377,44 @@
     document.getElementById('view-welcome').classList.remove('hidden');
   }
 
-  // Tabela de Colaboradores
   function renderAdminDashboard() {
+    renderModulesManagement();
+    renderUsersManagement();
+  }
+
+  // Exibir e Excluir Módulos
+  function renderModulesManagement() {
+    const steps = getSteps();
+    const container = document.getElementById('admin-modules-list');
+    container.innerHTML = '';
+
+    if (steps.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">Nenhum módulo cadastrado.</p>';
+      return;
+    }
+
+    steps.forEach((step, index) => {
+      const item = document.createElement('div');
+      item.className = 'module-manage-item';
+      item.innerHTML = `
+        <span style="font-weight:600;">${step.title}</span>
+        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteModule('${step.id}')">Excluir Módulo</button>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function deleteModule(id) {
+    if (confirm("Tem certeza que deseja excluir este módulo da trilha?")) {
+      let steps = getSteps();
+      steps = steps.filter(s => s.id !== id);
+      saveSteps(steps);
+      renderAdminDashboard();
+    }
+  }
+
+  // Tabela de Colaboradores
+  function renderUsersManagement() {
     const users = getUsers();
     const tbody = document.getElementById('admin-users-table');
     tbody.innerHTML = '';
@@ -373,7 +442,6 @@
     });
   }
 
-  // EXCLUIR USUÁRIO
   function deleteUser(email) {
     if (confirm(`Tem certeza que deseja apagar os dados de ${email}?`)) {
       const users = getUsers();
@@ -383,24 +451,27 @@
     }
   }
 
-  // ADICIONAR NOVO MÓDULO/AULA
+  // ADICIONAR NOVO MÓDULO
   document.getElementById('form-add-step').addEventListener('submit', (e) => {
     e.preventDefault();
     const steps = getSteps();
+
+    const rawVideoUrl = document.getElementById('new-video').value;
 
     const newStep = {
       id: Date.now().toString(),
       title: document.getElementById('new-title').value,
       desc: document.getElementById('new-desc').value,
-      videoUrl: document.getElementById('new-video').value,
+      videoUrl: convertToEmbedUrl(rawVideoUrl),
       docUrl: document.getElementById('new-doc').value
     };
 
     steps.push(newStep);
     saveSteps(steps);
 
-    alert("✅ Nova etapa cadastrada com sucesso!");
+    alert("✅ Novo módulo cadastrado com sucesso!");
     document.getElementById('form-add-step').reset();
+    renderAdminDashboard();
   });
 </script>
 
