@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.2 Cloud</title>
+  <title>LifeApps Academy v3.0 Cloud Refactored</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
     body { 
       background-color: var(--bg); 
       color: var(--text); 
-      padding: 30px 15px; 
+      padding: 20px 12px; 
       display: flex; 
       flex-direction: column; 
       align-items: center;
@@ -54,43 +54,43 @@
       position: relative;
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #06b6d4 100%);
       color: white;
-      padding: 32px; 
+      padding: 24px 20px; 
       border-radius: var(--radius); 
       box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.3);
-      margin-bottom: 24px; 
+      margin-bottom: 20px; 
       overflow: hidden;
     }
 
-    .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
 
     .title-badge {
       display: inline-block; background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 20px;
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
     }
 
-    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
-    header p { color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; margin-top: 6px; }
+    header h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+    header p { color: rgba(255, 255, 255, 0.85); font-size: 0.88rem; margin-top: 6px; }
 
     .btn-secret { 
       background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); 
-      color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
-      font-size: 0.8rem; font-weight: 500; transition: all 0.2s;
+      color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; 
+      font-size: 0.78rem; font-weight: 500; transition: all 0.2s; white-space: nowrap;
     }
     .btn-secret:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
 
     .card { 
-      background: var(--card-bg); padding: 28px; border-radius: var(--radius); 
-      box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border);
+      background: var(--card-bg); padding: 20px; border-radius: var(--radius); 
+      box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border);
     }
 
-    .card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: #334155; }
+    .card h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.82rem; color: #334155; }
 
     input, select, textarea { 
-      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); 
-      border-radius: 8px; font-size: 0.95rem; outline: none; 
+      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); 
+      border-radius: 8px; font-size: 0.9rem; outline: none; 
       transition: border-color 0.2s, box-shadow 0.2s; background: #f8fafc;
     }
 
@@ -100,8 +100,8 @@
     }
     
     .btn { 
-      background-color: var(--primary); color: white; border: none; padding: 10px 18px; 
-      border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; 
+      background-color: var(--primary); color: white; border: none; padding: 8px 14px; 
+      border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; 
       display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
     }
 
@@ -118,72 +118,37 @@
 
     /* KPIS ALUNO */
     .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
     }
 
-    .kpi-card {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .kpi-number {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .kpi-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
+    .kpi-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+    .kpi-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+    .kpi-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
 
     /* ESTRELAS DE AVALIAÇÃO */
-    .star-rating {
-      display: inline-flex;
-      gap: 4px;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
+    .star-rating { display: inline-flex; gap: 4px; font-size: 1.3rem; cursor: pointer; }
+    .star-rating .star { color: #cbd5e1; transition: color 0.2s; }
+    .star-rating .star.filled { color: #f59e0b; }
 
-    .star-rating .star {
-      color: #cbd5e1;
-      transition: color 0.2s;
-    }
-
-    .star-rating .star.filled {
-      color: #f59e0b;
-    }
-
-    /* ABAS DE NAVEGAÇÃO */
+    /* ABAS DE NAVEGAÇÃO RESPONSIVAS */
     .admin-tabs {
-      display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 20px;
+      display: flex; gap: 6px; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; padding-bottom: 2px;
     }
 
     .tab-btn {
-      padding: 10px 18px; border: none; background: transparent; font-weight: 600;
-      font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent;
-      margin-bottom: -2px; transition: all 0.2s;
+      padding: 8px 14px; border: none; background: transparent; font-weight: 600;
+      font-size: 0.85rem; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.2s; white-space: nowrap;
     }
 
-    .tab-btn.active {
-      color: var(--primary); border-bottom-color: var(--primary);
-    }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
     .student-notice-box {
       background-color: #fffbe3; border: 1px solid #fde047; border-left: 5px solid var(--warning);
-      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem;
+      color: #713f12; padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem;
     }
 
     .media-container-locked { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
@@ -192,78 +157,86 @@
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 10;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: white; padding: 20px; text-align: center; cursor: pointer;
+      color: white; padding: 15px; text-align: center; cursor: pointer;
     }
 
     .link-disabled { pointer-events: none; opacity: 0.4; text-decoration: none !important; cursor: not-allowed; }
 
     .progress-container { 
-      margin: 15px 0 25px 0; background: var(--primary-light);
-      padding: 16px 20px; border-radius: 10px; border: 1px solid #dbeafe;
+      margin: 12px 0 20px 0; background: var(--primary-light);
+      padding: 14px 16px; border-radius: 10px; border: 1px solid #dbeafe;
     }
 
-    .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; color: #1e40af; }
-    .progress-bar-bg { height: 12px; background-color: #cbd5e1; border-radius: 10px; overflow: hidden; }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; color: #1e40af; }
+    .progress-bar-bg { height: 10px; background-color: #cbd5e1; border-radius: 10px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.4s ease; }
 
-    .course-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: white; }
+    .course-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; background: white; }
     .course-card-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
-    .step-item { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; background-color: #f8fafc; }
+    .step-item { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; background-color: #f8fafc; }
     .step-item.locked { opacity: 0.7; }
-    .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1rem; }
-    .step-content { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+    .step-content { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
     .step-content.active { display: block; }
 
     /* SUBMÓDULO SANFONADO */
     .submodule-card {
-      background-color: white;
-      border: 1px solid #cbd5e1;
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-top: 16px;
+      background-color: white; border: 1px solid #cbd5e1; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 12px 14px; margin-top: 12px;
     }
 
-    .submodule-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 600;
+    .submodule-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
+    .submodule-content { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+    .submodule-content.active { display: block; }
+
+    /* ESTILOS DE SUBMÓDULO NO PAINEL DE GESTÃO */
+    .admin-submodule-box {
+      border: 1px dashed var(--border); background: #fafafa; padding: 12px; border-radius: 8px; margin-top: 10px;
     }
 
-    .submodule-content {
-      display: none;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--border);
+    .time-info-box { background: #f1f5f9; padding: 10px 12px; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
+
+    .comments-history { max-height: 130px; overflow-y: auto; margin-top: 8px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
+    .comment-date { font-size: 0.68rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
+
+    /* TABELAS RESPONSIVAS */
+    .table-wrapper { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; min-width: 600px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+    th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; }
+
+    .module-manage-item { 
+      border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background-color: #f8fafc; overflow: hidden;
     }
+    .module-manage-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; cursor: pointer; }
+    .module-manage-body { display: none; padding: 12px 14px; border-top: 1px solid var(--border); background: white; }
+    .module-manage-body.active { display: block; }
 
-    .submodule-content.active {
-      display: block;
-    }
-
-    .time-info-box { background: #f1f5f9; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
-
-    .comments-history { max-height: 150px; overflow-y: auto; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; }
-    .comment-date { font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.88rem; }
-    th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
-    th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px; }
-
-    .module-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background-color: #f8fafc; }
     .hidden { display: none !important; }
-    .badge { background: #d1fae5; color: #047857; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-    .badge-locked { background: #f1f5f9; color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .badge-inactive { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge { background: #d1fae5; color: #047857; padding: 3px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .badge-locked { background: #f1f5f9; color: #94a3b8; padding: 3px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .badge-inactive { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
 
     .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; }
-    .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 0.85rem; }
+    .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 0.82rem; }
 
-    footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); width: 100%; border-top: 1px solid #e2e8f0; }
+    /* MEDIA QUERIES PARA MOBILE */
+    @media (max-width: 640px) {
+      body { padding: 12px 8px; }
+      header { padding: 20px 16px; }
+      header h1 { font-size: 1.5rem; }
+      .card { padding: 16px; }
+      .kpi-grid { grid-template-columns: 1fr; gap: 8px; }
+      .checkbox-grid { grid-template-columns: 1fr; }
+      .form-grid-mobile { display: flex; flex-direction: column; gap: 8px; }
+      .module-manage-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .btn-group-mobile { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+      .btn-group-mobile .btn { font-size: 0.72rem; padding: 4px 8px; flex: 1; min-width: 80px; }
+    }
+
+    footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 0.82rem; color: var(--text-muted); width: 100%; border-top: 1px solid #e2e8f0; }
     footer p { margin-bottom: 6px; }
     footer a { color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
     footer a:hover { text-decoration: underline; }
@@ -286,7 +259,7 @@
   <!-- VISTA 1: ENTRADA DO ALUNO -->
   <div id="view-welcome" class="card">
     <h2>Acesso do Colaborador</h2>
-    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
       Digite seu e-mail cadastrado pelo gestor para acessar os seus cursos.
     </p>
     <form id="form-user">
@@ -294,13 +267,13 @@
         <label>E-mail corporativo *</label>
         <input type="email" id="u-email" required placeholder="seu.nome@lifeapps.com.br">
       </div>
-      <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Acessar Cursos</button>
+      <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Acessar Cursos</button>
     </form>
   </div>
 
   <!-- VISTA 2: PAINEL DE CURSOS DO ALUNO -->
   <div id="view-trail" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border); margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 14px; border-radius:8px; border:1px solid var(--border); margin-bottom:16px;">
       <div id="user-info"></div>
       <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
@@ -321,11 +294,11 @@
       </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-      <div class="student-notice-box" style="margin-bottom:0; flex:1; margin-right:10px;">
-        <strong>💡 Dica:</strong> Clique nos títulos para retrair ou expandir os Cursos, Módulos e Submódulos.
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+      <div class="student-notice-box" style="margin-bottom:0; flex:1; min-width:240px;">
+        <strong>💡 Dica:</strong> Clique nos títulos para retrair ou expandir Cursos, Módulos e Submódulos.
       </div>
-      <button class="btn btn-secondary" style="font-size:0.8rem; white-space:nowrap;" onclick="toggleAllStudentCourses()">↔ Expandir/Retrair Todos</button>
+      <button class="btn btn-secondary" style="font-size:0.78rem; white-space:nowrap;" onclick="toggleAllStudentCourses()">↔ Expandir/Retrair Cursos</button>
     </div>
 
     <div id="courses-container"></div>
@@ -333,11 +306,12 @@
 
   <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
   <div id="view-admin" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
       <h2>Painel Exclusivo de Gestão</h2>
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
+    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
       <button class="tab-btn active" onclick="switchAdminTab('users')">👥 Colaboradores</button>
       <button class="tab-btn" onclick="switchAdminTab('courses')">🎓 Cursos</button>
@@ -348,11 +322,11 @@
     <!-- ABA 1: COLABORADORES -->
     <div id="tab-users" class="tab-content active">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
-        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);" id="form-user-title">Cadastrar Novo Colaborador</h3>
+        <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);" id="form-user-title">Cadastrar Novo Colaborador</h3>
         <form id="form-add-user">
           <input type="hidden" id="edit-user-original-email" value="">
           
-          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <div class="form-grid-mobile" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
             <div>
               <label>Nome Completo *</label>
               <input type="text" id="admin-user-name" required placeholder="Ex: João da Silva">
@@ -380,37 +354,39 @@
           <label style="margin-top:12px;">Matricular nos Cursos:</label>
           <div class="checkbox-grid" id="admin-courses-enroll-checkboxes"></div>
 
-          <div style="display:flex; gap:10px; margin-top:15px;">
+          <div style="display:flex; gap:10px; margin-top:14px;">
             <button type="submit" class="btn" id="btn-save-user">Cadastrar Colaborador</button>
             <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit-user" onclick="resetUserForm()">Cancelar Edição</button>
           </div>
         </form>
       </div>
 
-      <h3 style="font-size:1rem; margin-top:20px;">Colaboradores Cadastrados</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Colaborador</th>
-            <th>E-mail / Depto</th>
-            <th>Status</th>
-            <th>Cursos e Progresso</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="admin-users-table"></tbody>
-      </table>
+      <h3 style="font-size:0.95rem; margin-top:16px;">Colaboradores Cadastrados</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Colaborador</th>
+              <th>E-mail / Depto</th>
+              <th>Status</th>
+              <th>Cursos e Progresso</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-table"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- ABA 2: CURSOS -->
     <div id="tab-courses" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
-        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);" id="form-course-title">Criar Novo Curso</h3>
+        <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);" id="form-course-title">Criar Novo Curso</h3>
         <form id="form-add-course">
           <input type="hidden" id="edit-course-id" value="">
           
-          <div style="display:flex; gap:10px; margin-bottom:12px;">
-            <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
+          <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+            <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0; flex:1;">
             <button type="submit" class="btn" id="btn-save-course" style="white-space:nowrap;">Criar Curso</button>
             <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit-course" onclick="resetCourseForm()">Cancelar</button>
           </div>
@@ -422,22 +398,22 @@
         </form>
       </div>
 
-      <h3 style="font-size:1rem; margin-top:20px;">Cursos Cadastrados</h3>
-      <div id="admin-courses-list" style="margin-top: 15px;"></div>
+      <h3 style="font-size:0.95rem; margin-top:16px;">Cursos Cadastrados</h3>
+      <div id="admin-courses-list" style="margin-top: 12px;"></div>
     </div>
 
-    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO E SUBMÓDULO -->
+    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO E MÚLTIPLOS SUBMÓDULOS -->
     <div id="tab-modules-form" class="tab-content">
-      <div style="border:1px solid var(--border); padding:20px; border-radius:8px; background:#fff;">
-        <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:15px;" id="form-step-title">Cadastrar Novo Módulo</h3>
+      <div style="border:1px solid var(--border); padding:18px; border-radius:8px; background:#fff;">
+        <h3 style="font-size:1rem; color:var(--primary); margin-bottom:12px;" id="form-step-title">Cadastrar Novo Módulo</h3>
         
         <form id="form-add-step">
           <input type="hidden" id="edit-module-id" value="">
           
           <label>Selecione o Curso deste Módulo *</label>
-          <select id="module-course-id" required style="margin-bottom:16px;"></select>
+          <select id="module-course-id" required style="margin-bottom:14px;"></select>
 
-          <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal do Módulo</h4>
+          <h4 style="color:var(--primary); margin-bottom:8px; font-size:0.9rem;">Conteúdo Principal do Módulo</h4>
           <label>Título do Módulo *</label>
           <input type="text" id="new-title" placeholder="Ex: 1. A História da LifeApps" required>
           
@@ -450,39 +426,37 @@
           <label>Link do Documento (PDF / Notion / Drive)</label>
           <input type="url" id="new-doc" placeholder="https://...">
 
-          <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
+          <hr style="margin:16px 0; border:none; border-top:1px dashed var(--border);">
 
-          <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional - Pode adicionar em Módulo Existente)</h4>
-          <label>Título do Submódulo</label>
-          <input type="text" id="sub-title" placeholder="Ex: Exercício Prático de Fixação">
-          
-          <label>Descrição do Submódulo</label>
-          <textarea id="sub-desc" rows="2" placeholder="Instruções para a atividade complementar..."></textarea>
-          
-          <label>Link do Vídeo do Submódulo (YouTube ou Google Drive)</label>
-          <input type="url" id="sub-video" placeholder="Cole aqui o link do YouTube ou do Google Drive">
-          
-          <label>Link do Documento do Submódulo</label>
-          <input type="url" id="sub-doc" placeholder="https://...">
+          <!-- GERENCIADOR DE MÚLTIPLOS SUBMÓDULOS -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h4 style="color:var(--accent); font-size:0.9rem;">Submódulos Adicionais (Ilimitados)</h4>
+            <button type="button" class="btn btn-secondary" style="font-size:0.75rem; padding:4px 8px;" onclick="addSubmoduleFormBlock()">➕ Adicionar Outro Submódulo</button>
+          </div>
 
-          <div style="display:flex; gap:10px; margin-top:15px;">
-            <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
+          <div id="submodules-form-container"></div>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button type="submit" class="btn" id="btn-save-module">Salvar Módulo e Submódulos</button>
             <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- ABA 4: GERENCIAR MÓDULOS -->
+    <!-- ABA 4: GERENCIAR MÓDULOS (REORDENAR, RECOLHER, EXCLUIR) -->
     <div id="tab-modules-list" class="tab-content">
-      <h3 style="font-size:1rem; margin-bottom:12px;">Todos os Módulos Cadastrados</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:0.95rem;">Todos os Módulos Cadastrados</h3>
+        <span style="font-size:0.75rem; color:var(--text-muted);">Use os botões ↑ ↓ para alterar a ordem da trilha.</span>
+      </div>
       <div id="admin-modules-list"></div>
     </div>
 
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.2 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 3.0 Cloud Refactored</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -520,19 +494,19 @@
   ];
 
   const DEFAULT_STEPS = [
-    { id: "1", courseId: "c1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "", status: "ativo" },
-    { id: "2", courseId: "c1", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "", status: "ativo" },
-    { id: "3", courseId: "c1", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "", status: "ativo" },
-    { id: "4", courseId: "c1", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "", status: "ativo" },
-    { id: "5", courseId: "c1", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "", status: "ativo" },
-    { id: "6", courseId: "c1", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "", status: "ativo" }
+    { id: "1", courseId: "c1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "", status: "ativo", order: 1, submodules: [] },
+    { id: "2", courseId: "c1", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "", status: "ativo", order: 2, submodules: [] },
+    { id: "3", courseId: "c1", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "", status: "ativo", order: 3, submodules: [] },
+    { id: "4", courseId: "c1", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "", status: "ativo", order: 4, submodules: [] },
+    { id: "5", courseId: "c1", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "", status: "ativo", order: 5, submodules: [] },
+    { id: "6", courseId: "c1", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "", status: "ativo", order: 6, submodules: [] }
   ];
 
   let currentStudent = null;
   let cachedCourses = [];
   let cachedSteps = [];
   let cachedUsers = {};
-  let allStudentCoursesExpanded = false; // Padrão: Recolhido
+  let allStudentCoursesExpanded = false; // Padrão: 100% Recolhido
 
   function switchAdminTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -560,6 +534,8 @@
       } else {
         cachedSteps = [];
         sSnap.forEach(doc => cachedSteps.push(doc.data()));
+        // Ordena por ordem configurada
+        cachedSteps.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
 
       const uSnap = await db.collection('users').get();
@@ -647,8 +623,8 @@
 
   function renderStudentCourses() {
     document.getElementById('user-info').innerHTML = `
-      <strong style="font-size:1rem; color:var(--text);">${currentStudent.name}</strong>
-      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.dept || 'Geral'} • ${currentStudent.email}</span>
+      <strong style="font-size:0.95rem; color:var(--text);">${currentStudent.name}</strong>
+      <span style="font-size:0.75rem; color:var(--text-muted); display:block;">${currentStudent.dept || 'Geral'} • ${currentStudent.email}</span>
     `;
 
     const enrolledIds = currentStudent.enrolledCourses || [];
@@ -673,9 +649,17 @@
 
       courseSteps.forEach(step => {
         const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
-        const hasSub = step.submodule && step.submodule.title;
-        const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
-        if (isMainDone && isSubDone) completedCount++;
+        
+        // Verifica submódulos do array ou antigo
+        const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
+        let allSubsDone = true;
+        subList.forEach((sub, sIdx) => {
+          if (!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`])) {
+            allSubsDone = false;
+          }
+        });
+
+        if (isMainDone && allSubsDone) completedCount++;
       });
 
       const pct = courseSteps.length ? Math.round((completedCount / courseSteps.length) * 100) : 0;
@@ -689,10 +673,10 @@
       courseEl.className = 'course-card';
       courseEl.innerHTML = `
         <div class="course-card-header" onclick="toggleCourseContent('${course.id}')">
-          <h2 style="color:var(--primary); font-size:1.2rem; display:flex; align-items:center; gap:8px;">
+          <h2 style="color:var(--primary); font-size:1.1rem; display:flex; align-items:center; gap:8px;">
             🎓 ${course.title}
           </h2>
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
             <span class="badge">${pct}% Concluído</span>
             <span style="font-size:0.8rem; color:var(--text-muted);">▾</span>
           </div>
@@ -705,9 +689,9 @@
             </div>
           </div>
 
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border); margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid var(--border); margin-bottom:14px; flex-wrap:wrap; gap:8px;">
             <div>
-              <span style="font-size:0.85rem; font-weight:600; color:var(--text); display:block;">Avalie este curso:</span>
+              <span style="font-size:0.8rem; font-weight:600; color:var(--text); display:block;">Avalie este curso:</span>
               <div class="star-rating" id="stars-${course.id}">
                 ${[1, 2, 3, 4, 5].map(star => `
                   <span class="star ${star <= currentRating ? 'filled' : ''}" onclick="rateCourse('${course.id}', ${star})">★</span>
@@ -715,7 +699,7 @@
               </div>
             </div>
 
-            <button class="btn btn-success" style="font-size:0.85rem;" ${!isFullyCompleted ? 'disabled title="Conclua 100% dos módulos do curso para liberar o certificado"' : ''} onclick="generateCertificate('${currentStudent.email}', '${course.id}')">
+            <button class="btn btn-success" style="font-size:0.78rem;" ${!isFullyCompleted ? 'disabled title="Conclua 100% dos módulos para liberar"' : ''} onclick="generateCertificate('${currentStudent.email}', '${course.id}')">
               📜 Baixar Certificado (PDF)
             </button>
           </div>
@@ -742,8 +726,8 @@
     if (body) body.classList.toggle('hidden');
   }
 
-  function toggleSubmoduleContent(stepId) {
-    const subBody = document.getElementById(`sub-body-${stepId}`);
+  function toggleSubmoduleContent(stepId, subIdx) {
+    const subBody = document.getElementById(`sub-body-${stepId}-${subIdx}`);
     if (subBody) subBody.classList.toggle('active');
   }
 
@@ -778,92 +762,106 @@
       const isStarted = !!stepTimes.start;
       
       const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
-      const hasSub = step.submodule && step.submodule.title;
-      const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
+      
+      // Suporte a múltiplos submódulos
+      const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
+      let allSubsDone = true;
 
-      const isModuleFullyDone = isMainDone && isSubDone;
+      subList.forEach((sub, sIdx) => {
+        if (!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`])) {
+          allSubsDone = false;
+        }
+      });
+
+      const isModuleFullyDone = isMainDone && allSubsDone;
       const isLocked = !previousModuleFullyCompleted;
       previousModuleFullyCompleted = isModuleFullyDone;
 
       const embedVideo = convertToEmbedUrl(step.videoUrl);
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
-      const canCompleteMain = isStarted && (!hasSub || isSubDone);
+      const canCompleteMain = isStarted && allSubsDone;
+
+      // HTML dos submódulos
+      let subModulesHtml = '';
+      subList.forEach((sub, sIdx) => {
+        const isSubDone = !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`]);
+        subModulesHtml += `
+          <div class="submodule-card">
+            <div class="submodule-header" onclick="toggleSubmoduleContent('${step.id}', ${sIdx})">
+              <span style="color:var(--accent); font-size:0.88rem;">📌 Submódulo ${sIdx + 1}: ${sub.title}</span>
+              <span style="font-size:0.75rem; color:var(--text-muted);">${isSubDone ? '✅ Concluído' : '▾ Ver conteúdo'}</span>
+            </div>
+
+            <div class="submodule-content" id="sub-body-${step.id}-${sIdx}">
+              ${sub.desc ? `<p style="font-size:0.85rem; color:#475569; margin-bottom:8px;">${sub.desc}</p>` : ''}
+              ${sub.videoUrl ? `
+                <div class="media-container-locked">
+                  ${!isStarted ? `<div class="media-overlay-lock"><span style="font-size:1.2rem;">🔒</span></div>` : ''}
+                  <iframe width="100%" height="260" src="${convertToEmbedUrl(sub.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
+                </div>
+              ` : ''}
+              ${sub.docUrl ? `<p style="margin-bottom:8px;"><a href="${sub.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.82rem;">📄 Material Submódulo →</a></p>` : ''}
+              <label style="font-weight:600; cursor:pointer; font-size:0.82rem; display:flex; gap:8px; align-items:center; margin-top:6px;">
+                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markSubStep('${step.id}', ${sIdx}, this.checked)">
+                ${isSubDone ? 'Submódulo Concluído' : 'Concluir submódulo'}
+              </label>
+            </div>
+          </div>
+        `;
+      });
 
       const el = document.createElement('div');
       el.className = `step-item ${isLocked ? 'locked' : ''}`;
       el.innerHTML = `
         <div class="step-header" onclick="${isLocked ? `alert('🔒 Conclua o módulo anterior para desbloquear!')` : `toggleContent('step-${step.id}')`}">
           <span>${step.title}</span>
-          ${isLocked ? '<span class="badge-locked">🔒 Bloqueado</span>' : (isModuleFullyDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--primary); font-weight:bold;">Acessar aula ▾</span>')}
+          ${isLocked ? '<span class="badge-locked">🔒 Bloqueado</span>' : (isModuleFullyDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.78rem; color:var(--primary); font-weight:bold;">Acessar aula ▾</span>')}
         </div>
         
         <div class="step-content" id="step-${step.id}">
           <div class="time-info-box">
             ${!isStarted ? `
-              <button type="button" class="btn" style="padding:8px 14px; font-size:0.85rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
+              <button type="button" class="btn" style="padding:6px 12px; font-size:0.8rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
             ` : `
               <p>🗓 <strong>Iniciado em:</strong> ${formatDate(stepTimes.start)}</p>
               ${stepTimes.end ? `<p style="margin-top:4px;">✅ <strong>Finalizado em:</strong> ${formatDate(stepTimes.end)}</p>` : '<p style="margin-top:4px; color:#d97706;">⏳ Em andamento...</p>'}
             `}
           </div>
 
-          <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
+          <p style="margin-bottom:10px; color:#475569; font-size:0.9rem;">${step.desc}</p>
 
           ${embedVideo ? `
             <div class="media-container-locked">
               ${!isStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' para liberar o vídeo!')"><span style="font-size:1.5rem;">🔒</span><span>Vídeo Bloqueado</span></div>` : ''}
-              <iframe width="100%" height="320" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
+              <iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
             </div>
           ` : ''}
 
           ${step.docUrl ? `
-            <p style="margin-bottom:12px;">
+            <p style="margin-bottom:10px;">
               <a href="${step.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
                 📄 Documento de Apoio → ${!isStarted ? '(Bloqueado)' : ''}
               </a>
             </p>
           ` : ''}
           
-          <!-- SUBMÓDULO RECOLHÍVEL / SANFONADO -->
-          ${hasSub ? `
-            <div class="submodule-card">
-              <div class="submodule-header" onclick="toggleSubmoduleContent('${step.id}')">
-                <span style="color:var(--accent); font-size:0.95rem;">📌 Submódulo: ${step.submodule.title}</span>
-                <span style="font-size:0.8rem; color:var(--text-muted);">${isSubDone ? '✅ Concluído' : '▾ Ver conteúdo'}</span>
-              </div>
+          ${subModulesHtml}
 
-              <div class="submodule-content" id="sub-body-${step.id}">
-                ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
-                ${step.submodule.videoUrl ? `
-                  <div class="media-container-locked">
-                    ${!isStarted ? `<div class="media-overlay-lock"><span style="font-size:1.2rem;">🔒</span></div>` : ''}
-                    <iframe width="100%" height="280" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
-                  </div>
-                ` : ''}
-                ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material Submódulo →</a></p>` : ''}
-                <label style="font-weight:600; cursor:pointer; font-size:0.85rem; display:flex; gap:8px; align-items:center; margin-top:8px;">
-                  <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
-                  ${isSubDone ? 'Submódulo Concluído' : 'Concluir submódulo'}
-                </label>
-              </div>
-            </div>
-          ` : ''}
-
-          <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
+          <div style="margin-top: 12px; padding-top:8px; border-top:1px dashed var(--border);">
             <label style="font-weight:600; cursor:${isMainDone ? 'default' : 'pointer'}; display:flex; gap:8px; align-items:center;">
-              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked disabled' : ''} ${!canCompleteMain ? 'disabled' : ''} onchange="markStep('${step.id}', 'main', this.checked)">
+              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked disabled' : ''} ${!canCompleteMain ? 'disabled' : ''} onchange="markMainStep('${step.id}', this.checked)">
               ${isMainDone ? 'Módulo Principal Concluído' : 'Concluir módulo principal'}
             </label>
           </div>
 
-          <div style="margin-top:18px; padding-top:12px; border-top:1px solid var(--border);">
-            <label style="font-size:0.85rem; font-weight:600;">📝 Histórico de Observações:</label>
+          <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border);">
+            <label style="font-size:0.8rem; font-weight:600;">📝 Histórico de Observações:</label>
             <div class="comments-history">
-              ${commentsList.length === 0 ? '<p style="font-size:0.8rem; color:var(--text-muted);">Nenhum comentário registrado.</p>' : commentsList.map(c => `<div class="comment-bubble"><span class="comment-date">${c.date}</span><span>${c.text}</span></div>`).join('')}
+              ${commentsList.length === 0 ? '<p style="font-size:0.78rem; color:var(--text-muted);">Nenhum comentário registrado.</p>' : commentsList.map(c => `<div class="comment-bubble"><span class="comment-date">${c.date}</span><span>${c.text}</span></div>`).join('')}
             </div>
-            <div style="display:flex; gap:8px; margin-top:8px;">
+            <div style="display:flex; gap:8px; margin-top:6px;">
               <input type="text" id="input-comment-${step.id}" style="margin-bottom:0;" placeholder="Digite seu comentário...">
-              <button type="button" class="btn" style="white-space:nowrap;" onclick="addComment('${step.id}')">💬 Salvar</button>
+              <button type="button" class="btn" style="white-space:nowrap; font-size:0.78rem;" onclick="addComment('${step.id}')">💬 Salvar</button>
             </div>
           </div>
         </div>
@@ -887,26 +885,42 @@
     }
   }
 
-  async function markStep(stepId, type, isChecked) {
+  async function markMainStep(stepId, isChecked) {
     if (!currentStudent.progress) currentStudent.progress = {};
-    const key = (type === 'sub') ? `${stepId}_sub` : stepId;
-    currentStudent.progress[key] = isChecked;
+    currentStudent.progress[stepId] = isChecked;
 
-    const stepObj = cachedSteps.find(s => s.id === stepId);
-    const hasSub = stepObj && stepObj.submodule && stepObj.submodule.title;
-
-    const isMainDone = !!currentStudent.progress[stepId];
-    const isSubDone = hasSub ? !!currentStudent.progress[`${stepId}_sub`] : true;
-
-    if (!currentStudent.times) currentStudent.times = {};
-    if (!currentStudent.times[stepId]) currentStudent.times[stepId] = { start: new Date().toISOString() };
-
-    if (isMainDone && isSubDone) currentStudent.times[stepId].end = new Date().toISOString();
-
+    checkAndFinalizeStepTimer(stepId);
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
     document.getElementById(`step-${stepId}`).classList.add('active');
+  }
+
+  async function markSubStep(stepId, subIdx, isChecked) {
+    if (!currentStudent.progress) currentStudent.progress = {};
+    currentStudent.progress[`${stepId}_sub_${subIdx}`] = isChecked;
+
+    checkAndFinalizeStepTimer(stepId);
+    await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
+
+    renderStudentCourses();
+    document.getElementById(`step-${stepId}`).classList.add('active');
+  }
+
+  function checkAndFinalizeStepTimer(stepId) {
+    const stepObj = cachedSteps.find(s => s.id === stepId);
+    const subList = stepObj.submodules || (stepObj.submodule && stepObj.submodule.title ? [stepObj.submodule] : []);
+
+    const isMainDone = !!currentStudent.progress[stepId];
+    let allSubsDone = true;
+    subList.forEach((sub, sIdx) => {
+      if (!currentStudent.progress[`${stepId}_sub_${sIdx}`]) allSubsDone = false;
+    });
+
+    if (!currentStudent.times) currentStudent.times = {};
+    if (!currentStudent.times[stepId]) currentStudent.times[stepId] = { start: new Date().toISOString() };
+
+    if (isMainDone && allSubsDone) currentStudent.times[stepId].end = new Date().toISOString();
   }
 
   async function addComment(stepId) {
@@ -929,7 +943,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA
+  // ÁREA DE GESTÃO RESTRITA (UX REFACTORED)
   // ==========================================
 
   async function openAdminModal() {
@@ -956,7 +970,7 @@
     renderUsersManagement();
   }
 
-  // 1. GESTÃO E EDIÇÃO DE CURSOS
+  // GESTÃO DE CURSOS
   document.getElementById('form-add-course').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('new-course-title').value.trim();
@@ -964,12 +978,7 @@
 
     const courseId = editId ? editId : `c_${Date.now()}`;
 
-    const courseData = {
-      id: courseId,
-      title: title,
-      status: "ativo"
-    };
-
+    const courseData = { id: courseId, title: title, status: "ativo" };
     await db.collection('courses').doc(courseId).set(courseData, { merge: true });
 
     if (editId) {
@@ -1000,12 +1009,12 @@
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
-        <div>
+        <div style="padding:10px 14px;">
           <strong>🎓 ${c.title}</strong>
           <span style="font-size:0.75rem; color:var(--text-muted); display:block;">(${moduleCount} Módulo(s) associados)</span>
           <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-top:4px; display:inline-block;">${isActive ? 'Ativo' : 'Inativo'}</span>
         </div>
-        <div style="display:flex; gap:6px;">
+        <div style="padding:10px 14px;" class="btn-group-mobile">
           <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editCourse('${c.id}')">✏️ Editar</button>
           <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleCourseStatus('${c.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
           <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteCourse('${c.id}')">Excluir</button>
@@ -1086,7 +1095,35 @@
     });
   }
 
-  // 2. GESTÃO DE MÓDULOS E SUBMÓDULOS
+  // GESTÃO DE MÓDULOS E SUBMÓDULOS ILIMITADOS
+  let submoduleFormCount = 0;
+
+  function addSubmoduleFormBlock(subData = null) {
+    submoduleFormCount++;
+    const container = document.getElementById('submodules-form-container');
+    const block = document.createElement('div');
+    block.className = 'admin-submodule-box';
+    block.id = `submodule-block-${submoduleFormCount}`;
+    block.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <strong style="font-size:0.85rem; color:var(--accent);">📌 Submódulo</strong>
+        <button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="document.getElementById('submodule-block-${submoduleFormCount}').remove()">Remover</button>
+      </div>
+      <label>Título do Submódulo</label>
+      <input type="text" class="sub-input-title" placeholder="Ex: Exercício de Fixação" value="${subData ? subData.title || '' : ''}">
+      
+      <label>Descrição do Submódulo</label>
+      <textarea class="sub-input-desc" rows="2" placeholder="Instruções...">${subData ? subData.desc || '' : ''}</textarea>
+      
+      <label>Link do Vídeo (YouTube / Drive)</label>
+      <input type="url" class="sub-input-video" placeholder="Link do vídeo..." value="${subData ? subData.videoUrl || '' : ''}">
+      
+      <label>Link do Documento de Apoio</label>
+      <input type="url" class="sub-input-doc" placeholder="Link do documento..." value="${subData ? subData.docUrl || '' : ''}">
+    `;
+    container.appendChild(block);
+  }
+
   function renderModulesManagement() {
     const container = document.getElementById('admin-modules-list');
     container.innerHTML = '';
@@ -1096,29 +1133,64 @@
       return;
     }
 
-    cachedSteps.forEach((step) => {
+    cachedSteps.forEach((step, idx) => {
       const course = cachedCourses.find(c => c.id === step.courseId);
       const courseName = course ? course.title : 'Sem Curso';
       const isActive = step.status !== "inativo";
-      const hasSub = step.submodule && step.submodule.title;
+      const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
 
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
-        <div>
-          <span style="font-size:0.75rem; color:var(--primary); font-weight:bold; display:block;">[${courseName}]</span>
-          <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
-          ${hasSub ? `<span style="display:block; font-size:0.75rem; color:var(--accent);">📌 Submódulo: ${step.submodule.title}</span>` : ''}
-          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-top:4px; display:inline-block; font-size:0.7rem;">${isActive ? 'Ativo' : 'Inativo'}</span>
+        <div class="module-manage-header" onclick="document.getElementById('mod-manage-body-${step.id}').classList.toggle('active')">
+          <div>
+            <span style="font-size:0.75rem; color:var(--primary); font-weight:bold; display:block;">[${courseName}]</span>
+            <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
+            <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-left:6px; font-size:0.7rem;">${isActive ? 'Ativo' : 'Inativo'}</span>
+            ${subList.length > 0 ? `<span class="badge" style="background:#e0f2fe; color:#0369a1; margin-left:4px;">${subList.length} Submódulo(s)</span>` : ''}
+          </div>
+          <div class="btn-group-mobile" onclick="event.stopPropagation()">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="moveModuleOrder(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑ Cima</button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="moveModuleOrder(${idx}, 1)" ${idx === cachedSteps.length - 1 ? 'disabled' : ''}>↓ Baixo</button>
+            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.72rem;" onclick="toggleModuleStatus('${step.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="editModule('${step.id}')">✏️ Editar</button>
+            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="deleteModule('${step.id}')">Excluir</button>
+          </div>
         </div>
-        <div style="display:flex; gap:6px;">
-          <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleModuleStatus('${step.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
-          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editModule('${step.id}')">Editar</button>
-          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
+
+        <div class="module-manage-body" id="mod-manage-body-${step.id}">
+          <p style="font-size:0.85rem; color:#475569; margin-bottom:8px;">${step.desc}</p>
+          ${subList.length > 0 ? `
+            <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
+              <strong style="font-size:0.8rem; color:var(--accent);">Submódulos vinculados:</strong>
+              <ul style="font-size:0.8rem; padding-left:20px; margin-top:4px;">
+                ${subList.map(sub => `<li>${sub.title}</li>`).join('')}
+              </ul>
+            </div>
+          ` : '<p style="font-size:0.78rem; color:var(--text-muted);">Nenhum submódulo vinculado.</p>'}
         </div>
       `;
       container.appendChild(item);
     });
+  }
+
+  async function moveModuleOrder(index, direction) {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= cachedSteps.length) return;
+
+    // Troca os elementos de posição
+    const temp = cachedSteps[index];
+    cachedSteps[index] = cachedSteps[targetIndex];
+    cachedSteps[targetIndex] = temp;
+
+    // Atualiza campo 'order'
+    for (let i = 0; i < cachedSteps.length; i++) {
+      cachedSteps[i].order = i + 1;
+      await db.collection('steps').doc(cachedSteps[i].id).update({ order: i + 1 });
+    }
+
+    await loadCloudData();
+    renderAdminDashboard();
   }
 
   async function toggleModuleStatus(stepId) {
@@ -1142,12 +1214,14 @@
     document.getElementById('new-video').value = step.videoUrl || '';
     document.getElementById('new-doc').value = step.docUrl || '';
 
-    if (step.submodule) {
-      document.getElementById('sub-title').value = step.submodule.title || '';
-      document.getElementById('sub-desc').value = step.submodule.desc || '';
-      document.getElementById('sub-video').value = step.submodule.videoUrl || '';
-      document.getElementById('sub-doc').value = step.submodule.docUrl || '';
-    } else clearSubmoduleFields();
+    // Preenche múltiplos submódulos
+    document.getElementById('submodules-form-container').innerHTML = '';
+    submoduleFormCount = 0;
+
+    const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
+    subList.forEach(sub => {
+      addSubmoduleFormBlock(sub);
+    });
 
     document.getElementById('form-step-title').innerText = `✏️ Editando Módulo: ${step.title}`;
     document.getElementById('btn-save-module').innerText = "Atualizar Módulo";
@@ -1159,17 +1233,12 @@
   function resetModuleForm() {
     document.getElementById('edit-module-id').value = '';
     document.getElementById('form-add-step').reset();
-    clearSubmoduleFields();
+    document.getElementById('submodules-form-container').innerHTML = '';
+    submoduleFormCount = 0;
+
     document.getElementById('form-step-title').innerText = "Cadastrar Novo Módulo";
     document.getElementById('btn-save-module').innerText = "Salvar Módulo";
     document.getElementById('btn-cancel-edit').classList.add('hidden');
-  }
-
-  function clearSubmoduleFields() {
-    document.getElementById('sub-title').value = '';
-    document.getElementById('sub-desc').value = '';
-    document.getElementById('sub-video').value = '';
-    document.getElementById('sub-doc').value = '';
   }
 
   async function deleteModule(id) {
@@ -1185,9 +1254,24 @@
     e.preventDefault();
     const editId = document.getElementById('edit-module-id').value;
     const courseId = document.getElementById('module-course-id').value;
-    const subTitle = document.getElementById('sub-title').value.trim();
 
     const id = editId ? editId : Date.now().toString();
+
+    // Coleta todos os submódulos preenchidos no formulário
+    const subBlocks = document.querySelectorAll('.admin-submodule-box');
+    const submodulesData = [];
+
+    subBlocks.forEach(b => {
+      const title = b.querySelector('.sub-input-title').value.trim();
+      if (title) {
+        submodulesData.push({
+          title: title,
+          desc: b.querySelector('.sub-input-desc').value.trim(),
+          videoUrl: convertToEmbedUrl(b.querySelector('.sub-input-video').value.trim()),
+          docUrl: b.querySelector('.sub-input-doc').value.trim()
+        });
+      }
+    });
 
     const moduleData = {
       id: id,
@@ -1197,24 +1281,20 @@
       videoUrl: convertToEmbedUrl(document.getElementById('new-video').value),
       docUrl: document.getElementById('new-doc').value,
       status: "ativo",
-      submodule: subTitle ? {
-        title: subTitle,
-        desc: document.getElementById('sub-desc').value,
-        videoUrl: convertToEmbedUrl(document.getElementById('sub-video').value),
-        docUrl: document.getElementById('sub-doc').value
-      } : null
+      order: editId ? (cachedSteps.find(s=>s.id===editId).order || cachedSteps.length+1) : cachedSteps.length+1,
+      submodules: submodulesData
     };
 
     await db.collection('steps').doc(id).set(moduleData, { merge: true });
     await loadCloudData();
 
-    alert("✅ Módulo salvo com sucesso na nuvem!");
+    alert("✅ Módulo e submódulos salvos com sucesso na nuvem!");
     resetModuleForm();
     renderAdminDashboard();
     switchAdminTab('modules-list');
   });
 
-  // 3. CADASTRAR / EDITAR / RESETAR / GERENCIAR ALUNOS E CERTIFICADOS
+  // GESTÃO E EDIÇÃO DE COLABORADORES
   document.getElementById('form-add-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
@@ -1304,7 +1384,13 @@
         if (confirm(`Resetar todo o curso "${targetCourse.title}" para ${u.name}?`)) {
           const courseSteps = cachedSteps.filter(s => s.courseId === targetCourse.id);
           courseSteps.forEach(s => {
-            if (u.progress) { delete u.progress[s.id]; delete u.progress[`${s.id}_sub`]; }
+            if (u.progress) {
+              delete u.progress[s.id];
+              // Limpa todos os submódulos vinculados
+              Object.keys(u.progress).forEach(k => {
+                if (k.startsWith(`${s.id}_sub_`)) delete u.progress[k];
+              });
+            }
             if (u.times) delete u.times[s.id];
             if (u.notes) delete u.notes[s.id];
           });
@@ -1325,7 +1411,12 @@
       if (!isNaN(chosenIdx) && cachedSteps[chosenIdx]) {
         const targetStep = cachedSteps[chosenIdx];
         if (confirm(`Resetar apenas o módulo "${targetStep.title}" para ${u.name}?`)) {
-          if (u.progress) { delete u.progress[targetStep.id]; delete u.progress[`${targetStep.id}_sub`]; }
+          if (u.progress) {
+            delete u.progress[targetStep.id];
+            Object.keys(u.progress).forEach(k => {
+              if (k.startsWith(`${targetStep.id}_sub_`)) delete u.progress[k];
+            });
+          }
           if (u.times) delete u.times[targetStep.id];
           if (u.notes) delete u.notes[targetStep.id];
 
@@ -1362,9 +1453,13 @@
         let doneCount = 0;
         cSteps.forEach(s => {
           const isMain = !!(u.progress && u.progress[s.id]);
-          const hasSub = s.submodule && s.submodule.title;
-          const isSub = hasSub ? !!(u.progress && u.progress[`${s.id}_sub`]) : true;
-          if (isMain && isSub) doneCount++;
+          const subList = s.submodules || (s.submodule && s.submodule.title ? [s.submodule] : []);
+          let allSubsDone = true;
+          subList.forEach((sub, sIdx) => {
+            if (!(u.progress && u.progress[`${s.id}_sub_${sIdx}`])) allSubsDone = false;
+          });
+
+          if (isMain && allSubsDone) doneCount++;
         });
 
         const pct = cSteps.length ? Math.round((doneCount / cSteps.length) * 100) : 0;
@@ -1372,9 +1467,9 @@
         const rating = (u.ratings && u.ratings[course.id]) ? `⭐ ${u.ratings[course.id]}/5` : '';
 
         coursesHtml += `
-          <div style="margin-bottom:6px; background:#f1f5f9; padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
-            <span><strong>${course.title}</strong> (${pct}%) ${rating ? `<span style="font-size:0.75rem; color:#d97706;">${rating}</span>` : ''}</span>
-            <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem;" ${!isFullyDone ? 'disabled' : ''} onclick="generateCertificate('${u.email}', '${course.id}')">📜 Certificado</button>
+          <div style="margin-bottom:6px; background:#f1f5f9; padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span><strong>${course.title}</strong> (${pct}%) ${rating ? `<span style="font-size:0.72rem; color:#d97706;">${rating}</span>` : ''}</span>
+            <button class="btn btn-success" style="padding:2px 6px; font-size:0.68rem;" ${!isFullyDone ? 'disabled' : ''} onclick="generateCertificate('${u.email}', '${course.id}')">📜 Certificado</button>
           </div>
         `;
       });
@@ -1384,13 +1479,13 @@
         <td><strong>${u.name || '-'}</strong></td>
         <td>${u.email}<br><span style="font-size:0.75rem; color:var(--text-muted);">${u.dept || 'Geral'}</span></td>
         <td><span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span></td>
-        <td style="min-width:260px;">${coursesHtml || 'Nenhum curso'}</td>
+        <td style="min-width:240px;">${coursesHtml || 'Nenhum curso'}</td>
         <td>
-          <div style="display:flex; gap:4px; flex-wrap:wrap;">
-            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editUser('${u.email}')">✏️ Editar</button>
-            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem;" onclick="resetUserOptions('${u.email}')">🔄 Resetar</button>
-            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleUserStatus('${u.email}')">${isActive ? 'Inativar' : 'Ativar'}</button>
-            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
+          <div class="btn-group-mobile">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="editUser('${u.email}')">✏️ Editar</button>
+            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.72rem;" onclick="resetUserOptions('${u.email}')">🔄 Resetar</button>
+            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.72rem;" onclick="toggleUserStatus('${u.email}')">${isActive ? 'Inativar' : 'Ativar'}</button>
+            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="deleteUser('${u.email}')">Excluir</button>
           </div>
         </td>
       `;
