@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.1 Cloud</title>
+  <title>LifeApps Academy v2.2 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -215,7 +215,35 @@
     .step-content { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
     .step-content.active { display: block; }
 
-    .submodule-card { background-color: white; border: 1px solid #cbd5e1; border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px; margin-top: 16px; }
+    /* SUBMÓDULO SANFONADO */
+    .submodule-card {
+      background-color: white;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .submodule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .submodule-content {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .submodule-content.active {
+      display: block;
+    }
+
     .time-info-box { background: #f1f5f9; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
 
     .comments-history { max-height: 150px; overflow-y: auto; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -295,7 +323,7 @@
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
       <div class="student-notice-box" style="margin-bottom:0; flex:1; margin-right:10px;">
-        <strong>💡 Dica:</strong> Clique nos títulos para retrair ou expandir os Cursos e Módulos.
+        <strong>💡 Dica:</strong> Clique nos títulos para retrair ou expandir os Cursos, Módulos e Submódulos.
       </div>
       <button class="btn btn-secondary" style="font-size:0.8rem; white-space:nowrap;" onclick="toggleAllStudentCourses()">↔ Expandir/Retrair Todos</button>
     </div>
@@ -398,7 +426,7 @@
       <div id="admin-courses-list" style="margin-top: 15px;"></div>
     </div>
 
-    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO -->
+    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO E SUBMÓDULO -->
     <div id="tab-modules-form" class="tab-content">
       <div style="border:1px solid var(--border); padding:20px; border-radius:8px; background:#fff;">
         <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:15px;" id="form-step-title">Cadastrar Novo Módulo</h3>
@@ -409,7 +437,7 @@
           <label>Selecione o Curso deste Módulo *</label>
           <select id="module-course-id" required style="margin-bottom:16px;"></select>
 
-          <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal</h4>
+          <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal do Módulo</h4>
           <label>Título do Módulo *</label>
           <input type="text" id="new-title" placeholder="Ex: 1. A História da LifeApps" required>
           
@@ -424,7 +452,7 @@
 
           <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
 
-          <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
+          <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional - Pode adicionar em Módulo Existente)</h4>
           <label>Título do Submódulo</label>
           <input type="text" id="sub-title" placeholder="Ex: Exercício Prático de Fixação">
           
@@ -454,7 +482,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.1 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.2 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -504,7 +532,7 @@
   let cachedCourses = [];
   let cachedSteps = [];
   let cachedUsers = {};
-  let allStudentCoursesExpanded = true;
+  let allStudentCoursesExpanded = false; // Padrão: Recolhido
 
   function switchAdminTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -629,7 +657,6 @@
     const container = document.getElementById('courses-container');
     container.innerHTML = '';
 
-    // ATUALIZAR KPIS DO ALUNO
     let enrolledCount = enrolledCourses.length;
     let ongoingCount = 0;
     let completedCountTotal = 0;
@@ -671,14 +698,13 @@
           </div>
         </div>
 
-        <div id="course-body-${course.id}">
+        <div id="course-body-${course.id}" class="hidden">
           <div class="progress-container">
             <div class="progress-bar-bg">
               <div class="progress-bar-fill" style="width: ${pct}%;"></div>
             </div>
           </div>
 
-          <!-- BOTÃO EMISSÃO DIRETA PELO ALUNO + AVALIAÇÃO DE ESTRELAS -->
           <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border); margin-bottom:16px; flex-wrap:wrap; gap:10px;">
             <div>
               <span style="font-size:0.85rem; font-weight:600; color:var(--text); display:block;">Avalie este curso:</span>
@@ -714,6 +740,11 @@
   function toggleCourseContent(courseId) {
     const body = document.getElementById(`course-body-${courseId}`);
     if (body) body.classList.toggle('hidden');
+  }
+
+  function toggleSubmoduleContent(stepId) {
+    const subBody = document.getElementById(`sub-body-${stepId}`);
+    if (subBody) subBody.classList.toggle('active');
   }
 
   function toggleAllStudentCourses() {
@@ -793,21 +824,28 @@
             </p>
           ` : ''}
           
+          <!-- SUBMÓDULO RECOLHÍVEL / SANFONADO -->
           ${hasSub ? `
             <div class="submodule-card">
-              <h4 style="color:var(--accent); font-size:0.95rem; margin-bottom:6px;">📌 Submódulo: ${step.submodule.title}</h4>
-              ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
-              ${step.submodule.videoUrl ? `
-                <div class="media-container-locked">
-                  ${!isStarted ? `<div class="media-overlay-lock"><span style="font-size:1.2rem;">🔒</span></div>` : ''}
-                  <iframe width="100%" height="280" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
-                </div>
-              ` : ''}
-              ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material Submódulo →</a></p>` : ''}
-              <label style="font-weight:600; cursor:pointer; font-size:0.85rem; display:flex; gap:8px; align-items:center; margin-top:8px;">
-                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
-                ${isSubDone ? 'Submódulo Concluído' : 'Concluir submódulo'}
-              </label>
+              <div class="submodule-header" onclick="toggleSubmoduleContent('${step.id}')">
+                <span style="color:var(--accent); font-size:0.95rem;">📌 Submódulo: ${step.submodule.title}</span>
+                <span style="font-size:0.8rem; color:var(--text-muted);">${isSubDone ? '✅ Concluído' : '▾ Ver conteúdo'}</span>
+              </div>
+
+              <div class="submodule-content" id="sub-body-${step.id}">
+                ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
+                ${step.submodule.videoUrl ? `
+                  <div class="media-container-locked">
+                    ${!isStarted ? `<div class="media-overlay-lock"><span style="font-size:1.2rem;">🔒</span></div>` : ''}
+                    <iframe width="100%" height="280" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
+                  </div>
+                ` : ''}
+                ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material Submódulo →</a></p>` : ''}
+                <label style="font-weight:600; cursor:pointer; font-size:0.85rem; display:flex; gap:8px; align-items:center; margin-top:8px;">
+                  <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
+                  ${isSubDone ? 'Submódulo Concluído' : 'Concluir submódulo'}
+                </label>
+              </div>
             </div>
           ` : ''}
 
@@ -1048,7 +1086,7 @@
     });
   }
 
-  // 2. GESTÃO DE MÓDULOS
+  // 2. GESTÃO DE MÓDULOS E SUBMÓDULOS
   function renderModulesManagement() {
     const container = document.getElementById('admin-modules-list');
     container.innerHTML = '';
@@ -1062,6 +1100,7 @@
       const course = cachedCourses.find(c => c.id === step.courseId);
       const courseName = course ? course.title : 'Sem Curso';
       const isActive = step.status !== "inativo";
+      const hasSub = step.submodule && step.submodule.title;
 
       const item = document.createElement('div');
       item.className = 'module-manage-item';
@@ -1069,7 +1108,8 @@
         <div>
           <span style="font-size:0.75rem; color:var(--primary); font-weight:bold; display:block;">[${courseName}]</span>
           <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
-          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-left:6px; font-size:0.7rem;">${isActive ? 'Ativo' : 'Inativo'}</span>
+          ${hasSub ? `<span style="display:block; font-size:0.75rem; color:var(--accent);">📌 Submódulo: ${step.submodule.title}</span>` : ''}
+          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-top:4px; display:inline-block; font-size:0.7rem;">${isActive ? 'Ativo' : 'Inativo'}</span>
         </div>
         <div style="display:flex; gap:6px;">
           <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleModuleStatus('${step.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
