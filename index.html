@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v3.0 Cloud Refactored</title>
+  <title>LifeApps Academy v3.1 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +148,7 @@
 
     .student-notice-box {
       background-color: #fffbe3; border: 1px solid #fde047; border-left: 5px solid var(--warning);
-      color: #713f12; padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem;
+      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem;
     }
 
     .media-container-locked { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
@@ -456,7 +456,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 3.0 Cloud Refactored</p>
+    <p><strong>LifeApps Academy</strong> • Versão 3.1 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -506,7 +506,7 @@
   let cachedCourses = [];
   let cachedSteps = [];
   let cachedUsers = {};
-  let allStudentCoursesExpanded = false; // Padrão: 100% Recolhido
+  let allStudentCoursesExpanded = false;
 
   function switchAdminTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -514,6 +514,11 @@
 
     event.target.classList.add('active');
     document.getElementById(`tab-${tabName}`).classList.add('active');
+
+    // REGRA v3.1: SE CLICAR NA ABA 'NOVO MÓDULO', ZERA O FORMULÁRIO COMPLETAMENTE
+    if (tabName === 'modules-form') {
+      resetModuleForm();
+    }
   }
 
   async function loadCloudData() {
@@ -534,7 +539,6 @@
       } else {
         cachedSteps = [];
         sSnap.forEach(doc => cachedSteps.push(doc.data()));
-        // Ordena por ordem configurada
         cachedSteps.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
 
@@ -650,7 +654,6 @@
       courseSteps.forEach(step => {
         const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
         
-        // Verifica submódulos do array ou antigo
         const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
         let allSubsDone = true;
         subList.forEach((sub, sIdx) => {
@@ -763,7 +766,6 @@
       
       const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
       
-      // Suporte a múltiplos submódulos
       const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
       let allSubsDone = true;
 
@@ -781,7 +783,6 @@
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
       const canCompleteMain = isStarted && allSubsDone;
 
-      // HTML dos submódulos
       let subModulesHtml = '';
       subList.forEach((sub, sIdx) => {
         const isSubDone = !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`]);
@@ -943,7 +944,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA (UX REFACTORED)
+  // ÁREA DE GESTÃO RESTRITA
   // ==========================================
 
   async function openAdminModal() {
@@ -970,7 +971,7 @@
     renderUsersManagement();
   }
 
-  // GESTÃO DE CURSOS
+  // 1. GESTÃO E EDIÇÃO DE CURSOS
   document.getElementById('form-add-course').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('new-course-title').value.trim();
@@ -1095,7 +1096,7 @@
     });
   }
 
-  // GESTÃO DE MÓDULOS E SUBMÓDULOS ILIMITADOS
+  // 2. GESTÃO DE MÓDULOS E SUBMÓDULOS ILIMITADOS
   let submoduleFormCount = 0;
 
   function addSubmoduleFormBlock(subData = null) {
@@ -1178,12 +1179,10 @@
     const targetIndex = index + direction;
     if (targetIndex < 0 || targetIndex >= cachedSteps.length) return;
 
-    // Troca os elementos de posição
     const temp = cachedSteps[index];
     cachedSteps[index] = cachedSteps[targetIndex];
     cachedSteps[targetIndex] = temp;
 
-    // Atualiza campo 'order'
     for (let i = 0; i < cachedSteps.length; i++) {
       cachedSteps[i].order = i + 1;
       await db.collection('steps').doc(cachedSteps[i].id).update({ order: i + 1 });
@@ -1214,7 +1213,6 @@
     document.getElementById('new-video').value = step.videoUrl || '';
     document.getElementById('new-doc').value = step.docUrl || '';
 
-    // Preenche múltiplos submódulos
     document.getElementById('submodules-form-container').innerHTML = '';
     submoduleFormCount = 0;
 
@@ -1241,6 +1239,11 @@
     document.getElementById('btn-cancel-edit').classList.add('hidden');
   }
 
+  function clearSubmoduleFields() {
+    document.getElementById('submodules-form-container').innerHTML = '';
+    submoduleFormCount = 0;
+  }
+
   async function deleteModule(id) {
     if (confirm("Excluir este módulo do banco em nuvem?")) {
       await db.collection('steps').doc(id).delete();
@@ -1257,7 +1260,6 @@
 
     const id = editId ? editId : Date.now().toString();
 
-    // Coleta todos os submódulos preenchidos no formulário
     const subBlocks = document.querySelectorAll('.admin-submodule-box');
     const submodulesData = [];
 
@@ -1294,7 +1296,7 @@
     switchAdminTab('modules-list');
   });
 
-  // GESTÃO E EDIÇÃO DE COLABORADORES
+  // 3. CADASTRAR / EDITAR / RESETAR / GERENCIAR ALUNOS E CERTIFICADOS
   document.getElementById('form-add-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
@@ -1386,7 +1388,6 @@
           courseSteps.forEach(s => {
             if (u.progress) {
               delete u.progress[s.id];
-              // Limpa todos os submódulos vinculados
               Object.keys(u.progress).forEach(k => {
                 if (k.startsWith(`${s.id}_sub_`)) delete u.progress[k];
               });
