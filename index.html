@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.7</title>
+  <title>LifeApps Academy v2.0</title>
   
-  <!-- Fonte Google Fonts: Inter -->
+  <!-- Fonte Google Fonts: Inter + Alex Brush (Para Rubricas) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Biblioteca jsPDF para geração do certificado em PDF -->
+  <!-- Biblioteca jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
@@ -46,7 +46,6 @@
 
     .container { max-width: 860px; width: 100%; }
     
-    /* CABEÇALHO HERO */
     header { 
       position: relative;
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #06b6d4 100%);
@@ -69,12 +68,7 @@
       border-radius: 50%;
     }
 
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 
     .title-badge {
       display: inline-block;
@@ -105,7 +99,6 @@
     }
     .btn-secret:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
 
-    /* CARDS */
     .card { 
       background: var(--card-bg); 
       padding: 28px; 
@@ -159,13 +152,10 @@
     .btn-warning:hover { background-color: #d97706; }
     .btn-danger { background-color: var(--danger); }
     .btn-danger:hover { background-color: var(--danger-hover); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
-    
     .btn-success { background-color: var(--success); }
     .btn-success:hover { background-color: #059669; }
-    
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
-    /* CAIXA DE AVISO */
     .student-notice-box {
       background-color: #fffbe3;
       border: 1px solid #fde047;
@@ -178,7 +168,6 @@
       line-height: 1.4;
     }
 
-    /* BLOQUEIO DE MÍDIA */
     .media-container-locked {
       position: relative;
       border-radius: 8px;
@@ -188,39 +177,18 @@
 
     .media-overlay-lock {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(4px);
       z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: white; padding: 20px; text-align: center; cursor: pointer;
     }
 
-    .media-overlay-lock span {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 6px;
-    }
+    .link-disabled { pointer-events: none; opacity: 0.4; text-decoration: none !important; cursor: not-allowed; }
 
-    .link-disabled {
-      pointer-events: none;
-      opacity: 0.4;
-      text-decoration: none !important;
-      cursor: not-allowed;
-    }
-
-    /* BARRA DE PROGRESSO */
     .progress-container { 
-      margin: 20px 0; 
+      margin: 15px 0 25px 0; 
       background: var(--primary-light);
       padding: 16px 20px;
       border-radius: 10px;
@@ -231,41 +199,33 @@
     .progress-bar-bg { height: 12px; background-color: #cbd5e1; border-radius: 10px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.4s ease; }
 
-    /* MÓDULOS DA TRILHA */
+    .course-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: white;
+    }
+
+    .course-card-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
+
     .step-item { 
       border: 1px solid var(--border); 
       border-radius: 10px; 
       padding: 18px 20px; 
       margin-bottom: 14px; 
-      background-color: white;
-      transition: all 0.2s;
-    }
-
-    .step-item.locked {
       background-color: #f8fafc;
-      opacity: 0.7;
     }
 
-    .step-header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      cursor: pointer; 
-      font-weight: 600; 
-      font-size: 1.05rem;
-    }
-
-    .step-content { 
-      display: none; 
-      margin-top: 16px; 
-      padding-top: 16px; 
-      border-top: 1px solid var(--border); 
-    }
-
+    .step-item.locked { opacity: 0.7; }
+    .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1rem; }
+    .step-content { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
     .step-content.active { display: block; }
 
     .submodule-card {
-      background-color: #f8fafc;
+      background-color: white;
       border: 1px solid #cbd5e1;
       border-left: 4px solid var(--accent);
       border-radius: 8px;
@@ -273,99 +233,29 @@
       margin-top: 16px;
     }
 
-    .time-info-box {
-      background: #f1f5f9;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
+    .time-info-box { background: #f1f5f9; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
 
-    /* HISTÓRICO DE COMENTÁRIOS */
-    .comments-history {
-      max-height: 150px;
-      overflow-y: auto;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .comments-history { max-height: 150px; overflow-y: auto; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; }
+    .comment-date { font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    .comment-bubble {
-      background: #f1f5f9;
-      border-left: 3px solid var(--primary);
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-
-    .comment-date {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    /* TABELA DE GESTÃO */
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
     th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
     th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
 
-    .module-manage-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 8px;
-      background-color: #f8fafc;
-    }
-
+    .module-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background-color: #f8fafc; }
     .hidden { display: none !important; }
-    
-    .badge { 
-      background: #d1fae5; 
-      color: #047857; 
-      padding: 4px 10px; 
-      border-radius: 20px; 
-      font-size: 0.75rem; 
-      font-weight: 700; 
-    }
-    .badge-locked {
-      background: #f1f5f9;
-      color: #94a3b8;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .badge-inactive {
-      background: #fee2e2;
-      color: #991b1b;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
+    .badge { background: #d1fae5; color: #047857; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .badge-locked { background: #f1f5f9; color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-inactive { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
-    /* RODAPÉ */
-    footer {
-      margin-top: auto;
-      padding-top: 20px;
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      width: 100%;
-      border-top: 1px solid #e2e8f0;
-    }
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+    .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; }
 
+    footer { margin-top: auto; padding-top: 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); width: 100%; border-top: 1px solid #e2e8f0; }
     footer p { margin-bottom: 6px; }
     footer a { color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
     footer a:hover { text-decoration: underline; }
-
     .linkedin-icon { width: 14px; height: 14px; fill: var(--primary); vertical-align: middle; }
   </style>
 </head>
@@ -373,55 +263,42 @@
 
 <div class="container">
   
-  <!-- CABEÇALHO -->
   <header>
     <div class="header-top">
-      <span class="title-badge">Trilha de Aprendizagem</span>
+      <span class="title-badge">Plataforma de Capacitação</span>
       <button class="btn-secret" onclick="openAdminModal()">🔒 Gestão</button>
     </div>
-    <h1>LifeApps Onboarding</h1>
-    <p>Capacitação oficial e integração de novos colaboradores.</p>
+    <h1>LifeApps Academy</h1>
+    <p>Treinamentos, onboarding e capacitação de colaboradores.</p>
   </header>
 
-  <!-- VISTA 1: ENTRADA DO COLABORADOR (APENAS E-MAIL) -->
+  <!-- VISTA 1: ENTRADA DO ALUNO -->
   <div id="view-welcome" class="card">
     <h2>Acesso do Colaborador</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-      Digite seu e-mail cadastrado pelo gestor para acessar a sua trilha.
+      Digite seu e-mail cadastrado pelo gestor para acessar os seus cursos.
     </p>
     <form id="form-user">
       <div class="form-group">
         <label>E-mail corporativo *</label>
         <input type="email" id="u-email" required placeholder="seu.nome@lifeapps.com.br">
       </div>
-      <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Acessar Trilha de Aprendizagem</button>
+      <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Acessar Cursos</button>
     </form>
   </div>
 
-  <!-- VISTA 2: TRILHA DE APRENDIZAGEM -->
+  <!-- VISTA 2: PAINEL DE CURSOS DO ALUNO -->
   <div id="view-trail" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border); margin-bottom:20px;">
       <div id="user-info"></div>
       <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
 
-    <!-- PROGRESSO -->
-    <div class="progress-container">
-      <div class="progress-header">
-        <span>SEU PROGRESSO TOTAL</span>
-        <span id="progress-text">0%</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div id="progress-bar" class="progress-bar-fill"></div>
-      </div>
-    </div>
-
-    <!-- AVISO EM DESTAQUE AO ALUNO -->
     <div class="student-notice-box">
-      <strong>💡 Observação Importante:</strong> Para iniciar o conteúdo de qualquer etapa, liberar os vídeos e fazer o download dos materiais, você deve obrigatoriamente clicar no botão <strong>"▶ Iniciar Módulo"</strong> dentro de cada etapa.
+      <strong>💡 Observação Importante:</strong> Clique em <strong>"▶ Iniciar Módulo"</strong> dentro de cada etapa para liberar o player de vídeo e os arquivos para download.
     </div>
 
-    <div id="steps-list"></div>
+    <div id="courses-container"></div>
   </div>
 
   <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
@@ -431,9 +308,64 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. CADASTRAR NOVO COLABORADOR (NOME, EMAIL, DEPARTAMENTO) -->
+    <!-- 1. GERENCIAR CURSOS -->
     <details open style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">👤 Cadastrar Novo Colaborador</summary>
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">🎓 1. Cadastrar e Gerenciar Cursos</summary>
+      <form id="form-add-course" style="margin-top: 15px; display:flex; gap:10px;">
+        <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
+        <button type="submit" class="btn" style="white-space:nowrap;">Criar Curso</button>
+      </form>
+      <div id="admin-courses-list" style="margin-top: 15px;"></div>
+    </details>
+
+    <!-- 2. GERENCIAR MÓDULOS DOS CURSOS -->
+    <details id="details-form-step" style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);" id="form-step-title">📚 2. Cadastrar / Editar Módulo</summary>
+      
+      <form id="form-add-step" style="margin-top: 15px;">
+        <input type="hidden" id="edit-module-id" value="">
+        
+        <label>Selecione o Curso deste Módulo *</label>
+        <select id="module-course-id" required></select>
+
+        <h4 style="color:var(--primary); margin:15px 0 10px 0;">Conteúdo Principal do Módulo</h4>
+        <label>Título do Módulo *</label>
+        <input type="text" id="new-title" placeholder="Ex: 1. A História da LifeApps" required>
+        
+        <label>Descrição / Instruções *</label>
+        <textarea id="new-desc" rows="2" placeholder="Descreva o objetivo desta aula..." required></textarea>
+        
+        <label>Link do Vídeo do YouTube (Pode colar o link normal)</label>
+        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=...">
+        
+        <label>Link do Documento (PDF / Notion / Drive)</label>
+        <input type="url" id="new-doc" placeholder="https://...">
+
+        <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
+
+        <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
+        <label>Título do Submódulo</label>
+        <input type="text" id="sub-title" placeholder="Ex: Exercício Prático de Fixação">
+        
+        <label>Descrição do Submódulo</label>
+        <textarea id="sub-desc" rows="2" placeholder="Instruções para a atividade complementar..."></textarea>
+        
+        <label>Link do Vídeo do Submódulo</label>
+        <input type="url" id="sub-video" placeholder="https://www.youtube.com/watch?v=...">
+        
+        <label>Link do Documento do Submódulo</label>
+        <input type="url" id="sub-doc" placeholder="https://...">
+
+        <div style="display:flex; gap:10px; margin-top:15px;">
+          <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
+          <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
+        </div>
+      </form>
+    </details>
+
+    <!-- 3. CADASTRAR E MATRICULAR COLABORADOR -->
+    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">👤 3. Cadastrar e Matricular Colaborador</summary>
       <form id="form-add-user" style="margin-top: 15px;">
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
           <div>
@@ -459,81 +391,34 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn" style="margin-top:10px;">Cadastrar Colaborador</button>
+
+        <label style="margin-top:12px;">Matricular nos Cursos:</label>
+        <div class="checkbox-grid" id="admin-courses-enroll-checkboxes"></div>
+
+        <button type="submit" class="btn" style="margin-top:15px;">Cadastrar Colaborador</button>
       </form>
     </details>
 
-    <!-- 2. GERENCIAR E EDITAR/EXCLUIR MÓDULOS -->
-    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">📚 Gerenciar Módulos Existentes</summary>
-      <div id="admin-modules-list" style="margin-top: 15px;"></div>
-    </details>
-
-    <!-- 3. ADICIONAR / EDITAR MÓDULO -->
-    <details id="details-form-step" style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);" id="form-step-title">➕ Cadastrar Novo Módulo</summary>
-      
-      <form id="form-add-step" style="margin-top: 15px;">
-        <input type="hidden" id="edit-module-id" value="">
-        
-        <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal do Módulo</h4>
-        <label>Título do Módulo</label>
-        <input type="text" id="new-title" placeholder="Ex: 7. Cultura e Benefícios" required>
-        
-        <label>Descrição / Instruções</label>
-        <textarea id="new-desc" rows="3" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
-        
-        <label>Link do Vídeo do YouTube (Pode colar o link normal)</label>
-        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=...">
-        
-        <label>Link do Documento (PDF / Notion / Drive)</label>
-        <input type="url" id="new-doc" placeholder="https://...">
-
-        <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
-
-        <!-- SUBMÓDULO OPCIONAL -->
-        <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
-        <label>Título do Submódulo</label>
-        <input type="text" id="sub-title" placeholder="Ex: Material Prático / Aprofundamento">
-        
-        <label>Descrição do Submódulo</label>
-        <textarea id="sub-desc" rows="2" placeholder="Instruções específicas para esta parte secundária..."></textarea>
-        
-        <label>Link do Vídeo do Submódulo (YouTube)</label>
-        <input type="url" id="sub-video" placeholder="https://www.youtube.com/watch?v=...">
-        
-        <label>Link do Documento do Submódulo</label>
-        <input type="url" id="sub-doc" placeholder="https://...">
-
-        <div style="display:flex; gap:10px; margin-top:15px;">
-          <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
-          <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
-        </div>
-      </form>
-    </details>
-
-    <!-- 4. GERENCIAR COLABORADORES -->
-    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores Cadastrados</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Controle o acesso (Ativo/Inativo), monitore progresso e emita certificados.</p>
+    <!-- 4. LISTA DE COLABORADORES E CERTIFICADOS -->
+    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores e Emissão de Certificados</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Gerencie matrículas, status e emita certificados por Curso.</p>
     
     <table>
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>E-mail</th>
-          <th>Departamento</th>
+          <th>Colaborador</th>
+          <th>E-mail / Depto</th>
           <th>Status</th>
-          <th>Progresso</th>
-          <th>Ações e Gestão</th>
+          <th>Cursos Matriculados e Progresso</th>
+          <th>Ações de Gestão</th>
         </tr>
       </thead>
       <tbody id="admin-users-table"></tbody>
     </table>
   </div>
 
-  <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.7</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.0</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -549,19 +434,19 @@
 </div>
 
 <script>
-  // ==========================================
-  // CONFIGURAÇÕES GERAIS E DADOS
-  // ==========================================
-  
   const SENHA_MESTRA = "lifeapps123"; 
 
+  const DEFAULT_COURSES = [
+    { id: "c1", title: "Onboarding Comercial LifeApps" }
+  ];
+
   const DEFAULT_STEPS = [
-    { id: "1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "" },
-    { id: "2", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "" },
-    { id: "3", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "" },
-    { id: "4", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "" },
-    { id: "5", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "" },
-    { id: "6", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "" }
+    { id: "1", courseId: "c1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "" },
+    { id: "2", courseId: "c1", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "" },
+    { id: "3", courseId: "c1", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "" },
+    { id: "4", courseId: "c1", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "" },
+    { id: "5", courseId: "c1", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "" },
+    { id: "6", courseId: "c1", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "" }
   ];
 
   let currentStudent = null;
@@ -569,13 +454,9 @@
   function convertToEmbedUrl(url) {
     if (!url) return "";
     let videoId = "";
-    if (url.includes("watch?v=")) {
-      videoId = url.split("watch?v=")[1].split("&")[0];
-    } else if (url.includes("youtu.be/")) {
-      videoId = url.split("youtu.be/")[1].split("?")[0];
-    } else if (url.includes("embed/")) {
-      return url;
-    }
+    if (url.includes("watch?v=")) videoId = url.split("watch?v=")[1].split("&")[0];
+    else if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
+    else if (url.includes("embed/")) return url;
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   }
 
@@ -587,22 +468,27 @@
 
   function calculateDurationInMs(startIso, endIso) {
     if (!startIso || !endIso) return 0;
-    const start = new Date(startIso);
-    const end = new Date(endIso);
-    const diff = end - start;
+    const diff = new Date(endIso) - new Date(startIso);
     return diff > 0 ? diff : 0;
   }
 
   function formatDurationText(diffMs) {
     if (!diffMs) return "0 minutos";
-    const seconds = Math.floor((diffMs / 1000) % 60);
     const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
-
     let res = "";
     if (hours > 0) res += `${hours} hora(s) e `;
     res += `${minutes} minuto(s)`;
     return res;
+  }
+
+  function getCourses() {
+    const saved = localStorage.getItem('lifeapps_courses');
+    return saved ? JSON.parse(saved) : DEFAULT_COURSES;
+  }
+
+  function saveCourses(courses) {
+    localStorage.setItem('lifeapps_courses', JSON.stringify(courses));
   }
 
   function getSteps() {
@@ -630,7 +516,6 @@
   document.getElementById('form-user').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('u-email').value.toLowerCase().trim();
-    
     const users = getUsers();
     const userFound = users[email];
 
@@ -640,16 +525,15 @@
     }
 
     if (userFound.status === "inativo") {
-      alert("⚠️ Seu acesso está inativo no momento. Entre em contato com o gestor para reativar seu usuário.");
+      alert("⚠️ Seu acesso está inativo no momento. Entre em contato com o gestor.");
       return;
     }
 
     currentStudent = userFound;
-
     document.getElementById('view-welcome').classList.add('hidden');
     document.getElementById('view-trail').classList.remove('hidden');
 
-    renderTrail();
+    renderStudentCourses();
   });
 
   function exitTrail() {
@@ -659,17 +543,64 @@
     document.getElementById('u-email').value = '';
   }
 
-  function renderTrail() {
+  function renderStudentCourses() {
     document.getElementById('user-info').innerHTML = `
       <strong style="font-size:1rem; color:var(--text);">${currentStudent.name}</strong>
       <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.dept || 'Geral'} • ${currentStudent.email}</span>
     `;
 
-    const steps = getSteps();
-    const listContainer = document.getElementById('steps-list');
+    const allCourses = getCourses();
+    const allSteps = getSteps();
+    const enrolledIds = currentStudent.enrolledCourses || [];
+
+    const enrolledCourses = allCourses.filter(c => enrolledIds.includes(c.id));
+    const container = document.getElementById('courses-container');
+    container.innerHTML = '';
+
+    if (enrolledCourses.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">Você ainda não possui matrículas em nenhum curso. Entre em contato com o gestor.</div>`;
+      return;
+    }
+
+    enrolledCourses.forEach(course => {
+      const courseSteps = allSteps.filter(s => s.courseId === course.id);
+      let completedCount = 0;
+
+      courseSteps.forEach(step => {
+        const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
+        const hasSub = step.submodule && step.submodule.title;
+        const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
+        if (isMainDone && isSubDone) completedCount++;
+      });
+
+      const pct = courseSteps.length ? Math.round((completedCount / courseSteps.length) * 100) : 0;
+
+      const courseEl = document.createElement('div');
+      courseEl.className = 'course-card';
+      courseEl.innerHTML = `
+        <div class="course-card-header">
+          <h2 style="color:var(--primary); font-size:1.2rem;">🎓 ${course.title}</h2>
+          <span class="badge">${pct}% Concluído</span>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+          </div>
+        </div>
+
+        <div id="steps-list-course-${course.id}"></div>
+      `;
+
+      container.appendChild(courseEl);
+      renderCourseSteps(course.id, courseSteps, `steps-list-course-${course.id}`);
+    });
+  }
+
+  function renderCourseSteps(courseId, steps, containerId) {
+    const listContainer = document.getElementById(containerId);
     listContainer.innerHTML = '';
 
-    let completedModulesCount = 0;
     let previousModuleFullyCompleted = true;
 
     steps.forEach((step) => {
@@ -681,14 +612,11 @@
       const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
 
       const isModuleFullyDone = isMainDone && isSubDone;
-      if (isModuleFullyDone) completedModulesCount++;
-
       const isLocked = !previousModuleFullyCompleted;
       previousModuleFullyCompleted = isModuleFullyDone;
 
       const embedVideo = convertToEmbedUrl(step.videoUrl);
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
-
       const canCompleteMain = isStarted && (!hasSub || isSubDone);
 
       const el = document.createElement('div');
@@ -696,15 +624,10 @@
       el.innerHTML = `
         <div class="step-header" onclick="${isLocked ? `alert('🔒 Conclua o módulo anterior para desbloquear!')` : `toggleContent('step-${step.id}')`}">
           <span>${step.title}</span>
-          ${isLocked 
-            ? '<span class="badge-locked">🔒 Bloqueado</span>' 
-            : (isModuleFullyDone 
-                ? '<span class="badge">Concluído</span>' 
-                : '<span style="font-size:0.8rem; color:var(--primary); font-weight:bold;">Acessar aula ▾</span>')}
+          ${isLocked ? '<span class="badge-locked">🔒 Bloqueado</span>' : (isModuleFullyDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--primary); font-weight:bold;">Acessar aula ▾</span>')}
         </div>
         
         <div class="step-content" id="step-${step.id}">
-          <!-- BOTÃO INICIAR E DATAS -->
           <div class="time-info-box">
             ${!isStarted ? `
               <button type="button" class="btn" style="padding:8px 14px; font-size:0.85rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
@@ -714,107 +637,62 @@
             `}
           </div>
 
-          <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
 
           ${embedVideo ? `
             <div class="media-container-locked">
-              ${!isStarted ? `
-                <div class="media-overlay-lock" onclick="alert('⚠️ Clique no botão \'▶ Iniciar Módulo\' acima para liberar o player do vídeo e o tempo de execução!')">
-                  <span style="font-size:1.5rem;">🔒</span>
-                  <span>Vídeo Bloqueado</span>
-                  <span style="font-size:0.75rem; opacity:0.8; margin-top:2px;">Clique em "▶ Iniciar Módulo" acima para liberar.</span>
-                </div>
-              ` : ''}
-              <iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
+              ${!isStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' para liberar o vídeo!')"><span style="font-size:1.5rem;">🔒</span><span>Vídeo Bloqueado</span></div>` : ''}
+              <iframe width="100%" height="280" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
             </div>
           ` : ''}
 
           ${step.docUrl ? `
             <p style="margin-bottom:12px;">
               <a href="${step.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
-                📄 Abrir Documento de Apoio → ${!isStarted ? '(Inicie o módulo para abrir)' : ''}
+                📄 Documento de Apoio → ${!isStarted ? '(Bloqueado)' : ''}
               </a>
             </p>
           ` : ''}
           
-          <!-- SUBMÓDULO OPCIONAL -->
           ${hasSub ? `
             <div class="submodule-card">
               <h4 style="color:var(--accent); font-size:0.95rem; margin-bottom:6px;">📌 Submódulo: ${step.submodule.title}</h4>
               ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
-              
               ${step.submodule.videoUrl ? `
                 <div class="media-container-locked">
-                  ${!isStarted ? `
-                    <div class="media-overlay-lock" onclick="alert('⚠️ Clique no botão \'▶ Iniciar Módulo\' acima para liberar o vídeo!')">
-                      <span style="font-size:1.5rem;">🔒</span>
-                      <span>Vídeo do Submódulo Bloqueado</span>
-                    </div>
-                  ` : ''}
-                  <iframe width="100%" height="250" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
+                  ${!isStarted ? `<div class="media-overlay-lock"><span style="font-size:1.2rem;">🔒</span></div>` : ''}
+                  <iframe width="100%" height="220" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
                 </div>
               ` : ''}
-
-              ${step.submodule.docUrl ? `
-                <p style="margin-bottom:10px;">
-                  <a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">
-                    📄 Material do Submódulo → ${!isStarted ? '(Bloqueado)' : ''}
-                  </a>
-                </p>
-              ` : ''}
-              
-              <label style="font-weight:600; cursor:pointer; font-size:0.9rem; color:var(--text); display:flex; gap:8px; align-items:center; margin-top:8px;">
+              ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material Submódulo →</a></p>` : ''}
+              <label style="font-weight:600; cursor:pointer; font-size:0.85rem; display:flex; gap:8px; align-items:center; margin-top:8px;">
                 <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
-                ${isSubDone ? 'Submódulo Concluído (Travado)' : 'Concluir submódulo'}
+                ${isSubDone ? 'Submódulo Concluído' : 'Concluir submódulo'}
               </label>
             </div>
           ` : ''}
 
-          <!-- CHECKBOX MÓDULO PRINCIPAL -->
           <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
-            <label style="font-weight:600; cursor:${isMainDone ? 'default' : 'pointer'}; color:var(--text); display:flex; gap:8px; align-items:center;">
+            <label style="font-weight:600; cursor:${isMainDone ? 'default' : 'pointer'}; display:flex; gap:8px; align-items:center;">
               <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked disabled' : ''} ${!canCompleteMain ? 'disabled' : ''} onchange="markStep('${step.id}', 'main', this.checked)">
-              ${isMainDone ? 'Módulo Principal Concluído (Travado)' : 'Concluir módulo principal'}
+              ${isMainDone ? 'Módulo Principal Concluído' : 'Concluir módulo principal'}
             </label>
-            ${!isStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:2px;">Clique em "Iniciar Módulo" acima para liberar.</span>' : ''}
-            ${isStarted && hasSub && !isSubDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:2px;">⚠️ Conclua o submódulo acima para liberar a conclusão do módulo principal.</span>' : ''}
           </div>
 
-          <!-- MINI CRM DE COMENTÁRIOS -->
           <div style="margin-top:18px; padding-top:12px; border-top:1px solid var(--border);">
-            <label style="font-size:0.85rem; font-weight:600; color:var(--text);">📝 Histórico de Comentários e Observações:</label>
-            
-            <div class="comments-history" id="comments-list-${step.id}">
-              ${commentsList.length === 0 
-                ? '<p style="font-size:0.8rem; color:var(--text-muted); italic;">Nenhum comentário registrado ainda.</p>' 
-                : commentsList.map(c => `
-                    <div class="comment-bubble">
-                      <span class="comment-date">${c.date}</span>
-                      <span>${c.text}</span>
-                    </div>
-                  `).join('')}
+            <label style="font-size:0.85rem; font-weight:600;">📝 Histórico de Observações:</label>
+            <div class="comments-history">
+              ${commentsList.length === 0 ? '<p style="font-size:0.8rem; color:var(--text-muted);">Nenhum comentário registrado.</p>' : commentsList.map(c => `<div class="comment-bubble"><span class="comment-date">${c.date}</span><span>${c.text}</span></div>`).join('')}
             </div>
-
             <div style="display:flex; gap:8px; margin-top:8px;">
-              <input type="text" id="input-comment-${step.id}" style="margin-bottom:0;" placeholder="Digite uma dúvida ou anotação...">
-              <button type="button" class="btn" style="white-space:nowrap;" onclick="addComment('${step.id}')">💬 Salvar Comentário</button>
+              <input type="text" id="input-comment-${step.id}" style="margin-bottom:0;" placeholder="Digite seu comentário...">
+              <button type="button" class="btn" style="white-space:nowrap;" onclick="addComment('${step.id}')">💬 Salvar</button>
             </div>
           </div>
         </div>
       `;
       listContainer.appendChild(el);
     });
-
-    const pct = steps.length ? Math.round((completedModulesCount / steps.length) * 100) : 0;
-    document.getElementById('progress-bar').style.width = `${pct}%`;
-    document.getElementById('progress-text').innerText = `${pct}%`;
-
-    const users = getUsers();
-    if(users[currentStudent.email]) {
-      users[currentStudent.email].pct = pct;
-      saveUsers(users);
-    }
   }
 
   function toggleContent(id) {
@@ -822,26 +700,20 @@
   }
 
   function startModule(event, stepId) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+    if (event) { event.preventDefault(); event.stopPropagation(); }
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) {
       currentStudent.times[stepId] = { start: new Date().toISOString() };
       const users = getUsers();
       users[currentStudent.email].times = currentStudent.times;
       saveUsers(users);
-      
-      renderTrail();
+      renderStudentCourses();
       document.getElementById(`step-${stepId}`).classList.add('active');
     }
   }
 
   function markStep(stepId, type, isChecked) {
     if (!currentStudent.progress) currentStudent.progress = {};
-    
     const key = (type === 'sub') ? `${stepId}_sub` : stepId;
     currentStudent.progress[key] = isChecked;
 
@@ -855,16 +727,14 @@
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) currentStudent.times[stepId] = { start: new Date().toISOString() };
 
-    if (isMainDone && isSubDone) {
-      currentStudent.times[stepId].end = new Date().toISOString();
-    }
+    if (isMainDone && isSubDone) currentStudent.times[stepId].end = new Date().toISOString();
 
     const users = getUsers();
     users[currentStudent.email].progress = currentStudent.progress;
     users[currentStudent.email].times = currentStudent.times;
     saveUsers(users);
 
-    renderTrail();
+    renderStudentCourses();
     document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
@@ -876,18 +746,16 @@
     if (!currentStudent.notes) currentStudent.notes = {};
     if (!currentStudent.notes[stepId]) currentStudent.notes[stepId] = [];
 
-    const newComment = {
+    currentStudent.notes[stepId].push({
       date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       text: text
-    };
-
-    currentStudent.notes[stepId].push(newComment);
+    });
 
     const users = getUsers();
     users[currentStudent.email].notes = currentStudent.notes;
     saveUsers(users);
 
-    renderTrail();
+    renderStudentCourses();
     document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
@@ -897,15 +765,12 @@
 
   function openAdminModal() {
     const inputPass = prompt("🔐 Digite a senha de Gestão para continuar:");
-    
     if (inputPass === SENHA_MESTRA) {
       document.getElementById('view-welcome').classList.add('hidden');
       document.getElementById('view-trail').classList.add('hidden');
       document.getElementById('view-admin').classList.remove('hidden');
       renderAdminDashboard();
-    } else if (inputPass !== null) {
-      alert("❌ Senha incorreta!");
-    }
+    } else if (inputPass !== null) alert("❌ Senha incorreta!");
   }
 
   function closeAdmin() {
@@ -914,58 +779,89 @@
   }
 
   function renderAdminDashboard() {
+    renderAdminCourses();
+    renderCourseDropdownInModules();
+    renderAdminEnrollCheckboxes();
     renderModulesManagement();
     renderUsersManagement();
   }
 
-  // CADASTRAR NOVO ALUNO COM DEPARTAMENTO
-  document.getElementById('form-add-user').addEventListener('submit', (e) => {
+  // 1. GESTÃO DE CURSOS
+  document.getElementById('form-add-course').addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('admin-user-name').value.trim();
-    const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
-    const dept = document.getElementById('admin-user-dept').value;
+    const title = document.getElementById('new-course-title').value.trim();
+    const courses = getCourses();
 
-    const users = getUsers();
+    courses.push({ id: `c_${Date.now()}`, title: title });
+    saveCourses(courses);
 
-    if (users[email]) {
-      alert("⚠️ Este e-mail já está cadastrado!");
-      return;
-    }
-
-    users[email] = {
-      name: name,
-      email: email,
-      dept: dept,
-      status: "ativo",
-      pct: 0,
-      progress: {},
-      times: {},
-      notes: {}
-    };
-
-    saveUsers(users);
-    alert(`✅ Colaborador ${name} cadastrado com sucesso no departamento ${dept}!`);
-    document.getElementById('form-add-user').reset();
-    renderUsersManagement();
+    alert("✅ Curso criado com sucesso!");
+    document.getElementById('form-add-course').reset();
+    renderAdminDashboard();
   });
 
+  function renderAdminCourses() {
+    const courses = getCourses();
+    const container = document.getElementById('admin-courses-list');
+    container.innerHTML = '';
+
+    courses.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'module-manage-item';
+      item.innerHTML = `
+        <strong>🎓 ${c.title}</strong>
+        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteCourse('${c.id}')">Excluir Curso</button>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function deleteCourse(courseId) {
+    if (confirm("Excluir este curso? Todos os módulos associados a ele serão mantidos ou devem ser reatribuídos.")) {
+      let courses = getCourses();
+      courses = courses.filter(c => c.id !== courseId);
+      saveCourses(courses);
+      renderAdminDashboard();
+    }
+  }
+
+  function renderCourseDropdownInModules() {
+    const courses = getCourses();
+    const select = document.getElementById('module-course-id');
+    select.innerHTML = '<option value="">Selecione o Curso...</option>';
+    courses.forEach(c => {
+      select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
+    });
+  }
+
+  function renderAdminEnrollCheckboxes() {
+    const courses = getCourses();
+    const container = document.getElementById('admin-courses-enroll-checkboxes');
+    container.innerHTML = '';
+    courses.forEach(c => {
+      container.innerHTML += `
+        <label><input type="checkbox" name="enroll-courses" value="${c.id}" checked> ${c.title}</label>
+      `;
+    });
+  }
+
+  // 2. GESTÃO DE MÓDULOS
   function renderModulesManagement() {
     const steps = getSteps();
+    const courses = getCourses();
     const container = document.getElementById('admin-modules-list');
     container.innerHTML = '';
 
-    if (steps.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">Nenhum módulo cadastrado.</p>';
-      return;
-    }
-
     steps.forEach((step) => {
+      const course = courses.find(c => c.id === step.courseId);
+      const courseName = course ? course.title : 'Sem Curso';
+
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
         <div>
+          <span style="font-size:0.75rem; color:var(--primary); font-weight:bold; display:block;">[${courseName}]</span>
           <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
-          ${step.submodule && step.submodule.title ? `<span style="display:block; font-size:0.75rem; color:var(--accent);">+ Submódulo: ${step.submodule.title}</span>` : ''}
         </div>
         <div style="display:flex; gap:6px;">
           <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="editModule('${step.id}')">Editar</button>
@@ -982,6 +878,7 @@
     if (!step) return;
 
     document.getElementById('edit-module-id').value = step.id;
+    document.getElementById('module-course-id').value = step.courseId || '';
     document.getElementById('new-title').value = step.title || '';
     document.getElementById('new-desc').value = step.desc || '';
     document.getElementById('new-video').value = step.videoUrl || '';
@@ -992,9 +889,7 @@
       document.getElementById('sub-desc').value = step.submodule.desc || '';
       document.getElementById('sub-video').value = step.submodule.videoUrl || '';
       document.getElementById('sub-doc').value = step.submodule.docUrl || '';
-    } else {
-      clearSubmoduleFields();
-    }
+    } else clearSubmoduleFields();
 
     document.getElementById('form-step-title').innerText = `✏️ Editando Módulo: ${step.title}`;
     document.getElementById('btn-save-module').innerText = "Atualizar Módulo";
@@ -1008,8 +903,7 @@
     document.getElementById('edit-module-id').value = '';
     document.getElementById('form-add-step').reset();
     clearSubmoduleFields();
-
-    document.getElementById('form-step-title').innerText = "➕ Cadastrar Novo Módulo";
+    document.getElementById('form-step-title').innerText = "📚 2. Cadastrar / Editar Módulo";
     document.getElementById('btn-save-module').innerText = "Salvar Módulo";
     document.getElementById('btn-cancel-edit').classList.add('hidden');
   }
@@ -1022,49 +916,125 @@
   }
 
   function deleteModule(id) {
-    if (confirm("Tem certeza que deseja excluir este módulo da trilha?")) {
-      let steps = getSteps();
-      steps = steps.filter(s => s.id !== id);
+    if (confirm("Excluir este módulo?")) {
+      let steps = getSteps().filter(s => s.id !== id);
       saveSteps(steps);
       renderAdminDashboard();
       resetModuleForm();
     }
   }
 
+  document.getElementById('form-add-step').addEventListener('submit', (e) => {
+    e.preventDefault();
+    let steps = getSteps();
+    const editId = document.getElementById('edit-module-id').value;
+    const courseId = document.getElementById('module-course-id').value;
+    const subTitle = document.getElementById('sub-title').value.trim();
+
+    const moduleData = {
+      id: editId ? editId : Date.now().toString(),
+      courseId: courseId,
+      title: document.getElementById('new-title').value,
+      desc: document.getElementById('new-desc').value,
+      videoUrl: convertToEmbedUrl(document.getElementById('new-video').value),
+      docUrl: document.getElementById('new-doc').value,
+      submodule: subTitle ? {
+        title: subTitle,
+        desc: document.getElementById('sub-desc').value,
+        videoUrl: convertToEmbedUrl(document.getElementById('sub-video').value),
+        docUrl: document.getElementById('sub-doc').value
+      } : null
+    };
+
+    if (editId) {
+      const index = steps.findIndex(s => s.id === editId);
+      if (index !== -1) steps[index] = moduleData;
+    } else steps.push(moduleData);
+
+    saveSteps(steps);
+    resetModuleForm();
+    renderAdminDashboard();
+  });
+
+  // 3. CADASTRAR / GERENCIAR ALUNOS E CERTIFICADOS
+  document.getElementById('form-add-user').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('admin-user-name').value.trim();
+    const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
+    const dept = document.getElementById('admin-user-dept').value;
+
+    const selectedCourses = Array.from(document.querySelectorAll('input[name="enroll-courses"]:checked')).map(cb => cb.value);
+
+    const users = getUsers();
+    if (users[email]) { alert("⚠️ E-mail já cadastrado!"); return; }
+
+    users[email] = {
+      name: name,
+      email: email,
+      dept: dept,
+      status: "ativo",
+      enrolledCourses: selectedCourses,
+      progress: {}, times: {}, notes: {}
+    };
+
+    saveUsers(users);
+    alert(`✅ Colaborador ${name} cadastrado com sucesso!`);
+    document.getElementById('form-add-user').reset();
+    renderUsersManagement();
+  });
+
   function renderUsersManagement() {
     const users = getUsers();
+    const courses = getCourses();
+    const steps = getSteps();
     const tbody = document.getElementById('admin-users-table');
     tbody.innerHTML = '';
 
     const userKeys = Object.keys(users);
-
     if (userKeys.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado ainda.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado.</td></tr>`;
       return;
     }
 
     userKeys.forEach(email => {
       const u = users[email];
-      const isCompleted = u.pct === 100;
       const isActive = (u.status !== "inativo");
+      const enrolledIds = u.enrolledCourses || [];
+
+      let coursesHtml = '';
+      enrolledIds.forEach(cId => {
+        const course = courses.find(c => c.id === cId);
+        if (!course) return;
+
+        const cSteps = steps.filter(s => s.courseId === cId);
+        let doneCount = 0;
+        cSteps.forEach(s => {
+          const isMain = !!(u.progress && u.progress[s.id]);
+          const hasSub = s.submodule && s.submodule.title;
+          const isSub = hasSub ? !!(u.progress && u.progress[`${s.id}_sub`]) : true;
+          if (isMain && isSub) doneCount++;
+        });
+
+        const pct = cSteps.length ? Math.round((doneCount / cSteps.length) * 100) : 0;
+        const isFullyDone = pct === 100;
+
+        coursesHtml += `
+          <div style="margin-bottom:6px; background:#f1f5f9; padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>${course.title}</strong> (${pct}%)</span>
+            <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem;" ${!isFullyDone ? 'disabled' : ''} onclick="generateCertificate('${u.email}', '${course.id}')">📜 Certificado</button>
+          </div>
+        `;
+      });
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><strong>${u.name || '-'}</strong></td>
-        <td>${u.email}</td>
-        <td><span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">${u.dept || 'Geral'}</span></td>
+        <td>${u.email}<br><span style="font-size:0.75rem; color:var(--text-muted);">${u.dept || 'Geral'}</span></td>
+        <td><span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span></td>
+        <td style="min-width:280px;">${coursesHtml || 'Nenhum curso'}</td>
         <td>
-          <span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span>
-        </td>
-        <td><span class="badge">${u.pct || 0}%</span></td>
-        <td>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleUserStatus('${u.email}')">
-              ${isActive ? '⏸ Inativar' : '▶ Ativar'}
-            </button>
-            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempos</button>
-            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem; background:#d97706;" onclick="resetUserProgressOptions('${u.email}')">🔄 Resetar</button>
-            <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" ${!isCompleted ? 'disabled title="O colaborador precisa atingir 100% de progresso"' : ''} onclick="generateCertificate('${u.email}')">📜 Certificado</button>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleUserStatus('${u.email}')">${isActive ? 'Inativar' : 'Ativar'}</button>
             <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
           </div>
         </td>
@@ -1075,130 +1045,38 @@
 
   function toggleUserStatus(email) {
     const users = getUsers();
-    const u = users[email];
-    if (!u) return;
-
-    const currentStatus = u.status || "ativo";
-    const newStatus = currentStatus === "ativo" ? "inativo" : "ativo";
-
-    u.status = newStatus;
-    saveUsers(users);
-
-    renderUsersManagement();
-  }
-
-  function resetUserProgressOptions(email) {
-    const users = getUsers();
-    const steps = getSteps();
-    const u = users[email];
-    if (!u) return;
-
-    const option = prompt(
-      `🔄 OPÇÕES DE RESET - ${u.name.toUpperCase()}\n\n` +
-      `Digite:\n` +
-      `1 - Resetar o CURSO COMPLETO (Apaga todo o progresso do aluno)\n` +
-      `2 - Resetar APENAS UM MÓDULO específico\n\n` +
-      `Sua opção (1 ou 2):`
-    );
-
-    if (option === '1') {
-      if (confirm(`Tem certeza que deseja resetar TODO o curso de ${u.name}?`)) {
-        u.progress = {};
-        u.times = {};
-        u.notes = {};
-        u.pct = 0;
-        saveUsers(users);
-        alert(`✅ Curso resetado com sucesso para ${u.name}!`);
-        renderAdminDashboard();
-      }
-    } else if (option === '2') {
-      let menuSteps = `Selecione o número do módulo a ser resetado para ${u.name}:\n\n`;
-      steps.forEach((s, i) => {
-        menuSteps += `${i + 1}. ${s.title}\n`;
-      });
-
-      const selectedNum = prompt(menuSteps);
-      const index = parseInt(selectedNum) - 1;
-
-      if (!isNaN(index) && steps[index]) {
-        const targetStep = steps[index];
-        if (confirm(`Resetar apenas o módulo "${targetStep.title}" para ${u.name}?`)) {
-          if (u.progress) {
-            delete u.progress[targetStep.id];
-            delete u.progress[`${targetStep.id}_sub`];
-          }
-          if (u.times) delete u.times[targetStep.id];
-          if (u.notes) delete u.notes[targetStep.id];
-
-          let completedCount = 0;
-          steps.forEach(s => {
-            const isMainDone = !!(u.progress && u.progress[s.id]);
-            const hasSub = s.submodule && s.submodule.title;
-            const isSubDone = hasSub ? !!(u.progress && u.progress[`${s.id}_sub`]) : true;
-            if (isMainDone && isSubDone) completedCount++;
-          });
-
-          u.pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
-
-          saveUsers(users);
-          alert(`✅ Módulo "${targetStep.title}" resetado com sucesso!`);
-          renderAdminDashboard();
-        }
-      } else if (selectedNum !== null) {
-        alert("❌ Opção de módulo inválida.");
-      }
+    if (users[email]) {
+      users[email].status = (users[email].status === "ativo") ? "inativo" : "ativo";
+      saveUsers(users);
+      renderUsersManagement();
     }
-  }
-
-  function viewUserTimes(email) {
-    const users = getUsers();
-    const steps = getSteps();
-    const u = users[email];
-
-    if (!u) return;
-
-    let msg = `⏱ TEMPOS DE EXECUÇÃO E OBSERVAÇÕES - ${u.name.toUpperCase()} (${u.dept || 'Geral'})\n\n`;
-
-    steps.forEach(s => {
-      const t = (u.times && u.times[s.id]) || {};
-      const durationMs = calculateDurationInMs(t.start, t.end);
-      const comments = (u.notes && u.notes[s.id]) || [];
-
-      msg += `📌 ${s.title}:\n`;
-      msg += `   • Início: ${formatDate(t.start)}\n`;
-      msg += `   • Fim: ${formatDate(t.end)}\n`;
-      msg += `   • Tempo gasto: ${formatDurationText(durationMs)}\n`;
-      if (comments.length > 0) {
-        msg += `   • Comentários (${comments.length}):\n`;
-        comments.forEach(c => {
-          msg += `     - [${c.date}] ${c.text}\n`;
-        });
-      }
-      msg += `\n`;
-    });
-
-    alert(msg);
   }
 
   function deleteUser(email) {
-    if (confirm(`Tem certeza que deseja apagar DEFINITIVAMENTE os dados de ${email}? Todos os relatórios e históricos serão excluídos.`)) {
+    if (confirm(`Excluir definitivamente ${email}?`)) {
       const users = getUsers();
       delete users[email];
       saveUsers(users);
-      renderAdminDashboard();
+      renderUsersManagement();
     }
   }
 
-  // GERAR PDF DO CERTIFICADO
-  function generateCertificate(email) {
+  // ==========================================
+  // EMISSÃO DE CERTIFICADO COM RUBRICAS
+  // ==========================================
+
+  function generateCertificate(email, courseId) {
     const users = getUsers();
+    const courses = getCourses();
     const steps = getSteps();
+
     const u = users[email];
+    const course = courses.find(c => c.id === courseId);
+    if (!u || !course) return;
 
-    if (!u) return;
-
+    const courseSteps = steps.filter(s => s.courseId === courseId);
     let totalMs = 0;
-    steps.forEach(s => {
+    courseSteps.forEach(s => {
       const t = (u.times && u.times[s.id]) || {};
       totalMs += calculateDurationInMs(t.start, t.end);
     });
@@ -1213,122 +1091,57 @@
       format: 'a4'
     });
 
-    // MOLDURA DO CERTIFICADO
-    doc.setDrawColor(37, 99, 235);
-    doc.setLineWidth(3);
-    doc.rect(10, 10, 277, 190);
+    // BORDAS
+    doc.setDrawColor(37, 99, 235); doc.setLineWidth(3); doc.rect(10, 10, 277, 190);
+    doc.setDrawColor(6, 182, 212); doc.setLineWidth(1); doc.rect(14, 14, 269, 182);
 
-    doc.setDrawColor(6, 182, 212);
-    doc.setLineWidth(1);
-    doc.rect(14, 14, 269, 182);
+    // CABEÇALHO
+    doc.setFont("helvetica", "bold"); doc.setFontSize(28); doc.setTextColor(30, 58, 138);
+    doc.text("LifeApps Academy", 148.5, 42, { align: "center" });
 
-    // TÍTULO DA EMPRESA
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(28);
-    doc.setTextColor(30, 58, 138);
-    doc.text("LifeApps", 148.5, 42, { align: "center" });
-
-    // SUBTÍTULO
-    doc.setFontSize(20);
-    doc.setTextColor(37, 99, 235);
+    doc.setFontSize(20); doc.setTextColor(37, 99, 235);
     doc.text("CERTIFICADO DE CONCLUSÃO", 148.5, 56, { align: "center" });
 
-    // CORPO DO TEXTO
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(14);
-    doc.setTextColor(51, 65, 85);
-    doc.text("Certificamos para os devidos fins que o(a) colaborador(a)", 148.5, 76, { align: "center" });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(14); doc.setTextColor(51, 65, 85);
+    doc.text("Certificamos para os devidos fins que o(a) colaborador(a)", 148.5, 74, { align: "center" });
 
-    // NOME DO ALUNO
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(24);
-    doc.setTextColor(15, 23, 42);
-    doc.text(u.name.toUpperCase(), 148.5, 92, { align: "center" });
+    // NOME ALUNO
+    doc.setFont("helvetica", "bold"); doc.setFontSize(24); doc.setTextColor(15, 23, 42);
+    doc.text(u.name.toUpperCase(), 148.5, 90, { align: "center" });
 
-    // DETALHES
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(13);
-    doc.setTextColor(51, 65, 85);
-    doc.text(`do departamento de ${u.dept || 'Geral'}, concluiu com êxito o programa de capacitação`, 148.5, 106, { align: "center" });
+    // CURSO
+    doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.setTextColor(51, 65, 85);
+    doc.text(`do departamento de ${u.dept || 'Geral'}, concluiu com êxito o curso de`, 148.5, 104, { align: "center" });
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(15);
-    doc.setTextColor(30, 58, 138);
-    doc.text("Onboarding Comercial LifeApps", 148.5, 116, { align: "center" });
+    doc.setFont("helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(30, 58, 138);
+    doc.text(course.title, 148.5, 114, { align: "center" });
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Carga horária / Tempo total de dedicação: ${durationFormatted} • Emitido em: ${issueDate}`, 148.5, 128, { align: "center" });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(12); doc.setTextColor(100, 116, 139);
+    doc.text(`Carga horária / Dedicação: ${durationFormatted} • Emitido em: ${issueDate}`, 148.5, 126, { align: "center" });
 
-    // LINHAS DE ASSINATURA
-    doc.setDrawColor(148, 163, 184);
-    doc.setLineWidth(0.5);
+    // RUBRICAS DESENHADAS (ESTILO CURSIVO FICTÍCIO)
+    doc.setFont("times", "italic"); doc.setFontSize(22); doc.setTextColor(30, 58, 138);
+    doc.text("R. Nascimento", 85, 154, { align: "center" });
+    
+    doc.text(`${u.name.split(' ')[0]} ${u.name.split(' ').slice(-1)[0]}`, 212, 154, { align: "center" });
 
-    // Assinatura Gestor
-    doc.line(45, 162, 125, 162);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.text("Rafael Nascimento", 85, 168, { align: "center" });
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(100, 116, 139);
-    doc.text("Head Comercial LifeApps", 85, 173, { align: "center" });
+    // LINHAS E TEXTOS DAS ASSINATURAS
+    doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
+    doc.line(45, 160, 125, 160);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(15, 23, 42);
+    doc.text("Rafael Nascimento", 85, 166, { align: "center" });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
+    doc.text("Head Comercial LifeApps", 85, 171, { align: "center" });
 
-    // Assinatura Aluno
-    doc.line(172, 162, 252, 162);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.text(u.name, 212, 168, { align: "center" });
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(100, 116, 139);
-    doc.text("Colaborador(a)", 212, 173, { align: "center" });
+    doc.line(172, 160, 252, 160);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(15, 23, 42);
+    doc.text(u.name, 212, 166, { align: "center" });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
+    doc.text("Colaborador(a)", 212, 171, { align: "center" });
 
     const cleanFileName = u.name.replace(/[^a-zA-Z0-9]/g, "_");
     doc.save(`Certificado_LifeApps_${cleanFileName}.pdf`);
   }
-
-  // CADASTRAR / ATUALIZAR MÓDULO
-  document.getElementById('form-add-step').addEventListener('submit', (e) => {
-    e.preventDefault();
-    let steps = getSteps();
-    const editId = document.getElementById('edit-module-id').value;
-
-    const rawVideoUrl = document.getElementById('new-video').value;
-    const subTitle = document.getElementById('sub-title').value.trim();
-
-    const moduleData = {
-      id: editId ? editId : Date.now().toString(),
-      title: document.getElementById('new-title').value,
-      desc: document.getElementById('new-desc').value,
-      videoUrl: convertToEmbedUrl(rawVideoUrl),
-      docUrl: document.getElementById('new-doc').value,
-      submodule: subTitle ? {
-        title: subTitle,
-        desc: document.getElementById('sub-desc').value,
-        videoUrl: convertToEmbedUrl(document.getElementById('sub-video').value),
-        docUrl: document.getElementById('sub-doc').value
-      } : null
-    };
-
-    if (editId) {
-      const index = steps.findIndex(s => s.id === editId);
-      if (index !== -1) {
-        steps[index] = moduleData;
-      }
-      alert("✅ Módulo atualizado com sucesso!");
-    } else {
-      steps.push(moduleData);
-      alert("✅ Novo módulo cadastrado com sucesso!");
-    }
-
-    saveSteps(steps);
-    resetModuleForm();
-    renderAdminDashboard();
-  });
 </script>
 
 </body>
