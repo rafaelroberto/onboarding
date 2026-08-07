@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.1</title>
+  <title>LifeApps Academy v2.5 (Firebase Cloud)</title>
   
-  <!-- Fonte Google Fonts: Inter + Alex Brush (Para Rubricas) -->
+  <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Biblioteca jsPDF -->
+  <!-- jsPDF para Certificados -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- FIREBASE SDKs (Compat v10) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
@@ -59,53 +63,33 @@
 
     header::after {
       content: '';
-      position: absolute;
-      right: -40px;
-      bottom: -40px;
-      width: 180px;
-      height: 180px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
+      position: absolute; right: -40px; bottom: -40px;
+      width: 180px; height: 180px;
+      background: rgba(255, 255, 255, 0.08); border-radius: 50%;
     }
 
     .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 
     .title-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(4px);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+      display: inline-block; background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 8px;
     }
 
     header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
     header p { color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; margin-top: 6px; }
 
     .btn-secret { 
-      background: rgba(255, 255, 255, 0.15); 
-      border: 1px solid rgba(255, 255, 255, 0.3); 
-      color: white; 
-      padding: 8px 14px; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 0.8rem; 
-      font-weight: 500;
-      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); 
+      color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
+      font-size: 0.8rem; font-weight: 500; transition: all 0.2s;
     }
     .btn-secret:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
 
     .card { 
-      background: var(--card-bg); 
-      padding: 28px; 
-      border-radius: var(--radius); 
-      box-shadow: var(--shadow); 
-      margin-bottom: 24px; 
-      border: 1px solid var(--border);
+      background: var(--card-bg); padding: 28px; border-radius: var(--radius); 
+      box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border);
     }
 
     .card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
@@ -113,36 +97,20 @@
     label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: #334155; }
 
     input, select, textarea { 
-      width: 100%; 
-      padding: 12px 14px; 
-      border: 1.5px solid var(--border); 
-      border-radius: 8px; 
-      font-size: 0.95rem; 
-      outline: none; 
-      transition: border-color 0.2s, box-shadow 0.2s;
-      background: #f8fafc;
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); 
+      border-radius: 8px; font-size: 0.95rem; outline: none; 
+      transition: border-color 0.2s, box-shadow 0.2s; background: #f8fafc;
     }
 
     input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      background: white;
+      border-color: var(--primary); background: white;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
     
     .btn { 
-      background-color: var(--primary); 
-      color: white; 
-      border: none; 
-      padding: 10px 18px; 
-      border-radius: 8px; 
-      font-size: 0.9rem;
-      font-weight: 600; 
-      cursor: pointer; 
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.2s;
+      background-color: var(--primary); color: white; border: none; padding: 10px 18px; 
+      border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; 
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
     }
 
     .btn:hover { background-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
@@ -157,30 +125,15 @@
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
     .student-notice-box {
-      background-color: #fffbe3;
-      border: 1px solid #fde047;
-      border-left: 5px solid var(--warning);
-      color: #713f12;
-      padding: 14px 18px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      line-height: 1.4;
+      background-color: #fffbe3; border: 1px solid #fde047; border-left: 5px solid var(--warning);
+      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem; line-height: 1.4;
     }
 
-    .media-container-locked {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
+    .media-container-locked { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
 
     .media-overlay-lock {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(4px);
-      z-index: 10;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 10;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: white; padding: 20px; text-align: center; cursor: pointer;
     }
@@ -188,51 +141,24 @@
     .link-disabled { pointer-events: none; opacity: 0.4; text-decoration: none !important; cursor: not-allowed; }
 
     .progress-container { 
-      margin: 15px 0 25px 0; 
-      background: var(--primary-light);
-      padding: 16px 20px;
-      border-radius: 10px;
-      border: 1px solid #dbeafe;
+      margin: 15px 0 25px 0; background: var(--primary-light);
+      padding: 16px 20px; border-radius: 10px; border: 1px solid #dbeafe;
     }
 
     .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; color: #1e40af; }
     .progress-bar-bg { height: 12px; background-color: #cbd5e1; border-radius: 10px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.4s ease; }
 
-    .course-card {
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      background: white;
-    }
+    .course-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: white; }
+    .course-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 
-    .course-card-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-    }
-
-    .step-item { 
-      border: 1px solid var(--border); 
-      border-radius: 10px; 
-      padding: 18px 20px; 
-      margin-bottom: 14px; 
-      background-color: #f8fafc;
-    }
-
+    .step-item { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; background-color: #f8fafc; }
     .step-item.locked { opacity: 0.7; }
     .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1rem; }
     .step-content { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
     .step-content.active { display: block; }
 
-    .submodule-card {
-      background-color: white;
-      border: 1px solid #cbd5e1;
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
-    }
-
+    .submodule-card { background-color: white; border: 1px solid #cbd5e1; border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px; margin-top: 16px; }
     .time-info-box { background: #f1f5f9; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
 
     .comments-history { max-height: 150px; overflow-y: auto; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -265,7 +191,7 @@
   
   <header>
     <div class="header-top">
-      <span class="title-badge">Plataforma de Capacitação</span>
+      <span class="title-badge">Plataforma de Capacitação Cloud</span>
       <button class="btn-secret" onclick="openAdminModal()">🔒 Gestão</button>
     </div>
     <h1>LifeApps Academy</h1>
@@ -304,7 +230,7 @@
   <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
   <div id="view-admin" class="card hidden">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom:12px; border-bottom:1px solid var(--border);">
-      <h2>Painel Exclusivo de Gestão</h2>
+      <h2>Painel Exclusivo de Gestão (Cloud)</h2>
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
@@ -418,7 +344,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.1</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.5 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -434,6 +360,21 @@
 </div>
 
 <script>
+  // ==========================================
+  // CONFIGURAÇÃO DO FIREBASE (SUBSTITUA AQUI)
+  // ==========================================
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "SEU_PROJECT_ID.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_PROJECT_ID.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
   const SENHA_MESTRA = "lifeapps123"; 
 
   const DEFAULT_COURSES = [
@@ -450,35 +391,44 @@
   ];
 
   let currentStudent = null;
+  let cachedCourses = [];
+  let cachedSteps = [];
+  let cachedUsers = {};
 
   // ==========================================
-  // MIGRAÇÃO E GARANTIA DE DADOS ANTERIORES
+  // FUNÇÕES DE SINCRONIZAÇÃO EM NUVEM (FIRESTORE)
   // ==========================================
-  function migrateLegacyData() {
-    const courses = getCourses();
-    const steps = getSteps();
-    const users = getUsers();
 
-    // 1. Garantir que os módulos existentes possuem vinculação com o Curso Padrão
-    let stepsChanged = false;
-    steps.forEach(s => {
-      if (!s.courseId) {
-        s.courseId = "c1";
-        stepsChanged = true;
+  async function loadCloudData() {
+    try {
+      // 1. Cursos
+      const cSnap = await db.collection('courses').get();
+      if (cSnap.empty) {
+        for (let c of DEFAULT_COURSES) { await db.collection('courses').doc(c.id).set(c); }
+        cachedCourses = DEFAULT_COURSES;
+      } else {
+        cachedCourses = [];
+        cSnap.forEach(doc => cachedCourses.push(doc.data()));
       }
-    });
-    if (stepsChanged) saveSteps(steps);
 
-    // 2. Garantir que os Alunos das Versões 1.0 a 1.7 tenham o curso Padrão em "enrolledCourses"
-    let usersChanged = false;
-    Object.keys(users).forEach(email => {
-      const u = users[email];
-      if (!u.enrolledCourses || u.enrolledCourses.length === 0) {
-        u.enrolledCourses = ["c1"];
-        usersChanged = true;
+      // 2. Módulos
+      const sSnap = await db.collection('steps').get();
+      if (sSnap.empty) {
+        for (let s of DEFAULT_STEPS) { await db.collection('steps').doc(s.id).set(s); }
+        cachedSteps = DEFAULT_STEPS;
+      } else {
+        cachedSteps = [];
+        sSnap.forEach(doc => cachedSteps.push(doc.data()));
       }
-    });
-    if (usersChanged) saveUsers(users);
+
+      // 3. Usuários
+      const uSnap = await db.collection('users').get();
+      cachedUsers = {};
+      uSnap.forEach(doc => { cachedUsers[doc.id] = doc.data(); });
+
+    } catch (err) {
+      console.error("Erro ao carregar dados do Firebase:", err);
+    }
   }
 
   function convertToEmbedUrl(url) {
@@ -512,45 +462,16 @@
     return res;
   }
 
-  function getCourses() {
-    const saved = localStorage.getItem('lifeapps_courses');
-    return saved ? JSON.parse(saved) : DEFAULT_COURSES;
-  }
-
-  function saveCourses(courses) {
-    localStorage.setItem('lifeapps_courses', JSON.stringify(courses));
-  }
-
-  function getSteps() {
-    const saved = localStorage.getItem('lifeapps_custom_steps');
-    return saved ? JSON.parse(saved) : DEFAULT_STEPS;
-  }
-
-  function saveSteps(steps) {
-    localStorage.setItem('lifeapps_custom_steps', JSON.stringify(steps));
-  }
-
-  function getUsers() {
-    const saved = localStorage.getItem('lifeapps_all_users');
-    return saved ? JSON.parse(saved) : {};
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem('lifeapps_all_users', JSON.stringify(users));
-  }
-
-  // Executa migração logo ao carregar o script
-  migrateLegacyData();
-
   // ==========================================
   // ÁREA DO COLABORADOR
   // ==========================================
 
-  document.getElementById('form-user').addEventListener('submit', (e) => {
+  document.getElementById('form-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('u-email').value.toLowerCase().trim();
-    const users = getUsers();
-    const userFound = users[email];
+
+    await loadCloudData();
+    const userFound = cachedUsers[email];
 
     if (!userFound) {
       alert("❌ E-mail não encontrado! Entre em contato com o gestor para realizar o seu cadastro.");
@@ -582,11 +503,8 @@
       <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.dept || 'Geral'} • ${currentStudent.email}</span>
     `;
 
-    const allCourses = getCourses();
-    const allSteps = getSteps();
     const enrolledIds = currentStudent.enrolledCourses || [];
-
-    const enrolledCourses = allCourses.filter(c => enrolledIds.includes(c.id));
+    const enrolledCourses = cachedCourses.filter(c => enrolledIds.includes(c.id));
     const container = document.getElementById('courses-container');
     container.innerHTML = '';
 
@@ -596,7 +514,7 @@
     }
 
     enrolledCourses.forEach(course => {
-      const courseSteps = allSteps.filter(s => s.courseId === course.id);
+      const courseSteps = cachedSteps.filter(s => s.courseId === course.id);
       let completedCount = 0;
 
       courseSteps.forEach(step => {
@@ -732,26 +650,26 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  function startModule(event, stepId) {
+  async function startModule(event, stepId) {
     if (event) { event.preventDefault(); event.stopPropagation(); }
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) {
       currentStudent.times[stepId] = { start: new Date().toISOString() };
-      const users = getUsers();
-      users[currentStudent.email].times = currentStudent.times;
-      saveUsers(users);
+      
+      // Salva no Firestore Cloud
+      await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
+      
       renderStudentCourses();
       document.getElementById(`step-${stepId}`).classList.add('active');
     }
   }
 
-  function markStep(stepId, type, isChecked) {
+  async function markStep(stepId, type, isChecked) {
     if (!currentStudent.progress) currentStudent.progress = {};
     const key = (type === 'sub') ? `${stepId}_sub` : stepId;
     currentStudent.progress[key] = isChecked;
 
-    const steps = getSteps();
-    const stepObj = steps.find(s => s.id === stepId);
+    const stepObj = cachedSteps.find(s => s.id === stepId);
     const hasSub = stepObj && stepObj.submodule && stepObj.submodule.title;
 
     const isMainDone = !!currentStudent.progress[stepId];
@@ -762,16 +680,14 @@
 
     if (isMainDone && isSubDone) currentStudent.times[stepId].end = new Date().toISOString();
 
-    const users = getUsers();
-    users[currentStudent.email].progress = currentStudent.progress;
-    users[currentStudent.email].times = currentStudent.times;
-    saveUsers(users);
+    // Salva no Firestore Cloud
+    await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
     document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
-  function addComment(stepId) {
+  async function addComment(stepId) {
     const input = document.getElementById(`input-comment-${stepId}`);
     const text = input.value.trim();
     if (!text) return;
@@ -784,9 +700,8 @@
       text: text
     });
 
-    const users = getUsers();
-    users[currentStudent.email].notes = currentStudent.notes;
-    saveUsers(users);
+    // Salva no Firestore Cloud
+    await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
     document.getElementById(`step-${stepId}`).classList.add('active');
@@ -796,9 +711,10 @@
   // ÁREA DE GESTÃO RESTRITA
   // ==========================================
 
-  function openAdminModal() {
+  async function openAdminModal() {
     const inputPass = prompt("🔐 Digite a senha de Gestão para continuar:");
     if (inputPass === SENHA_MESTRA) {
+      await loadCloudData();
       document.getElementById('view-welcome').classList.add('hidden');
       document.getElementById('view-trail').classList.add('hidden');
       document.getElementById('view-admin').classList.remove('hidden');
@@ -820,25 +736,24 @@
   }
 
   // 1. GESTÃO DE CURSOS
-  document.getElementById('form-add-course').addEventListener('submit', (e) => {
+  document.getElementById('form-add-course').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('new-course-title').value.trim();
-    const courses = getCourses();
+    const newCourse = { id: `c_${Date.now()}`, title: title };
 
-    courses.push({ id: `c_${Date.now()}`, title: title });
-    saveCourses(courses);
+    await db.collection('courses').doc(newCourse.id).set(newCourse);
+    await loadCloudData();
 
-    alert("✅ Curso criado com sucesso!");
+    alert("✅ Curso criado com sucesso no banco em nuvem!");
     document.getElementById('form-add-course').reset();
     renderAdminDashboard();
   });
 
   function renderAdminCourses() {
-    const courses = getCourses();
     const container = document.getElementById('admin-courses-list');
     container.innerHTML = '';
 
-    courses.forEach(c => {
+    cachedCourses.forEach(c => {
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
@@ -849,29 +764,26 @@
     });
   }
 
-  function deleteCourse(courseId) {
-    if (confirm("Excluir este curso?")) {
-      let courses = getCourses();
-      courses = courses.filter(c => c.id !== courseId);
-      saveCourses(courses);
+  async function deleteCourse(courseId) {
+    if (confirm("Excluir este curso do banco em nuvem?")) {
+      await db.collection('courses').doc(courseId).delete();
+      await loadCloudData();
       renderAdminDashboard();
     }
   }
 
   function renderCourseDropdownInModules() {
-    const courses = getCourses();
     const select = document.getElementById('module-course-id');
     select.innerHTML = '<option value="">Selecione o Curso...</option>';
-    courses.forEach(c => {
+    cachedCourses.forEach(c => {
       select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
     });
   }
 
   function renderAdminEnrollCheckboxes() {
-    const courses = getCourses();
     const container = document.getElementById('admin-courses-enroll-checkboxes');
     container.innerHTML = '';
-    courses.forEach(c => {
+    cachedCourses.forEach(c => {
       container.innerHTML += `
         <label><input type="checkbox" name="enroll-courses" value="${c.id}" checked> ${c.title}</label>
       `;
@@ -880,13 +792,11 @@
 
   // 2. GESTÃO DE MÓDULOS
   function renderModulesManagement() {
-    const steps = getSteps();
-    const courses = getCourses();
     const container = document.getElementById('admin-modules-list');
     container.innerHTML = '';
 
-    steps.forEach((step) => {
-      const course = courses.find(c => c.id === step.courseId);
+    cachedSteps.forEach((step) => {
+      const course = cachedCourses.find(c => c.id === step.courseId);
       const courseName = course ? course.title : 'Sem Curso';
 
       const item = document.createElement('div');
@@ -906,8 +816,7 @@
   }
 
   function editModule(id) {
-    const steps = getSteps();
-    const step = steps.find(s => s.id === id);
+    const step = cachedSteps.find(s => s.id === id);
     if (!step) return;
 
     document.getElementById('edit-module-id').value = step.id;
@@ -948,24 +857,25 @@
     document.getElementById('sub-doc').value = '';
   }
 
-  function deleteModule(id) {
-    if (confirm("Excluir este módulo?")) {
-      let steps = getSteps().filter(s => s.id !== id);
-      saveSteps(steps);
+  async function deleteModule(id) {
+    if (confirm("Excluir este módulo do banco em nuvem?")) {
+      await db.collection('steps').doc(id).delete();
+      await loadCloudData();
       renderAdminDashboard();
       resetModuleForm();
     }
   }
 
-  document.getElementById('form-add-step').addEventListener('submit', (e) => {
+  document.getElementById('form-add-step').addEventListener('submit', async (e) => {
     e.preventDefault();
-    let steps = getSteps();
     const editId = document.getElementById('edit-module-id').value;
     const courseId = document.getElementById('module-course-id').value;
     const subTitle = document.getElementById('sub-title').value.trim();
 
+    const id = editId ? editId : Date.now().toString();
+
     const moduleData = {
-      id: editId ? editId : Date.now().toString(),
+      id: id,
       courseId: courseId,
       title: document.getElementById('new-title').value,
       desc: document.getElementById('new-desc').value,
@@ -979,18 +889,16 @@
       } : null
     };
 
-    if (editId) {
-      const index = steps.findIndex(s => s.id === editId);
-      if (index !== -1) steps[index] = moduleData;
-    } else steps.push(moduleData);
+    await db.collection('steps').doc(id).set(moduleData);
+    await loadCloudData();
 
-    saveSteps(steps);
+    alert("✅ Módulo salvo com sucesso no banco em nuvem!");
     resetModuleForm();
     renderAdminDashboard();
   });
 
   // 3. CADASTRAR / GERENCIAR ALUNOS E CERTIFICADOS
-  document.getElementById('form-add-user').addEventListener('submit', (e) => {
+  document.getElementById('form-add-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
     const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
@@ -998,10 +906,7 @@
 
     const selectedCourses = Array.from(document.querySelectorAll('input[name="enroll-courses"]:checked')).map(cb => cb.value);
 
-    const users = getUsers();
-    if (users[email]) { alert("⚠️ E-mail já cadastrado!"); return; }
-
-    users[email] = {
+    const userData = {
       name: name,
       email: email,
       dept: dept,
@@ -1010,36 +915,35 @@
       progress: {}, times: {}, notes: {}
     };
 
-    saveUsers(users);
-    alert(`✅ Colaborador ${name} cadastrado com sucesso!`);
+    await db.collection('users').doc(email).set(userData, { merge: true });
+    await loadCloudData();
+
+    alert(`✅ Colaborador ${name} cadastrado e salvo na nuvem!`);
     document.getElementById('form-add-user').reset();
     renderUsersManagement();
   });
 
   function renderUsersManagement() {
-    const users = getUsers();
-    const courses = getCourses();
-    const steps = getSteps();
     const tbody = document.getElementById('admin-users-table');
     tbody.innerHTML = '';
 
-    const userKeys = Object.keys(users);
+    const userKeys = Object.keys(cachedUsers);
     if (userKeys.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado.</td></tr>`;
       return;
     }
 
     userKeys.forEach(email => {
-      const u = users[email];
+      const u = cachedUsers[email];
       const isActive = (u.status !== "inativo");
       const enrolledIds = u.enrolledCourses || [];
 
       let coursesHtml = '';
       enrolledIds.forEach(cId => {
-        const course = courses.find(c => c.id === cId);
+        const course = cachedCourses.find(c => c.id === cId);
         if (!course) return;
 
-        const cSteps = steps.filter(s => s.courseId === cId);
+        const cSteps = cachedSteps.filter(s => s.courseId === cId);
         let doneCount = 0;
         cSteps.forEach(s => {
           const isMain = !!(u.progress && u.progress[s.id]);
@@ -1076,38 +980,30 @@
     });
   }
 
-  function toggleUserStatus(email) {
-    const users = getUsers();
-    if (users[email]) {
-      users[email].status = (users[email].status === "ativo") ? "inativo" : "ativo";
-      saveUsers(users);
+  async function toggleUserStatus(email) {
+    if (cachedUsers[email]) {
+      const newStatus = (cachedUsers[email].status === "ativo") ? "inativo" : "ativo";
+      await db.collection('users').doc(email).update({ status: newStatus });
+      await loadCloudData();
       renderUsersManagement();
     }
   }
 
-  function deleteUser(email) {
-    if (confirm(`Excluir definitivamente ${email}?`)) {
-      const users = getUsers();
-      delete users[email];
-      saveUsers(users);
+  async function deleteUser(email) {
+    if (confirm(`Excluir definitivamente ${email} do banco em nuvem?`)) {
+      await db.collection('users').doc(email).delete();
+      await loadCloudData();
       renderUsersManagement();
     }
   }
 
-  // ==========================================
   // EMISSÃO DE CERTIFICADO COM RUBRICAS
-  // ==========================================
-
   function generateCertificate(email, courseId) {
-    const users = getUsers();
-    const courses = getCourses();
-    const steps = getSteps();
-
-    const u = users[email];
-    const course = courses.find(c => c.id === courseId);
+    const u = cachedUsers[email];
+    const course = cachedCourses.find(c => c.id === courseId);
     if (!u || !course) return;
 
-    const courseSteps = steps.filter(s => s.courseId === courseId);
+    const courseSteps = cachedSteps.filter(s => s.courseId === courseId);
     let totalMs = 0;
     courseSteps.forEach(s => {
       const t = (u.times && u.times[s.id]) || {};
@@ -1118,17 +1014,11 @@
     const issueDate = new Date().toLocaleDateString('pt-BR');
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
-    // BORDAS
     doc.setDrawColor(37, 99, 235); doc.setLineWidth(3); doc.rect(10, 10, 277, 190);
     doc.setDrawColor(6, 182, 212); doc.setLineWidth(1); doc.rect(14, 14, 269, 182);
 
-    // CABEÇALHO
     doc.setFont("helvetica", "bold"); doc.setFontSize(28); doc.setTextColor(30, 58, 138);
     doc.text("LifeApps Academy", 148.5, 42, { align: "center" });
 
@@ -1138,11 +1028,9 @@
     doc.setFont("helvetica", "normal"); doc.setFontSize(14); doc.setTextColor(51, 65, 85);
     doc.text("Certificamos para os devidos fins que o(a) colaborador(a)", 148.5, 74, { align: "center" });
 
-    // NOME ALUNO
     doc.setFont("helvetica", "bold"); doc.setFontSize(24); doc.setTextColor(15, 23, 42);
     doc.text(u.name.toUpperCase(), 148.5, 90, { align: "center" });
 
-    // CURSO
     doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.setTextColor(51, 65, 85);
     doc.text(`do departamento de ${u.dept || 'Geral'}, concluiu com êxito o curso de`, 148.5, 104, { align: "center" });
 
@@ -1152,13 +1040,11 @@
     doc.setFont("helvetica", "normal"); doc.setFontSize(12); doc.setTextColor(100, 116, 139);
     doc.text(`Carga horária / Dedicação: ${durationFormatted} • Emitido em: ${issueDate}`, 148.5, 126, { align: "center" });
 
-    // RUBRICAS DESENHADAS (ESTILO CURSIVO FICTÍCIO)
+    // Rubricas
     doc.setFont("times", "italic"); doc.setFontSize(22); doc.setTextColor(30, 58, 138);
     doc.text("R. Nascimento", 85, 154, { align: "center" });
-    
     doc.text(`${u.name.split(' ')[0]} ${u.name.split(' ').slice(-1)[0]}`, 212, 154, { align: "center" });
 
-    // LINHAS E TEXTOS DAS ASSINATURAS
     doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
     doc.line(45, 160, 125, 160);
     doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(15, 23, 42);
@@ -1175,6 +1061,18 @@
     const cleanFileName = u.name.replace(/[^a-zA-Z0-9]/g, "_");
     doc.save(`Certificado_LifeApps_${cleanFileName}.pdf`);
   }
+  // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDHsLURW9stnnXCHDdmHnjCgW4Dxwswg1Q",
+  authDomain: "cursos-life-apps.firebaseapp.com",
+  projectId: "cursos-life-apps",
+  storageBucket: "cursos-life-apps.firebasestorage.app",
+  messagingSenderId: "734362005580",
+  appId: "1:734362005580:web:b10f335649de9b562444e9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 </script>
 
 </body>
