@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v3.1 Cloud</title>
+  <title>LifeApps Academy v3.2 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +190,6 @@
     .submodule-content { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
     .submodule-content.active { display: block; }
 
-    /* ESTILOS DE SUBMÓDULO NO PAINEL DE GESTÃO */
     .admin-submodule-box {
       border: 1px dashed var(--border); background: #fafafa; padding: 12px; border-radius: 8px; margin-top: 10px;
     }
@@ -201,7 +200,6 @@
     .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
     .comment-date { font-size: 0.68rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    /* TABELAS RESPONSIVAS */
     .table-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; min-width: 600px; }
     th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
@@ -222,7 +220,6 @@
     .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; }
     .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 0.82rem; }
 
-    /* MEDIA QUERIES PARA MOBILE */
     @media (max-width: 640px) {
       body { padding: 12px 8px; }
       header { padding: 20px 16px; }
@@ -313,10 +310,10 @@
 
     <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
-      <button class="tab-btn active" onclick="switchAdminTab('users')">👥 Colaboradores</button>
-      <button class="tab-btn" onclick="switchAdminTab('courses')">🎓 Cursos</button>
-      <button class="tab-btn" onclick="switchAdminTab('modules-form')">➕ Novo Módulo</button>
-      <button class="tab-btn" onclick="switchAdminTab('modules-list')">⚙️ Gerenciar Módulos</button>
+      <button class="tab-btn active" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
+      <button class="tab-btn" id="tab-btn-courses" onclick="switchAdminTab('courses')">🎓 Cursos</button>
+      <button class="tab-btn" id="tab-btn-modules-form" onclick="switchAdminTab('modules-form', true)">➕ Novo Módulo</button>
+      <button class="tab-btn" id="tab-btn-modules-list" onclick="switchAdminTab('modules-list')">⚙️ Gerenciar Módulos</button>
     </div>
 
     <!-- ABA 1: COLABORADORES -->
@@ -444,7 +441,7 @@
       </div>
     </div>
 
-    <!-- ABA 4: GERENCIAR MÓDULOS (REORDENAR, RECOLHER, EXCLUIR) -->
+    <!-- ABA 4: GERENCIAR MÓDULOS -->
     <div id="tab-modules-list" class="tab-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="font-size:0.95rem;">Todos os Módulos Cadastrados</h3>
@@ -456,7 +453,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 3.1 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 3.2 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -508,15 +505,18 @@
   let cachedUsers = {};
   let allStudentCoursesExpanded = false;
 
-  function switchAdminTab(tabName) {
+  function switchAdminTab(tabName, forceResetModule = false) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-    event.target.classList.add('active');
-    document.getElementById(`tab-${tabName}`).classList.add('active');
+    const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+    if (activeBtn) activeBtn.classList.add('active');
 
-    // REGRA v3.1: SE CLICAR NA ABA 'NOVO MÓDULO', ZERA O FORMULÁRIO COMPLETAMENTE
-    if (tabName === 'modules-form') {
+    const activeContent = document.getElementById(`tab-${tabName}`);
+    if (activeContent) activeContent.classList.add('active');
+
+    // REGRA DE OURO v3.2: Só reseta o formulário se a pessoa clicou diretamente no botão '➕ Novo Módulo'
+    if (tabName === 'modules-form' && forceResetModule) {
       resetModuleForm();
     }
   }
@@ -1206,6 +1206,7 @@
     const step = cachedSteps.find(s => s.id === id);
     if (!step) return;
 
+    // PREENCHE O ID DO MÓDULO PARA GARANTIR EDIÇÃO E NÃO DUPLICAÇÃO
     document.getElementById('edit-module-id').value = step.id;
     document.getElementById('module-course-id').value = step.courseId || '';
     document.getElementById('new-title').value = step.title || '';
@@ -1258,6 +1259,7 @@
     const editId = document.getElementById('edit-module-id').value;
     const courseId = document.getElementById('module-course-id').value;
 
+    // SE ESTIVER EDITANDO, MANTÉM O MESMO ID DO FIRESTORE (SEM DUPLICAR)
     const id = editId ? editId : Date.now().toString();
 
     const subBlocks = document.querySelectorAll('.admin-submodule-box');
@@ -1275,6 +1277,8 @@
       }
     });
 
+    const existingStep = editId ? cachedSteps.find(s => s.id === editId) : null;
+
     const moduleData = {
       id: id,
       courseId: courseId,
@@ -1282,15 +1286,15 @@
       desc: document.getElementById('new-desc').value,
       videoUrl: convertToEmbedUrl(document.getElementById('new-video').value),
       docUrl: document.getElementById('new-doc').value,
-      status: "ativo",
-      order: editId ? (cachedSteps.find(s=>s.id===editId).order || cachedSteps.length+1) : cachedSteps.length+1,
+      status: existingStep ? (existingStep.status || "ativo") : "ativo",
+      order: existingStep ? (existingStep.order || cachedSteps.length + 1) : (cachedSteps.length + 1),
       submodules: submodulesData
     };
 
     await db.collection('steps').doc(id).set(moduleData, { merge: true });
     await loadCloudData();
 
-    alert("✅ Módulo e submódulos salvos com sucesso na nuvem!");
+    alert(editId ? "✅ Módulo atualizado com sucesso!" : "✅ Novo módulo cadastrado com sucesso!");
     resetModuleForm();
     renderAdminDashboard();
     switchAdminTab('modules-list');
