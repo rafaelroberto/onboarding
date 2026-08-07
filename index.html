@@ -3,85 +3,332 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps</title>
+  <title>Onboarding LifeApps v1.0</title>
   
+  <!-- Fonte Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --primary: #2563eb;
-      --primary-hover: #1d4ed8;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent: #06b6d4;
       --danger: #ef4444;
-      --bg: #f8fafc;
+      --danger-hover: #dc2626;
+      --bg: #f1f5f9;
       --card-bg: #ffffff;
       --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
       --success: #10b981;
+      --radius: 12px;
+      --shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
-    .container { max-width: 850px; width: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
     
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    header h1 { font-size: 1.2rem; color: var(--primary); }
-    
-    .btn-secret { background: transparent; border: 1px dashed var(--text-muted); color: var(--text-muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-    .btn-secret:hover { border-color: var(--primary); color: var(--primary); }
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 30px 15px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+      min-height: 100vh;
+    }
 
-    .card { background: var(--card-bg); padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .form-group { margin-bottom: 14px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
-    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
+    .container { max-width: 860px; width: 100%; }
     
-    .btn { background-color: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; display: inline-block; }
-    .btn:hover { background-color: var(--primary-hover); }
+    /* CABEÇALHO HERO */
+    header { 
+      position: relative;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #06b6d4 100%);
+      color: white;
+      padding: 36px 32px; 
+      border-radius: var(--radius); 
+      box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.3);
+      margin-bottom: 24px; 
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 180px;
+      height: 180px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .title-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    header h1 { 
+      font-size: 2.2rem; 
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    header p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    .btn-secret { 
+      background: rgba(255, 255, 255, 0.15); 
+      border: 1px solid rgba(255, 255, 255, 0.3); 
+      color: white; 
+      padding: 8px 14px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 0.8rem; 
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-secret:hover { 
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* CARDS */
+    .card { 
+      background: var(--card-bg); 
+      padding: 28px; 
+      border-radius: var(--radius); 
+      box-shadow: var(--shadow); 
+      margin-bottom: 24px; 
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    
+    label { 
+      display: block; 
+      margin-bottom: 6px; 
+      font-weight: 600; 
+      font-size: 0.85rem; 
+      color: #334155;
+    }
+
+    input, select, textarea { 
+      width: 100%; 
+      padding: 12px 14px; 
+      border: 1.5px solid var(--border); 
+      border-radius: 8px; 
+      font-size: 0.95rem; 
+      outline: none; 
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #f8fafc;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    
+    .btn { 
+      background-color: var(--primary); 
+      color: white; 
+      border: none; 
+      padding: 12px 20px; 
+      border-radius: 8px; 
+      font-size: 0.95rem;
+      font-weight: 600; 
+      cursor: pointer; 
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover { 
+      background-color: var(--primary-dark); 
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
     .btn-danger { background-color: var(--danger); }
-    .btn-danger:hover { background-color: #dc2626; }
-    
-    /* Progresso */
-    .progress-container { margin: 20px 0; }
-    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
-    .progress-bar-bg { height: 10px; background-color: var(--border); border-radius: 6px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.3s ease; }
+    .btn-danger:hover { background-color: var(--danger-hover); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
 
-    /* Etapas */
-    .step-item { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
-    .step-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
-    .step-content { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    /* BARRA DE PROGRESSO */
+    .progress-container { 
+      margin: 24px 0; 
+      background: var(--primary-light);
+      padding: 16px 20px;
+      border-radius: 10px;
+      border: 1px solid #dbeafe;
+    }
+
+    .progress-header { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-bottom: 10px; 
+      font-weight: 700; 
+      font-size: 0.9rem;
+      color: #1e40af;
+    }
+
+    .progress-bar-bg { 
+      height: 12px; 
+      background-color: #cbd5e1; 
+      border-radius: 10px; 
+      overflow: hidden; 
+    }
+
+    .progress-bar-fill { 
+      height: 100%; 
+      background: linear-gradient(90deg, #10b981, #059669); 
+      width: 0%; 
+      transition: width 0.4s ease; 
+    }
+
+    /* MÓDULOS DA TRILHA */
+    .step-item { 
+      border: 1px solid var(--border); 
+      border-radius: 10px; 
+      padding: 18px 20px; 
+      margin-bottom: 14px; 
+      background-color: white;
+      transition: all 0.2s;
+    }
+
+    .step-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .step-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      cursor: pointer; 
+      font-weight: 600; 
+      font-size: 1.05rem;
+    }
+
+    .step-content { 
+      display: none; 
+      margin-top: 16px; 
+      padding-top: 16px; 
+      border-top: 1px solid var(--border); 
+    }
+
     .step-content.active { display: block; }
 
+    /* TABELA DE GESTÃO */
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
-    th { background-color: #f1f5f9; }
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+    th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
 
     .module-manage-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px;
+      padding: 12px 16px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 8px;
-      background-color: #fafafa;
+      background-color: #f8fafc;
     }
 
     .hidden { display: none !important; }
-    .badge { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+    
+    .badge { 
+      background: #d1fae5; 
+      color: #047857; 
+      padding: 4px 10px; 
+      border-radius: 20px; 
+      font-size: 0.75rem; 
+      font-weight: 700; 
+    }
+
+    /* RODAPÉ */
+    footer {
+      margin-top: auto;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      width: 100%;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    footer p { margin-bottom: 6px; }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .linkedin-icon {
+      width: 14px;
+      height: 14px;
+      fill: var(--primary);
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
+  
+  <!-- CABEÇALHO -->
   <header>
+    <div class="header-top">
+      <span class="title-badge">Trilha Comercial</span>
+      <button class="btn-secret" onclick="openAdminModal()">🔒 Gestão</button>
+    </div>
     <h1>LifeApps Onboarding</h1>
-    <button class="btn-secret" onclick="openAdminModal()">🔒 Painel do Gestor</button>
+    <p>Capacitação oficial e integração de novos colaboradores.</p>
   </header>
 
   <!-- VISTA 1: ENTRADA DO COLABORADOR -->
   <div id="view-welcome" class="card">
-    <h2>Acesso do Colaborador</h2>
-    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
-      Digite seu e-mail para começar ou continuar de onde parou.
+    <h2>Bem-vindo à sua jornada!</h2>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+      Informe seus dados abaixo para iniciar ou continuar o seu progresso salvo.
     </p>
     <form id="form-user">
       <div class="form-group">
@@ -90,16 +337,16 @@
       </div>
       <div class="form-group">
         <label>Nome Completo *</label>
-        <input type="text" id="u-name" required placeholder="Nome e Sobrenome">
+        <input type="text" id="u-name" required placeholder="Digite seu nome completo">
       </div>
       <div class="form-group">
-        <label>Telefone/WhatsApp *</label>
+        <label>Telefone / WhatsApp *</label>
         <input type="tel" id="u-phone" required placeholder="(00) 00000-0000">
       </div>
       <div class="form-group">
-        <label>Função/Cargo *</label>
+        <label>Função / Cargo *</label>
         <select id="u-role" required>
-          <option value="">Selecione...</option>
+          <option value="">Selecione sua função...</option>
           <option value="SDR">SDR</option>
           <option value="BDR">BDR</option>
           <option value="Inside Sales">Inside Sales</option>
@@ -108,20 +355,20 @@
           <option value="Gerente">Gerente</option>
         </select>
       </div>
-      <button type="submit" class="btn" style="width: 100%;">Acessar Trilha</button>
+      <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Acessar Trilha de Aprendizagem</button>
     </form>
   </div>
 
   <!-- VISTA 2: TRILHA DE APRENDIZAGEM -->
   <div id="view-trail" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
       <div id="user-info"></div>
-      <button class="btn-secret" onclick="exitTrail()">Sair / Trocar Usuário</button>
+      <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
 
     <div class="progress-container">
       <div class="progress-header">
-        <span>Progresso da Trilha</span>
+        <span>SEU PROGRESSO TOTAL</span>
         <span id="progress-text">0%</span>
       </div>
       <div class="progress-bar-bg">
@@ -134,42 +381,40 @@
 
   <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
   <div id="view-admin" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom:12px; border-bottom:1px solid var(--border);">
       <h2>Painel Exclusivo de Gestão</h2>
       <button class="btn" style="background:#64748b;" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
     <!-- 1. GERENCIAR E EXCLUIR MÓDULOS -->
-    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
-      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">📚 Gerenciar e Excluir Módulos Existentes</summary>
-      <div id="admin-modules-list" style="margin-top: 15px;">
-        <!-- Módulos carregados aqui com botão excluir -->
-      </div>
+    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">📚 Gerenciar Módulos Existentes</summary>
+      <div id="admin-modules-list" style="margin-top: 15px;"></div>
     </details>
 
     <!-- 2. ADICIONAR NOVO MÓDULO -->
-    <details style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
-      <summary style="font-weight: bold; cursor: pointer; color: var(--primary);">➕ Adicionar Novo Módulo</summary>
+    <details style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">➕ Adicionar Novo Módulo à Trilha</summary>
       <form id="form-add-step" style="margin-top: 15px;">
         <label>Título do Módulo</label>
         <input type="text" id="new-title" placeholder="Ex: 7. Cultura e Benefícios" required>
         
         <label>Descrição/Instruções</label>
-        <textarea id="new-desc" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
+        <textarea id="new-desc" rows="3" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
         
-        <label>Link do Vídeo do YouTube (Pode colar o link normal do YouTube)</label>
-        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=... ou https://youtu.be/...">
+        <label>Link do Vídeo do YouTube (Pode colar o link normal)</label>
+        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=...">
         
         <label>Link do Documento (PDF / Notion / Drive)</label>
         <input type="url" id="new-doc" placeholder="https://...">
 
-        <button type="submit" class="btn">Cadastrar Módulo</button>
+        <button type="submit" class="btn" style="margin-top:10px;">Cadastrar Módulo</button>
       </form>
     </details>
 
     <!-- 3. GERENCIAR COLABORADORES E EXCLUIR -->
-    <h3>Colaboradores Cadastrados</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 10px;">Aqui você visualiza quem entrou e pode apagar os dados se precisar.</p>
+    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso dos novos colaboradores ou apague registros antigos.</p>
     
     <table>
       <thead>
@@ -181,17 +426,30 @@
           <th>Ação</th>
         </tr>
       </thead>
-      <tbody id="admin-users-table">
-        <!-- Preenchido dinamicamente -->
-      </tbody>
+      <tbody id="admin-users-table"></tbody>
     </table>
   </div>
+
+  <!-- RODAPÉ COMPLETO -->
+  <footer>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.0</p>
+    <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
+    <p>
+      Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
+      <a href="https://www.linkedin.com/in/rafaelrobertonascimento" target="_blank" rel="noopener noreferrer">
+        <svg class="linkedin-icon" viewBox="0 0 24 24">
+          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.78a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24Z"/>
+        </svg>
+        LinkedIn
+      </a>
+    </p>
+  </footer>
 
 </div>
 
 <script>
   // ==========================================
-  // CONFIGURAÇÕES GERAIS
+  // CONFIGURAÇÕES GERAIS E DADOS
   // ==========================================
   
   const SENHA_MESTRA = "lifeapps123"; 
@@ -207,24 +465,16 @@
 
   let currentStudent = null;
 
-  // Função auxiliar para converter qualquer link do YouTube no formato Embed válido
   function convertToEmbedUrl(url) {
     if (!url) return "";
     let videoId = "";
-    
-    // Suporta links como: https://www.youtube.com/watch?v=ID
     if (url.includes("watch?v=")) {
       videoId = url.split("watch?v=")[1].split("&")[0];
-    } 
-    // Suporta links curtos como: https://youtu.be/ID
-    else if (url.includes("youtu.be/")) {
+    } else if (url.includes("youtu.be/")) {
       videoId = url.split("youtu.be/")[1].split("?")[0];
-    }
-    // Suporta links que já estejam como embed
-    else if (url.includes("embed/")) {
+    } else if (url.includes("embed/")) {
       return url;
     }
-
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   }
 
@@ -291,8 +541,8 @@
 
   function renderTrail() {
     document.getElementById('user-info').innerHTML = `
-      <h3>Olá, ${currentStudent.name}!</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted);">${currentStudent.role} | ${currentStudent.email}</p>
+      <strong style="font-size:1rem; color:var(--text);">${currentStudent.name}</strong>
+      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.role} • ${currentStudent.email}</span>
     `;
 
     const steps = getSteps();
@@ -312,15 +562,15 @@
       el.innerHTML = `
         <div class="step-header" onclick="toggleContent('step-${step.id}')">
           <span>${step.title}</span>
-          ${isDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Ver aula ▾</span>'}
+          ${isDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Acessar aula ▾</span>'}
         </div>
         <div class="step-content" id="step-${step.id}">
-          <p style="margin-bottom:10px;">${step.desc}</p>
-          ${embedVideo ? `<iframe width="100%" height="280" src="${embedVideo}" allowfullscreen style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
-          ${step.docUrl ? `<p><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600;">📄 Acessar Documento de Apoio</a></p>` : ''}
-          <div style="margin-top: 12px;">
-            <label style="font-weight:normal; cursor:pointer;">
-              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
+          <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
+          ${embedVideo ? `<iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none; margin-bottom:12px;"></iframe>` : ''}
+          ${step.docUrl ? `<p style="margin-bottom:12px;"><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 Abrir Documento de Apoio →</a></p>` : ''}
+          <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
+            <label style="font-weight:600; cursor:pointer; color:var(--text); display:flex; gap:8px; align-items:center;">
+              <input type="checkbox" style="width:18px; height:18px;" ${isDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
               Marcar esta etapa como concluída
             </label>
           </div>
@@ -356,7 +606,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA (PAINEL DO GESTOR)
+  // ÁREA DE GESTÃO RESTRITA
   // ==========================================
 
   function openAdminModal() {
@@ -382,7 +632,6 @@
     renderUsersManagement();
   }
 
-  // Exibir e Excluir Módulos
   function renderModulesManagement() {
     const steps = getSteps();
     const container = document.getElementById('admin-modules-list');
@@ -393,12 +642,12 @@
       return;
     }
 
-    steps.forEach((step, index) => {
+    steps.forEach((step) => {
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
-        <span style="font-weight:600;">${step.title}</span>
-        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteModule('${step.id}')">Excluir Módulo</button>
+        <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
+        <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
       `;
       container.appendChild(item);
     });
@@ -413,7 +662,6 @@
     }
   }
 
-  // Tabela de Colaboradores
   function renderUsersManagement() {
     const users = getUsers();
     const tbody = document.getElementById('admin-users-table');
@@ -430,12 +678,12 @@
       const u = users[email];
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${u.name || '-'}</td>
+        <td><strong>${u.name || '-'}</strong></td>
         <td>${u.email}</td>
         <td>${u.role || '-'}</td>
-        <td><strong>${u.pct || 0}%</strong></td>
+        <td><span class="badge">${u.pct || 0}%</span></td>
         <td>
-          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteUser('${u.email}')">Excluir</button>
+          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -451,7 +699,6 @@
     }
   }
 
-  // ADICIONAR NOVO MÓDULO
   document.getElementById('form-add-step').addEventListener('submit', (e) => {
     e.preventDefault();
     const steps = getSteps();
