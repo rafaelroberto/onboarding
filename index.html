@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.0 Cloud</title>
+  <title>LifeApps Academy v2.1 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -116,6 +116,54 @@
     .btn-success:hover { background-color: #059669; }
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
+    /* KPIS ALUNO */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .kpi-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ESTRELAS DE AVALIAÇÃO */
+    .star-rating {
+      display: inline-flex;
+      gap: 4px;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .star-rating .star {
+      color: #cbd5e1;
+      transition: color 0.2s;
+    }
+
+    .star-rating .star.filled {
+      color: #f59e0b;
+    }
+
+    /* ABAS DE NAVEGAÇÃO */
     .admin-tabs {
       display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 20px;
     }
@@ -159,7 +207,7 @@
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.4s ease; }
 
     .course-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: white; }
-    .course-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .course-card-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
     .step-item { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; background-color: #f8fafc; }
     .step-item.locked { opacity: 0.7; }
@@ -229,8 +277,27 @@
       <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
 
-    <div class="student-notice-box">
-      <strong>💡 Observação Importante:</strong> Clique em <strong>"▶ Iniciar Módulo"</strong> dentro de cada etapa para liberar o player de vídeo e os arquivos para download.
+    <!-- KPIS DO ALUNO -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-number" id="kpi-enrolled">0</div>
+        <div class="kpi-label">Matriculados</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-number" id="kpi-ongoing" style="color: var(--warning);">0</div>
+        <div class="kpi-label">Em Andamento</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-number" id="kpi-completed" style="color: var(--success);">0</div>
+        <div class="kpi-label">Concluídos</div>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <div class="student-notice-box" style="margin-bottom:0; flex:1; margin-right:10px;">
+        <strong>💡 Dica:</strong> Clique nos títulos para retrair ou expandir os Cursos e Módulos.
+      </div>
+      <button class="btn btn-secondary" style="font-size:0.8rem; white-space:nowrap;" onclick="toggleAllStudentCourses()">↔ Expandir/Retrair Todos</button>
     </div>
 
     <div id="courses-container"></div>
@@ -243,7 +310,6 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
       <button class="tab-btn active" onclick="switchAdminTab('users')">👥 Colaboradores</button>
       <button class="tab-btn" onclick="switchAdminTab('courses')">🎓 Cursos</button>
@@ -308,7 +374,7 @@
       </table>
     </div>
 
-    <!-- ABA 2: CURSOS (CRIAR E EDITAR CURSO E COMPOSIÇÃO DE MÓDULOS) -->
+    <!-- ABA 2: CURSOS -->
     <div id="tab-courses" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
         <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);" id="form-course-title">Criar Novo Curso</h3>
@@ -388,7 +454,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.0 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.1 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -405,7 +471,7 @@
 
 <script>
   // ==========================================
-  // CONFIGURAÇÃO DO FIREBASE (COM SUAS CREDENCIAIS)
+  // CONFIGURAÇÃO DO FIREBASE
   // ==========================================
   const firebaseConfig = {
     apiKey: "AIzaSyDHsLURW9stnnXCHDdmHnjCgW4Dxwswg1Q",
@@ -438,6 +504,7 @@
   let cachedCourses = [];
   let cachedSteps = [];
   let cachedUsers = {};
+  let allStudentCoursesExpanded = true;
 
   function switchAdminTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -562,8 +629,14 @@
     const container = document.getElementById('courses-container');
     container.innerHTML = '';
 
+    // ATUALIZAR KPIS DO ALUNO
+    let enrolledCount = enrolledCourses.length;
+    let ongoingCount = 0;
+    let completedCountTotal = 0;
+
     if (enrolledCourses.length === 0) {
       container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">Você ainda não possui matrículas em nenhum curso ativo. Entre em contato com o gestor.</div>`;
+      updateStudentKPIs(0, 0, 0);
       return;
     }
 
@@ -579,27 +652,88 @@
       });
 
       const pct = courseSteps.length ? Math.round((completedCount / courseSteps.length) * 100) : 0;
+      if (pct === 100) completedCountTotal++;
+      else if (pct > 0) ongoingCount++;
+
+      const isFullyCompleted = pct === 100;
+      const currentRating = (currentStudent.ratings && currentStudent.ratings[course.id]) || 0;
 
       const courseEl = document.createElement('div');
       courseEl.className = 'course-card';
       courseEl.innerHTML = `
-        <div class="course-card-header">
-          <h2 style="color:var(--primary); font-size:1.2rem;">🎓 ${course.title}</h2>
-          <span class="badge">${pct}% Concluído</span>
-        </div>
-
-        <div class="progress-container">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+        <div class="course-card-header" onclick="toggleCourseContent('${course.id}')">
+          <h2 style="color:var(--primary); font-size:1.2rem; display:flex; align-items:center; gap:8px;">
+            🎓 ${course.title}
+          </h2>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="badge">${pct}% Concluído</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">▾</span>
           </div>
         </div>
 
-        <div id="steps-list-course-${course.id}"></div>
+        <div id="course-body-${course.id}">
+          <div class="progress-container">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+            </div>
+          </div>
+
+          <!-- BOTÃO EMISSÃO DIRETA PELO ALUNO + AVALIAÇÃO DE ESTRELAS -->
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border); margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span style="font-size:0.85rem; font-weight:600; color:var(--text); display:block;">Avalie este curso:</span>
+              <div class="star-rating" id="stars-${course.id}">
+                ${[1, 2, 3, 4, 5].map(star => `
+                  <span class="star ${star <= currentRating ? 'filled' : ''}" onclick="rateCourse('${course.id}', ${star})">★</span>
+                `).join('')}
+              </div>
+            </div>
+
+            <button class="btn btn-success" style="font-size:0.85rem;" ${!isFullyCompleted ? 'disabled title="Conclua 100% dos módulos do curso para liberar o certificado"' : ''} onclick="generateCertificate('${currentStudent.email}', '${course.id}')">
+              📜 Baixar Certificado (PDF)
+            </button>
+          </div>
+
+          <div id="steps-list-course-${course.id}"></div>
+        </div>
       `;
 
       container.appendChild(courseEl);
       renderCourseSteps(course.id, courseSteps, `steps-list-course-${course.id}`);
     });
+
+    updateStudentKPIs(enrolledCount, ongoingCount, completedCountTotal);
+  }
+
+  function updateStudentKPIs(enrolled, ongoing, completed) {
+    document.getElementById('kpi-enrolled').innerText = enrolled;
+    document.getElementById('kpi-ongoing').innerText = ongoing;
+    document.getElementById('kpi-completed').innerText = completed;
+  }
+
+  function toggleCourseContent(courseId) {
+    const body = document.getElementById(`course-body-${courseId}`);
+    if (body) body.classList.toggle('hidden');
+  }
+
+  function toggleAllStudentCourses() {
+    allStudentCoursesExpanded = !allStudentCoursesExpanded;
+    const enrolledIds = currentStudent.enrolledCourses || [];
+    enrolledIds.forEach(id => {
+      const body = document.getElementById(`course-body-${id}`);
+      if (body) {
+        if (allStudentCoursesExpanded) body.classList.remove('hidden');
+        else body.classList.add('hidden');
+      }
+    });
+  }
+
+  async function rateCourse(courseId, rating) {
+    if (!currentStudent.ratings) currentStudent.ratings = {};
+    currentStudent.ratings[courseId] = rating;
+
+    await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
+    renderStudentCourses();
   }
 
   function renderCourseSteps(courseId, steps, containerId) {
@@ -800,7 +934,6 @@
 
     await db.collection('courses').doc(courseId).set(courseData, { merge: true });
 
-    // Atualiza vínculos dos Módulos se estiver editando
     if (editId) {
       const selectedModuleIds = Array.from(document.querySelectorAll('input[name="course-modules"]:checked')).map(cb => cb.value);
       for (let step of cachedSteps) {
@@ -854,7 +987,6 @@
     document.getElementById('btn-save-course').innerText = "Atualizar Curso";
     document.getElementById('btn-cancel-edit-course').classList.remove('hidden');
 
-    // Exibe lista de módulos com checkbox para o gestor escolher quais pertencem ao curso
     const box = document.getElementById('course-modules-selection-box');
     const container = document.getElementById('course-modules-checkboxes');
     box.classList.remove('hidden');
@@ -1052,7 +1184,6 @@
 
     const selectedCourses = Array.from(document.querySelectorAll('input[name="enroll-courses"]:checked')).map(cb => cb.value);
 
-    // Se estiver editando e alterou o e-mail, apaga o registro do e-mail antigo
     if (originalEmail && originalEmail !== email) {
       await db.collection('users').doc(originalEmail).delete();
     }
@@ -1065,7 +1196,8 @@
       enrolledCourses: selectedCourses,
       progress: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].progress : {},
       times: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].times : {},
-      notes: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].notes : {}
+      notes: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].notes : {},
+      ratings: (originalEmail && cachedUsers[originalEmail]) ? cachedUsers[originalEmail].ratings : {}
     };
 
     await db.collection('users').doc(email).set(userData, { merge: true });
@@ -1085,7 +1217,6 @@
     document.getElementById('admin-user-email').value = u.email || '';
     document.getElementById('admin-user-dept').value = u.dept || '';
 
-    // Selecionar cursos matriculados
     const enrolled = u.enrolledCourses || [];
     document.querySelectorAll('input[name="enroll-courses"]').forEach(cb => {
       cb.checked = enrolled.includes(cb.value);
@@ -1108,7 +1239,6 @@
     renderAdminEnrollCheckboxes();
   }
 
-  // REFRESH E RESET DE CURSOS E MÓDULOS ESPECÍFICOS DO USUÁRIO
   async function resetUserOptions(email) {
     const u = cachedUsers[email];
     if (!u) return;
@@ -1199,10 +1329,11 @@
 
         const pct = cSteps.length ? Math.round((doneCount / cSteps.length) * 100) : 0;
         const isFullyDone = pct === 100;
+        const rating = (u.ratings && u.ratings[course.id]) ? `⭐ ${u.ratings[course.id]}/5` : '';
 
         coursesHtml += `
           <div style="margin-bottom:6px; background:#f1f5f9; padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
-            <span><strong>${course.title}</strong> (${pct}%)</span>
+            <span><strong>${course.title}</strong> (${pct}%) ${rating ? `<span style="font-size:0.75rem; color:#d97706;">${rating}</span>` : ''}</span>
             <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem;" ${!isFullyDone ? 'disabled' : ''} onclick="generateCertificate('${u.email}', '${course.id}')">📜 Certificado</button>
           </div>
         `;
