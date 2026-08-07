@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.1</title>
+  <title>Onboarding LifeApps v1.2</title>
   
-  <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -85,18 +84,8 @@
       margin-bottom: 8px;
     }
 
-    header h1 { 
-      font-size: 2.2rem; 
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-    }
-
-    header p {
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.95rem;
-      margin-top: 6px;
-    }
+    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+    header p { color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; margin-top: 6px; }
 
     .btn-secret { 
       background: rgba(255, 255, 255, 0.15); 
@@ -109,11 +98,7 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-
-    .btn-secret:hover { 
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
-    }
+    .btn-secret:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
 
     /* CARDS */
     .card { 
@@ -125,22 +110,9 @@
       border: 1px solid var(--border);
     }
 
-    .card h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
-    }
-
+    .card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
     .form-group { margin-bottom: 16px; }
-    
-    label { 
-      display: block; 
-      margin-bottom: 6px; 
-      font-weight: 600; 
-      font-size: 0.85rem; 
-      color: #334155;
-    }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: #334155; }
 
     input, select, textarea { 
       width: 100%; 
@@ -175,19 +147,9 @@
       transition: all 0.2s;
     }
 
-    .btn:hover { 
-      background-color: var(--primary-dark); 
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    }
-
-    .btn-secondary {
-      background-color: #64748b;
-    }
-    .btn-secondary:hover {
-      background-color: #475569;
-    }
-
+    .btn:hover { background-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+    .btn-secondary { background-color: #64748b; }
+    .btn-secondary:hover { background-color: #475569; }
     .btn-danger { background-color: var(--danger); }
     .btn-danger:hover { background-color: var(--danger-hover); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
 
@@ -200,28 +162,9 @@
       border: 1px solid #dbeafe;
     }
 
-    .progress-header { 
-      display: flex; 
-      justify-content: space-between; 
-      margin-bottom: 10px; 
-      font-weight: 700; 
-      font-size: 0.9rem;
-      color: #1e40af;
-    }
-
-    .progress-bar-bg { 
-      height: 12px; 
-      background-color: #cbd5e1; 
-      border-radius: 10px; 
-      overflow: hidden; 
-    }
-
-    .progress-bar-fill { 
-      height: 100%; 
-      background: linear-gradient(90deg, #10b981, #059669); 
-      width: 0%; 
-      transition: width 0.4s ease; 
-    }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; color: #1e40af; }
+    .progress-bar-bg { height: 12px; background-color: #cbd5e1; border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.4s ease; }
 
     /* MÓDULOS DA TRILHA */
     .step-item { 
@@ -233,9 +176,9 @@
       transition: all 0.2s;
     }
 
-    .step-item:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    .step-item.locked {
+      background-color: #f8fafc;
+      opacity: 0.7;
     }
 
     .step-header { 
@@ -256,7 +199,6 @@
 
     .step-content.active { display: block; }
 
-    /* SUBMÓDULO ESTILIZADO */
     .submodule-card {
       background-color: #f8fafc;
       border: 1px solid #cbd5e1;
@@ -264,6 +206,15 @@
       border-radius: 8px;
       padding: 16px;
       margin-top: 16px;
+    }
+
+    .time-info-box {
+      background: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
     }
 
     /* TABELA DE GESTÃO */
@@ -292,6 +243,14 @@
       font-size: 0.75rem; 
       font-weight: 700; 
     }
+    .badge-locked {
+      background: #f1f5f9;
+      color: #94a3b8;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
 
     /* RODAPÉ */
     footer {
@@ -305,26 +264,10 @@
     }
 
     footer p { margin-bottom: 6px; }
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+    footer a:hover { text-decoration: underline; }
 
-    footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    .linkedin-icon {
-      width: 14px;
-      height: 14px;
-      fill: var(--primary);
-      vertical-align: middle;
-    }
+    .linkedin-icon { width: 14px; height: 14px; fill: var(--primary); vertical-align: middle; }
   </style>
 </head>
 <body>
@@ -454,7 +397,7 @@
 
     <!-- 3. GERENCIAR COLABORADORES -->
     <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso dos novos colaboradores ou apague registros antigos.</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso e o tempo de conclusão de cada colaborador.</p>
     
     <table>
       <thead>
@@ -463,7 +406,7 @@
           <th>E-mail</th>
           <th>Cargo</th>
           <th>Progresso</th>
-          <th>Ação</th>
+          <th>Ações / Métricas</th>
         </tr>
       </thead>
       <tbody id="admin-users-table"></tbody>
@@ -472,7 +415,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.1</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.2</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -518,6 +461,30 @@
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   }
 
+  function formatDate(isoString) {
+    if (!isoString) return "-";
+    const d = new Date(isoString);
+    return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function calculateDuration(startIso, endIso) {
+    if (!startIso || !endIso) return "-";
+    const start = new Date(startIso);
+    const end = new Date(endIso);
+    const diffMs = end - start;
+    if (diffMs < 0) return "-";
+
+    const seconds = Math.floor((diffMs / 1000) % 60);
+    const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+
+    let res = "";
+    if (hours > 0) res += `${hours}h `;
+    if (minutes > 0 || hours > 0) res += `${minutes}m `;
+    res += `${seconds}s`;
+    return res;
+  }
+
   function getSteps() {
     const saved = localStorage.getItem('lifeapps_custom_steps');
     return saved ? JSON.parse(saved) : DEFAULT_STEPS;
@@ -556,7 +523,7 @@
     
     const users = getUsers();
     if (!users[email]) {
-      users[email] = { progress: {} };
+      users[email] = { progress: {}, times: {}, notes: {} };
     }
 
     users[email].name = document.getElementById('u-name').value;
@@ -589,37 +556,50 @@
     const listContainer = document.getElementById('steps-list');
     listContainer.innerHTML = '';
 
-    let totalItemsCount = 0;
-    let completedItemsCount = 0;
+    let completedModulesCount = 0;
+    let previousModuleFullyCompleted = true; // O primeiro módulo sempre começa desbloqueado
 
-    steps.forEach((step) => {
-      // Contagem de itens (módulo principal + submódulo se existir)
-      totalItemsCount++;
+    steps.forEach((step, index) => {
+      const stepTimes = (currentStudent.times && currentStudent.times[step.id]) || {};
+      const isStarted = !!stepTimes.start;
+      
       const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
-      if (isMainDone) completedItemsCount++;
+      const hasSub = step.submodule && step.submodule.title;
+      const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
 
-      let hasSub = step.submodule && step.submodule.title;
-      let isSubDone = false;
+      // O módulo só atinge 100% de conclusão se tiver cumprido Módulo e Submódulo (se houver)
+      const isModuleFullyDone = isMainDone && isSubDone;
+      if (isModuleFullyDone) completedModulesCount++;
 
-      if (hasSub) {
-        totalItemsCount++;
-        isSubDone = !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]);
-        if (isSubDone) completedItemsCount++;
-      }
+      const isLocked = !previousModuleFullyCompleted;
+      previousModuleFullyCompleted = isModuleFullyDone;
 
-      const isModuleFullyDone = hasSub ? (isMainDone && isSubDone) : isMainDone;
       const embedVideo = convertToEmbedUrl(step.videoUrl);
+      const userNote = (currentStudent.notes && currentStudent.notes[step.id]) || "";
 
       const el = document.createElement('div');
-      el.className = 'step-item';
+      el.className = `step-item ${isLocked ? 'locked' : ''}`;
       el.innerHTML = `
-        <div class="step-header" onclick="toggleContent('step-${step.id}')">
+        <div class="step-header" onclick="${isLocked ? `alert('🔒 Conclua o módulo anterior antes de acessar este!')` : `toggleContent('step-${step.id}')`}">
           <span>${step.title}</span>
-          ${isModuleFullyDone 
-            ? '<span class="badge">Concluído</span>' 
-            : '<span style="font-size:0.8rem; color:var(--text-muted);">Acessar aula ▾</span>'}
+          ${isLocked 
+            ? '<span class="badge-locked">🔒 Bloqueado</span>' 
+            : (isModuleFullyDone 
+                ? '<span class="badge">Concluído</span>' 
+                : '<span style="font-size:0.8rem; color:var(--primary); font-weight:bold;">Acessar aula ▾</span>')}
         </div>
+        
         <div class="step-content" id="step-${step.id}">
+          <!-- BOTÃO INICIAR E DATAS -->
+          <div class="time-info-box">
+            ${!isStarted ? `
+              <button class="btn" style="padding:6px 12px; font-size:0.8rem;" onclick="startModule('${step.id}')">▶ Iniciar Módulo</button>
+            ` : `
+              <p>🗓 <strong>Iniciado em:</strong> ${formatDate(stepTimes.start)}</p>
+              ${stepTimes.end ? `<p style="margin-top:4px;">✅ <strong>Finalizado em:</strong> ${formatDate(stepTimes.end)}</p>` : '<p style="margin-top:4px; color:#d97706;">⏳ Em andamento...</p>'}
+            `}
+          </div>
+
           <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
           ${embedVideo ? `<iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none; margin-bottom:12px;"></iframe>` : ''}
@@ -627,9 +607,10 @@
           
           <div style="margin-top: 10px; padding-top:10px; border-top:1px dashed var(--border);">
             <label style="font-weight:600; cursor:pointer; color:var(--text); display:flex; gap:8px; align-items:center;">
-              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
+              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'main', this.checked)">
               Concluir módulo principal
             </label>
+            ${!isStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:2px;">Clique em "Iniciar Módulo" acima para liberar.</span>' : ''}
           </div>
 
           <!-- SUBMÓDULO OPCIONAL -->
@@ -641,17 +622,23 @@
               ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material do Submódulo →</a></p>` : ''}
               
               <label style="font-weight:600; cursor:pointer; font-size:0.9rem; color:var(--text); display:flex; gap:8px; align-items:center; margin-top:8px;">
-                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked' : ''} onchange="markStep('${step.id}_sub', this.checked)">
+                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
                 Concluir submódulo
               </label>
             </div>
           ` : ''}
+
+          <!-- OBSERVATIONS DO ALUNO -->
+          <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+            <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">📝 Suas Anotações / Observações sobre este módulo:</label>
+            <textarea rows="2" style="font-size:0.85rem; margin-top:4px;" placeholder="Escreva aqui suas dúvidas ou anotações pessoais..." onblur="saveUserNote('${step.id}', this.value)">${userNote}</textarea>
+          </div>
         </div>
       `;
       listContainer.appendChild(el);
     });
 
-    const pct = totalItemsCount ? Math.round((completedItemsCount / totalItemsCount) * 100) : 0;
+    const pct = steps.length ? Math.round((completedModulesCount / steps.length) * 100) : 0;
     document.getElementById('progress-bar').style.width = `${pct}%`;
     document.getElementById('progress-text').innerText = `${pct}%`;
 
@@ -666,15 +653,54 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  function markStep(stepKey, isChecked) {
+  function startModule(stepId) {
+    if (!currentStudent.times) currentStudent.times = {};
+    if (!currentStudent.times[stepId]) {
+      currentStudent.times[stepId] = { start: new Date().toISOString() };
+      const users = getUsers();
+      users[currentStudent.email].times = currentStudent.times;
+      saveUsers(users);
+      renderTrail();
+    }
+  }
+
+  function markStep(stepId, type, isChecked) {
     if (!currentStudent.progress) currentStudent.progress = {};
-    currentStudent.progress[stepKey] = isChecked;
+    
+    const key = (type === 'sub') ? `${stepId}_sub` : stepId;
+    currentStudent.progress[key] = isChecked;
+
+    // Verificar se o módulo como um todo foi concluído para gravar a data/hora final
+    const steps = getSteps();
+    const stepObj = steps.find(s => s.id === stepId);
+    const hasSub = stepObj && stepObj.submodule && stepObj.submodule.title;
+
+    const isMainDone = !!currentStudent.progress[stepId];
+    const isSubDone = hasSub ? !!currentStudent.progress[`${stepId}_sub`] : true;
+
+    if (!currentStudent.times) currentStudent.times = {};
+    if (!currentStudent.times[stepId]) currentStudent.times[stepId] = { start: new Date().toISOString() };
+
+    if (isMainDone && isSubDone) {
+      currentStudent.times[stepId].end = new Date().toISOString();
+    } else {
+      delete currentStudent.times[stepId].end;
+    }
 
     const users = getUsers();
     users[currentStudent.email].progress = currentStudent.progress;
+    users[currentStudent.email].times = currentStudent.times;
     saveUsers(users);
 
     renderTrail();
+  }
+
+  function saveUserNote(stepId, noteText) {
+    if (!currentStudent.notes) currentStudent.notes = {};
+    currentStudent.notes[stepId] = noteText;
+    const users = getUsers();
+    users[currentStudent.email].notes = currentStudent.notes;
+    saveUsers(users);
   }
 
   // ==========================================
@@ -742,7 +768,6 @@
     document.getElementById('new-video').value = step.videoUrl || '';
     document.getElementById('new-doc').value = step.docUrl || '';
 
-    // Preencher Submódulo se existir
     if (step.submodule) {
       document.getElementById('sub-title').value = step.submodule.title || '';
       document.getElementById('sub-desc').value = step.submodule.desc || '';
@@ -789,6 +814,7 @@
 
   function renderUsersManagement() {
     const users = getUsers();
+    const steps = getSteps();
     const tbody = document.getElementById('admin-users-table');
     tbody.innerHTML = '';
 
@@ -808,11 +834,33 @@
         <td>${u.role || '-'}</td>
         <td><span class="badge">${u.pct || 0}%</span></td>
         <td>
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempo Módulos</button>
           <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
         </td>
       `;
       tbody.appendChild(tr);
     });
+  }
+
+  function viewUserTimes(email) {
+    const users = getUsers();
+    const steps = getSteps();
+    const u = users[email];
+
+    if (!u) return;
+
+    let msg = `⏱ TEMPO DE EXECUÇÃO - ${u.name.toUpperCase()}\n\n`;
+
+    steps.forEach(s => {
+      const t = (u.times && u.times[s.id]) || {};
+      const duration = calculateDuration(t.start, t.end);
+      msg += `📌 ${s.title}:\n`;
+      msg += `   • Início: ${formatDate(t.start)}\n`;
+      msg += `   • Fim: ${formatDate(t.end)}\n`;
+      msg += `   • Tempo Total Gastos: ${duration}\n\n`;
+    });
+
+    alert(msg);
   }
 
   function deleteUser(email) {
@@ -824,7 +872,6 @@
     }
   }
 
-  // CADASTRAR / ATUALIZAR MÓDULO
   document.getElementById('form-add-step').addEventListener('submit', (e) => {
     e.preventDefault();
     let steps = getSteps();
@@ -848,14 +895,12 @@
     };
 
     if (editId) {
-      // Atualizar módulo existente
       const index = steps.findIndex(s => s.id === editId);
       if (index !== -1) {
         steps[index] = moduleData;
       }
       alert("✅ Módulo atualizado com sucesso!");
     } else {
-      // Cadastrar novo módulo
       steps.push(moduleData);
       alert("✅ Novo módulo cadastrado com sucesso!");
     }
