@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.2</title>
+  <title>Onboarding LifeApps v1.3</title>
   
+  <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Biblioteca jsPDF para geração do certificado em PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     :root {
@@ -152,6 +156,11 @@
     .btn-secondary:hover { background-color: #475569; }
     .btn-danger { background-color: var(--danger); }
     .btn-danger:hover { background-color: var(--danger-hover); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
+    
+    .btn-success { background-color: var(--success); }
+    .btn-success:hover { background-color: #059669; }
+    
+    .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
     /* BARRA DE PROGRESSO */
     .progress-container { 
@@ -210,11 +219,37 @@
 
     .time-info-box {
       background: #f1f5f9;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    /* HISTÓRICO DE COMENTÁRIOS / CRM */
+    .comments-history {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .comment-bubble {
+      background: #f1f5f9;
+      border-left: 3px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .comment-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 2px;
     }
 
     /* TABELA DE GESTÃO */
@@ -397,7 +432,7 @@
 
     <!-- 3. GERENCIAR COLABORADORES -->
     <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso e o tempo de conclusão de cada colaborador.</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso, tempos e emita certificados para quem concluiu 100%.</p>
     
     <table>
       <thead>
@@ -406,7 +441,7 @@
           <th>E-mail</th>
           <th>Cargo</th>
           <th>Progresso</th>
-          <th>Ações / Métricas</th>
+          <th>Ações e Certificado</th>
         </tr>
       </thead>
       <tbody id="admin-users-table"></tbody>
@@ -415,7 +450,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.2</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.3</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -467,21 +502,23 @@
     return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
-  function calculateDuration(startIso, endIso) {
-    if (!startIso || !endIso) return "-";
+  function calculateDurationInMs(startIso, endIso) {
+    if (!startIso || !endIso) return 0;
     const start = new Date(startIso);
     const end = new Date(endIso);
-    const diffMs = end - start;
-    if (diffMs < 0) return "-";
+    const diff = end - start;
+    return diff > 0 ? diff : 0;
+  }
 
+  function formatDurationText(diffMs) {
+    if (!diffMs) return "0 minutos";
     const seconds = Math.floor((diffMs / 1000) % 60);
     const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
 
     let res = "";
-    if (hours > 0) res += `${hours}h `;
-    if (minutes > 0 || hours > 0) res += `${minutes}m `;
-    res += `${seconds}s`;
+    if (hours > 0) res += `${hours} hora(s) e `;
+    res += `${minutes} minuto(s)`;
     return res;
   }
 
@@ -557,9 +594,9 @@
     listContainer.innerHTML = '';
 
     let completedModulesCount = 0;
-    let previousModuleFullyCompleted = true; // O primeiro módulo sempre começa desbloqueado
+    let previousModuleFullyCompleted = true; // Primeiro módulo sempre desbloqueado
 
-    steps.forEach((step, index) => {
+    steps.forEach((step) => {
       const stepTimes = (currentStudent.times && currentStudent.times[step.id]) || {};
       const isStarted = !!stepTimes.start;
       
@@ -567,7 +604,7 @@
       const hasSub = step.submodule && step.submodule.title;
       const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
 
-      // O módulo só atinge 100% de conclusão se tiver cumprido Módulo e Submódulo (se houver)
+      // Só considera o módulo 100% concluído se módulo e submódulo forem marcados
       const isModuleFullyDone = isMainDone && isSubDone;
       if (isModuleFullyDone) completedModulesCount++;
 
@@ -575,12 +612,12 @@
       previousModuleFullyCompleted = isModuleFullyDone;
 
       const embedVideo = convertToEmbedUrl(step.videoUrl);
-      const userNote = (currentStudent.notes && currentStudent.notes[step.id]) || "";
+      const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
 
       const el = document.createElement('div');
       el.className = `step-item ${isLocked ? 'locked' : ''}`;
       el.innerHTML = `
-        <div class="step-header" onclick="${isLocked ? `alert('🔒 Conclua o módulo anterior antes de acessar este!')` : `toggleContent('step-${step.id}')`}">
+        <div class="step-header" onclick="${isLocked ? `alert('🔒 Conclua o módulo anterior para desbloquear!')` : `toggleContent('step-${step.id}')`}">
           <span>${step.title}</span>
           ${isLocked 
             ? '<span class="badge-locked">🔒 Bloqueado</span>' 
@@ -590,10 +627,10 @@
         </div>
         
         <div class="step-content" id="step-${step.id}">
-          <!-- BOTÃO INICIAR E DATAS -->
+          <!-- BOTÃO INICIAR E DATAS DE EXECUÇÃO -->
           <div class="time-info-box">
             ${!isStarted ? `
-              <button class="btn" style="padding:6px 12px; font-size:0.8rem;" onclick="startModule('${step.id}')">▶ Iniciar Módulo</button>
+              <button type="button" class="btn" style="padding:8px 14px; font-size:0.85rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
             ` : `
               <p>🗓 <strong>Iniciado em:</strong> ${formatDate(stepTimes.start)}</p>
               ${stepTimes.end ? `<p style="margin-top:4px;">✅ <strong>Finalizado em:</strong> ${formatDate(stepTimes.end)}</p>` : '<p style="margin-top:4px; color:#d97706;">⏳ Em andamento...</p>'}
@@ -628,10 +665,25 @@
             </div>
           ` : ''}
 
-          <!-- OBSERVATIONS DO ALUNO -->
-          <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
-            <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">📝 Suas Anotações / Observações sobre este módulo:</label>
-            <textarea rows="2" style="font-size:0.85rem; margin-top:4px;" placeholder="Escreva aqui suas dúvidas ou anotações pessoais..." onblur="saveUserNote('${step.id}', this.value)">${userNote}</textarea>
+          <!-- MINI CRM DE COMENTÁRIOS E ANOTAÇÕES -->
+          <div style="margin-top:18px; padding-top:12px; border-top:1px solid var(--border);">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text);">📝 Histórico de Comentários e Observações:</label>
+            
+            <div class="comments-history" id="comments-list-${step.id}">
+              ${commentsList.length === 0 
+                ? '<p style="font-size:0.8rem; color:var(--text-muted); italic;">Nenhum comentário registrado ainda.</p>' 
+                : commentsList.map(c => `
+                    <div class="comment-bubble">
+                      <span class="comment-date">${c.date}</span>
+                      <span>${c.text}</span>
+                    </div>
+                  `).join('')}
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <input type="text" id="input-comment-${step.id}" style="margin-bottom:0;" placeholder="Digite uma dúvida ou anotação...">
+              <button type="button" class="btn" style="white-space:nowrap;" onclick="addComment('${step.id}')">💬 Salvar Comentário</button>
+            </div>
           </div>
         </div>
       `;
@@ -653,14 +705,23 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  function startModule(stepId) {
+  // Iniciar Módulo sem resetar a tela
+  function startModule(event, stepId) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) {
       currentStudent.times[stepId] = { start: new Date().toISOString() };
       const users = getUsers();
       users[currentStudent.email].times = currentStudent.times;
       saveUsers(users);
+      
+      // Mantém a sanfona aberta e atualiza visualmente
       renderTrail();
+      document.getElementById(`step-${stepId}`).classList.add('active');
     }
   }
 
@@ -670,7 +731,6 @@
     const key = (type === 'sub') ? `${stepId}_sub` : stepId;
     currentStudent.progress[key] = isChecked;
 
-    // Verificar se o módulo como um todo foi concluído para gravar a data/hora final
     const steps = getSteps();
     const stepObj = steps.find(s => s.id === stepId);
     const hasSub = stepObj && stepObj.submodule && stepObj.submodule.title;
@@ -693,14 +753,31 @@
     saveUsers(users);
 
     renderTrail();
+    document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
-  function saveUserNote(stepId, noteText) {
+  // Mini CRM de Comentários
+  function addComment(stepId) {
+    const input = document.getElementById(`input-comment-${stepId}`);
+    const text = input.value.trim();
+    if (!text) return;
+
     if (!currentStudent.notes) currentStudent.notes = {};
-    currentStudent.notes[stepId] = noteText;
+    if (!currentStudent.notes[stepId]) currentStudent.notes[stepId] = [];
+
+    const newComment = {
+      date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      text: text
+    };
+
+    currentStudent.notes[stepId].push(newComment);
+
     const users = getUsers();
     users[currentStudent.email].notes = currentStudent.notes;
     saveUsers(users);
+
+    renderTrail();
+    document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
   // ==========================================
@@ -814,7 +891,6 @@
 
   function renderUsersManagement() {
     const users = getUsers();
-    const steps = getSteps();
     const tbody = document.getElementById('admin-users-table');
     tbody.innerHTML = '';
 
@@ -827,6 +903,8 @@
 
     userKeys.forEach(email => {
       const u = users[email];
+      const isCompleted = u.pct === 100;
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><strong>${u.name || '-'}</strong></td>
@@ -834,8 +912,11 @@
         <td>${u.role || '-'}</td>
         <td><span class="badge">${u.pct || 0}%</span></td>
         <td>
-          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempo Módulos</button>
-          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempos</button>
+            <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" ${!isCompleted ? 'disabled title="O colaborador precisa atingir 100% de progresso"' : ''} onclick="generateCertificate('${u.email}')">📜 Emitir Certificado</button>
+            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -849,15 +930,24 @@
 
     if (!u) return;
 
-    let msg = `⏱ TEMPO DE EXECUÇÃO - ${u.name.toUpperCase()}\n\n`;
+    let msg = `⏱ TEMPOS DE EXECUÇÃO E OBSERVAÇÕES - ${u.name.toUpperCase()}\n\n`;
 
     steps.forEach(s => {
       const t = (u.times && u.times[s.id]) || {};
-      const duration = calculateDuration(t.start, t.end);
+      const durationMs = calculateDurationInMs(t.start, t.end);
+      const comments = (u.notes && u.notes[s.id]) || [];
+
       msg += `📌 ${s.title}:\n`;
       msg += `   • Início: ${formatDate(t.start)}\n`;
       msg += `   • Fim: ${formatDate(t.end)}\n`;
-      msg += `   • Tempo Total Gastos: ${duration}\n\n`;
+      msg += `   • Tempo gasto: ${formatDurationText(durationMs)}\n`;
+      if (comments.length > 0) {
+        msg += `   • Comentários (${comments.length}):\n`;
+        comments.forEach(c => {
+          msg += `     - [${c.date}] ${c.text}\n`;
+        });
+      }
+      msg += `\n`;
     });
 
     alert(msg);
@@ -872,6 +962,112 @@
     }
   }
 
+  // GENERATE PDF CERTIFICATE (jsPDF) - LANDSCAPE FORMAT
+  function generateCertificate(email) {
+    const users = getUsers();
+    const steps = getSteps();
+    const u = users[email];
+
+    if (!u) return;
+
+    // Calcular total acumulado de tempo em ms
+    let totalMs = 0;
+    steps.forEach(s => {
+      const t = (u.times && u.times[s.id]) || {};
+      totalMs += calculateDurationInMs(t.start, t.end);
+    });
+
+    const durationFormatted = formatDurationText(totalMs);
+    const issueDate = new Date().toLocaleDateString('pt-BR');
+
+    // Inicializa jsPDF no formato Paisagem (Landscape: 297mm x 210mm)
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    // MOLDURA DO CERTIFICADO
+    doc.setDrawColor(37, 99, 235); // Azul Primary
+    doc.setLineWidth(3);
+    doc.rect(10, 10, 277, 190);
+
+    doc.setDrawColor(6, 182, 212); // Azul Accent
+    doc.setLineWidth(1);
+    doc.rect(14, 14, 269, 182);
+
+    // TÍTULO DA EMPRESA
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(28);
+    doc.setTextColor(30, 58, 138);
+    doc.text("LifeApps", 148.5, 42, { align: "center" });
+
+    // SUBTÍTULO
+    doc.setFontSize(20);
+    doc.setTextColor(37, 99, 235);
+    doc.text("CERTIFICADO DE CONCLUSÃO", 148.5, 56, { align: "center" });
+
+    // CORPO DO TEXTO
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(14);
+    doc.setTextColor(51, 65, 85);
+    doc.text("Certificamos para os devidos fins que o(a) colaborador(a)", 148.5, 76, { align: "center" });
+
+    // NOME DO ALUNO
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.setTextColor(15, 23, 42);
+    doc.text(u.name.toUpperCase(), 148.5, 92, { align: "center" });
+
+    // CARGO E DETALHES
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(13);
+    doc.setTextColor(51, 65, 85);
+    doc.text(`no cargo de ${u.role}, concluiu com êxito o programa de`, 148.5, 106, { align: "center" });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(15);
+    doc.setTextColor(30, 58, 138);
+    doc.text("Onboarding Comercial LifeApps", 148.5, 116, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Carga horária / Tempo total de dedicação: ${durationFormatted} • Emitido em: ${issueDate}`, 148.5, 128, { align: "center" });
+
+    // LINHAS DE ASSINATURA
+    doc.setDrawColor(148, 163, 184);
+    doc.setLineWidth(0.5);
+
+    // Assinatura Gestor
+    doc.line(45, 162, 125, 162);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Rafael Nascimento", 85, 168, { align: "center" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
+    doc.text("Head Comercial LifeApps", 85, 173, { align: "center" });
+
+    // Assinatura Aluno
+    doc.line(172, 162, 252, 162);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text(u.name, 212, 168, { align: "center" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
+    doc.text("Colaborador(a)", 212, 173, { align: "center" });
+
+    // Salvar/Baixar o PDF
+    const cleanFileName = u.name.replace(/[^a-zA-Z0-9]/g, "_");
+    doc.save(`Certificado_LifeApps_${cleanFileName}.pdf`);
+  }
+
+  // CADASTRAR / ATUALIZAR MÓDULO
   document.getElementById('form-add-step').addEventListener('submit', (e) => {
     e.preventDefault();
     let steps = getSteps();
