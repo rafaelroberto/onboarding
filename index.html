@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.5 (Firebase Cloud)</title>
+  <title>LifeApps Academy v2.6 UX Refactored</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- jsPDF para Certificados -->
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <!-- FIREBASE SDKs (Compat v10) -->
@@ -48,24 +48,17 @@
       min-height: 100vh;
     }
 
-    .container { max-width: 860px; width: 100%; }
+    .container { max-width: 900px; width: 100%; }
     
     header { 
       position: relative;
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #06b6d4 100%);
       color: white;
-      padding: 36px 32px; 
+      padding: 32px; 
       border-radius: var(--radius); 
       box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.3);
       margin-bottom: 24px; 
       overflow: hidden;
-    }
-
-    header::after {
-      content: '';
-      position: absolute; right: -40px; bottom: -40px;
-      width: 180px; height: 180px;
-      background: rgba(255, 255, 255, 0.08); border-radius: 50%;
     }
 
     .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
@@ -73,8 +66,7 @@
     .title-badge {
       display: inline-block; background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 20px;
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;
-      text-transform: uppercase; margin-bottom: 8px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
     }
 
     header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
@@ -97,7 +89,7 @@
     label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: #334155; }
 
     input, select, textarea { 
-      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); 
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); 
       border-radius: 8px; font-size: 0.95rem; outline: none; 
       transition: border-color 0.2s, box-shadow 0.2s; background: #f8fafc;
     }
@@ -124,9 +116,28 @@
     .btn-success:hover { background-color: #059669; }
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
+    /* NAVEGAÇÃO POR ABAS NO PAINEL (UX) */
+    .admin-tabs {
+      display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 18px; border: none; background: transparent; font-weight: 600;
+      font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary); border-bottom-color: var(--primary);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* CARDS E ITENS DE GESTÃO */
     .student-notice-box {
       background-color: #fffbe3; border: 1px solid #fde047; border-left: 5px solid var(--warning);
-      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem; line-height: 1.4;
+      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem;
     }
 
     .media-container-locked { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
@@ -165,9 +176,9 @@
     .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; }
     .comment-date { font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.88rem; }
     th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
-    th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+    th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px; }
 
     .module-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background-color: #f8fafc; }
     .hidden { display: none !important; }
@@ -229,122 +240,142 @@
 
   <!-- VISTA 3: PAINEL DE GESTÃO EXCLUSIVO -->
   <div id="view-admin" class="card hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom:12px; border-bottom:1px solid var(--border);">
-      <h2>Painel Exclusivo de Gestão (Cloud)</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <h2>Painel Exclusivo de Gestão</h2>
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. GERENCIAR CURSOS -->
-    <details open style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">🎓 1. Cadastrar e Gerenciar Cursos</summary>
-      <form id="form-add-course" style="margin-top: 15px; display:flex; gap:10px;">
-        <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
-        <button type="submit" class="btn" style="white-space:nowrap;">Criar Curso</button>
-      </form>
+    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO (UX REFACTORED) -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="switchAdminTab('users')">👥 Colaboradores</button>
+      <button class="tab-btn" onclick="switchAdminTab('courses')">🎓 Cursos</button>
+      <button class="tab-btn" onclick="switchAdminTab('modules-form')">➕ Novo Módulo</button>
+      <button class="tab-btn" onclick="switchAdminTab('modules-list')">⚙️ Gerenciar Módulos</button>
+    </div>
+
+    <!-- ABA 1: COLABORADORES -->
+    <div id="tab-users" class="tab-content active">
+      <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
+        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);">Cadastrar Novo Colaborador</h3>
+        <form id="form-add-user">
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+            <div>
+              <label>Nome Completo *</label>
+              <input type="text" id="admin-user-name" required placeholder="Ex: João da Silva">
+            </div>
+            <div>
+              <label>E-mail Corporativo *</label>
+              <input type="email" id="admin-user-email" required placeholder="joao@lifeapps.com.br">
+            </div>
+            <div>
+              <label>Departamento *</label>
+              <select id="admin-user-dept" required>
+                <option value="">Selecione...</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Financeiro">Financeiro</option>
+                <option value="Desenvolvimento">Desenvolvimento</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Customer Success">Customer Success</option>
+                <option value="Suporte">Suporte</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Recepção">Recepção</option>
+              </select>
+            </div>
+          </div>
+
+          <label style="margin-top:12px;">Matricular nos Cursos:</label>
+          <div class="checkbox-grid" id="admin-courses-enroll-checkboxes"></div>
+
+          <button type="submit" class="btn" style="margin-top:15px;">Cadastrar Colaborador</button>
+        </form>
+      </div>
+
+      <h3 style="font-size:1rem; margin-top:20px;">Colaboradores Cadastrados</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Colaborador</th>
+            <th>E-mail / Depto</th>
+            <th>Status</th>
+            <th>Cursos Matriculados e Progresso</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="admin-users-table"></tbody>
+      </table>
+    </div>
+
+    <!-- ABA 2: CURSOS -->
+    <div id="tab-courses" class="tab-content">
+      <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
+        <h3 style="font-size:1rem; margin-bottom:12px; color:var(--primary);">Criar Novo Curso</h3>
+        <form id="form-add-course" style="display:flex; gap:10px;">
+          <input type="text" id="new-course-title" placeholder="Nome do Curso (Ex: Onboarding Comercial)" required style="margin-bottom:0;">
+          <button type="submit" class="btn" style="white-space:nowrap;">Criar Curso</button>
+        </form>
+      </div>
+
+      <h3 style="font-size:1rem; margin-top:20px;">Cursos Cadastrados</h3>
       <div id="admin-courses-list" style="margin-top: 15px;"></div>
-    </details>
+    </div>
 
-    <!-- 2. GERENCIAR MÓDULOS DOS CURSOS -->
-    <details id="details-form-step" style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);" id="form-step-title">📚 2. Cadastrar / Editar Módulo</summary>
-      
-      <form id="form-add-step" style="margin-top: 15px;">
-        <input type="hidden" id="edit-module-id" value="">
+    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO -->
+    <div id="tab-modules-form" class="tab-content">
+      <div style="border:1px solid var(--border); padding:20px; border-radius:8px; background:#fff;">
+        <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:15px;" id="form-step-title">Cadastrar Novo Módulo</h3>
         
-        <label>Selecione o Curso deste Módulo *</label>
-        <select id="module-course-id" required></select>
+        <form id="form-add-step">
+          <input type="hidden" id="edit-module-id" value="">
+          
+          <label>Selecione o Curso deste Módulo *</label>
+          <select id="module-course-id" required style="margin-bottom:16px;"></select>
 
-        <h4 style="color:var(--primary); margin:15px 0 10px 0;">Conteúdo Principal do Módulo</h4>
-        <label>Título do Módulo *</label>
-        <input type="text" id="new-title" placeholder="Ex: 1. A História da LifeApps" required>
-        
-        <label>Descrição / Instruções *</label>
-        <textarea id="new-desc" rows="2" placeholder="Descreva o objetivo desta aula..." required></textarea>
-        
-        <label>Link do Vídeo do YouTube (Pode colar o link normal)</label>
-        <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=...">
-        
-        <label>Link do Documento (PDF / Notion / Drive)</label>
-        <input type="url" id="new-doc" placeholder="https://...">
+          <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal</h4>
+          <label>Título do Módulo *</label>
+          <input type="text" id="new-title" placeholder="Ex: 1. A História da LifeApps" required>
+          
+          <label>Descrição / Instruções *</label>
+          <textarea id="new-desc" rows="2" placeholder="Descreva o objetivo desta aula..." required></textarea>
+          
+          <label>Link do Vídeo do YouTube</label>
+          <input type="url" id="new-video" placeholder="https://www.youtube.com/watch?v=...">
+          
+          <label>Link do Documento (PDF / Notion / Drive)</label>
+          <input type="url" id="new-doc" placeholder="https://...">
 
-        <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
+          <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
 
-        <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
-        <label>Título do Submódulo</label>
-        <input type="text" id="sub-title" placeholder="Ex: Exercício Prático de Fixação">
-        
-        <label>Descrição do Submódulo</label>
-        <textarea id="sub-desc" rows="2" placeholder="Instruções para a atividade complementar..."></textarea>
-        
-        <label>Link do Vídeo do Submódulo</label>
-        <input type="url" id="sub-video" placeholder="https://www.youtube.com/watch?v=...">
-        
-        <label>Link do Documento do Submódulo</label>
-        <input type="url" id="sub-doc" placeholder="https://...">
+          <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
+          <label>Título do Submódulo</label>
+          <input type="text" id="sub-title" placeholder="Ex: Exercício Prático de Fixação">
+          
+          <label>Descrição do Submódulo</label>
+          <textarea id="sub-desc" rows="2" placeholder="Instruções para a atividade complementar..."></textarea>
+          
+          <label>Link do Vídeo do Submódulo</label>
+          <input type="url" id="sub-video" placeholder="https://www.youtube.com/watch?v=...">
+          
+          <label>Link do Documento do Submódulo</label>
+          <input type="url" id="sub-doc" placeholder="https://...">
 
-        <div style="display:flex; gap:10px; margin-top:15px;">
-          <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
-          <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
-        </div>
-      </form>
-    </details>
-
-    <!-- 3. CADASTRAR E MATRICULAR COLABORADOR -->
-    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">👤 3. Cadastrar e Matricular Colaborador</summary>
-      <form id="form-add-user" style="margin-top: 15px;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-          <div>
-            <label>Nome Completo *</label>
-            <input type="text" id="admin-user-name" required placeholder="Ex: João da Silva">
+          <div style="display:flex; gap:10px; margin-top:15px;">
+            <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
+            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
           </div>
-          <div>
-            <label>E-mail Corporativo *</label>
-            <input type="email" id="admin-user-email" required placeholder="joao@lifeapps.com.br">
-          </div>
-          <div>
-            <label>Departamento *</label>
-            <select id="admin-user-dept" required>
-              <option value="">Selecione...</option>
-              <option value="Comercial">Comercial</option>
-              <option value="Financeiro">Financeiro</option>
-              <option value="Desenvolvimento">Desenvolvimento</option>
-              <option value="Administrativo">Administrativo</option>
-              <option value="Customer Success">Customer Success</option>
-              <option value="Suporte">Suporte</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Recepção">Recepção</option>
-            </select>
-          </div>
-        </div>
+        </form>
+      </div>
+    </div>
 
-        <label style="margin-top:12px;">Matricular nos Cursos:</label>
-        <div class="checkbox-grid" id="admin-courses-enroll-checkboxes"></div>
+    <!-- ABA 4: GERENCIAR MÓDULOS -->
+    <div id="tab-modules-list" class="tab-content">
+      <h3 style="font-size:1rem; margin-bottom:12px;">Todos os Módulos Cadastrados</h3>
+      <div id="admin-modules-list"></div>
+    </div>
 
-        <button type="submit" class="btn" style="margin-top:15px;">Cadastrar Colaborador</button>
-      </form>
-    </details>
-
-    <!-- 4. LISTA DE COLABORADORES E CERTIFICADOS -->
-    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores e Emissão de Certificados</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Gerencie matrículas, status e emita certificados por Curso.</p>
-    
-    <table>
-      <thead>
-        <tr>
-          <th>Colaborador</th>
-          <th>E-mail / Depto</th>
-          <th>Status</th>
-          <th>Cursos Matriculados e Progresso</th>
-          <th>Ações de Gestão</th>
-        </tr>
-      </thead>
-      <tbody id="admin-users-table"></tbody>
-    </table>
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.5 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.6 UX Refactored</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -379,16 +410,16 @@
   const SENHA_MESTRA = "lifeapps123"; 
 
   const DEFAULT_COURSES = [
-    { id: "c1", title: "Onboarding Comercial LifeApps" }
+    { id: "c1", title: "Onboarding Comercial LifeApps", status: "ativo" }
   ];
 
   const DEFAULT_STEPS = [
-    { id: "1", courseId: "c1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "" },
-    { id: "2", courseId: "c1", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "" },
-    { id: "3", courseId: "c1", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "" },
-    { id: "4", courseId: "c1", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "" },
-    { id: "5", courseId: "c1", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "" },
-    { id: "6", courseId: "c1", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "" }
+    { id: "1", courseId: "c1", title: "1. Quem somos. A história da LifeApps", desc: "Conheça a fundação, nossos valores e visão de futuro.", videoUrl: "", docUrl: "", status: "ativo" },
+    { id: "2", courseId: "c1", title: "2. Segmento Atacado Distribuidor", desc: "Entenda a fundo o mercado atacadista e nossas soluções.", videoUrl: "", docUrl: "", status: "ativo" },
+    { id: "3", courseId: "c1", title: "3. Departamento Comercial", desc: "Estrutura interna, papéis e responsabilidades no time.", videoUrl: "", docUrl: "", status: "ativo" },
+    { id: "4", courseId: "c1", title: "4. Sistemas e plataformas do Comercial", desc: "Ferramentas de CRM, prospecção e rotinas.", videoUrl: "", docUrl: "", status: "ativo" },
+    { id: "5", courseId: "c1", title: "5. Metas e Objetivos", desc: "Indicadores chave (KPIs) e metas por função.", videoUrl: "", docUrl: "", status: "ativo" },
+    { id: "6", courseId: "c1", title: "6. Onboarding DP/RH", desc: "Procedimentos do RH, benefícios e conduta.", videoUrl: "", docUrl: "", status: "ativo" }
   ];
 
   let currentStudent = null;
@@ -396,9 +427,14 @@
   let cachedSteps = [];
   let cachedUsers = {};
 
-  // ==========================================
-  // FUNÇÕES DE SINCRONIZAÇÃO EM NUVEM (FIRESTORE)
-  // ==========================================
+  // TROCA DE ABAS NA GESTÃO (UX)
+  function switchAdminTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+  }
 
   async function loadCloudData() {
     try {
@@ -505,17 +541,18 @@
     `;
 
     const enrolledIds = currentStudent.enrolledCourses || [];
-    const enrolledCourses = cachedCourses.filter(c => enrolledIds.includes(c.id));
+    const activeCourses = cachedCourses.filter(c => c.status !== "inativo");
+    const enrolledCourses = activeCourses.filter(c => enrolledIds.includes(c.id));
     const container = document.getElementById('courses-container');
     container.innerHTML = '';
 
     if (enrolledCourses.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">Você ainda não possui matrículas em nenhum curso. Entre em contato com o gestor.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">Você ainda não possui matrículas em nenhum curso ativo. Entre em contato com o gestor.</div>`;
       return;
     }
 
     enrolledCourses.forEach(course => {
-      const courseSteps = cachedSteps.filter(s => s.courseId === course.id);
+      const courseSteps = cachedSteps.filter(s => s.courseId === course.id && s.status !== "inativo");
       let completedCount = 0;
 
       courseSteps.forEach(step => {
@@ -656,10 +693,7 @@
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) {
       currentStudent.times[stepId] = { start: new Date().toISOString() };
-      
-      // Salva no Firestore Cloud
       await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
-      
       renderStudentCourses();
       document.getElementById(`step-${stepId}`).classList.add('active');
     }
@@ -681,7 +715,6 @@
 
     if (isMainDone && isSubDone) currentStudent.times[stepId].end = new Date().toISOString();
 
-    // Salva no Firestore Cloud
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
@@ -701,7 +734,6 @@
       text: text
     });
 
-    // Salva no Firestore Cloud
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
@@ -709,7 +741,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA
+  // ÁREA DE GESTÃO RESTRITA (UX REFACTORED)
   // ==========================================
 
   async function openAdminModal() {
@@ -740,12 +772,12 @@
   document.getElementById('form-add-course').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('new-course-title').value.trim();
-    const newCourse = { id: `c_${Date.now()}`, title: title };
+    const newCourse = { id: `c_${Date.now()}`, title: title, status: "ativo" };
 
     await db.collection('courses').doc(newCourse.id).set(newCourse);
     await loadCloudData();
 
-    alert("✅ Curso criado com sucesso no banco em nuvem!");
+    alert("✅ Curso criado com sucesso!");
     document.getElementById('form-add-course').reset();
     renderAdminDashboard();
   });
@@ -755,14 +787,31 @@
     container.innerHTML = '';
 
     cachedCourses.forEach(c => {
+      const isActive = c.status !== "inativo";
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
-        <strong>🎓 ${c.title}</strong>
-        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteCourse('${c.id}')">Excluir Curso</button>
+        <div>
+          <strong>🎓 ${c.title}</strong>
+          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-left:8px;">${isActive ? 'Ativo' : 'Inativo'}</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleCourseStatus('${c.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
+          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteCourse('${c.id}')">Excluir</button>
+        </div>
       `;
       container.appendChild(item);
     });
+  }
+
+  async function toggleCourseStatus(courseId) {
+    const course = cachedCourses.find(c => c.id === courseId);
+    if (course) {
+      const newStatus = course.status === "inativo" ? "ativo" : "inativo";
+      await db.collection('courses').doc(courseId).update({ status: newStatus });
+      await loadCloudData();
+      renderAdminDashboard();
+    }
   }
 
   async function deleteCourse(courseId) {
@@ -796,9 +845,15 @@
     const container = document.getElementById('admin-modules-list');
     container.innerHTML = '';
 
+    if (cachedSteps.length === 0) {
+      container.innerHTML = `<p style="color:var(--text-muted); padding:10px;">Nenhum módulo cadastrado até o momento.</p>`;
+      return;
+    }
+
     cachedSteps.forEach((step) => {
       const course = cachedCourses.find(c => c.id === step.courseId);
       const courseName = course ? course.title : 'Sem Curso';
+      const isActive = step.status !== "inativo";
 
       const item = document.createElement('div');
       item.className = 'module-manage-item';
@@ -806,14 +861,26 @@
         <div>
           <span style="font-size:0.75rem; color:var(--primary); font-weight:bold; display:block;">[${courseName}]</span>
           <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
+          <span class="${isActive ? 'badge' : 'badge-inactive'}" style="margin-left:6px; font-size:0.7rem;">${isActive ? 'Ativo' : 'Inativo'}</span>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="editModule('${step.id}')">Editar</button>
-          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
+          <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleModuleStatus('${step.id}')">${isActive ? 'Inativar' : 'Ativar'}</button>
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="editModule('${step.id}')">Editar</button>
+          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
         </div>
       `;
       container.appendChild(item);
     });
+  }
+
+  async function toggleModuleStatus(stepId) {
+    const step = cachedSteps.find(s => s.id === stepId);
+    if (step) {
+      const newStatus = step.status === "inativo" ? "ativo" : "inativo";
+      await db.collection('steps').doc(stepId).update({ status: newStatus });
+      await loadCloudData();
+      renderAdminDashboard();
+    }
   }
 
   function editModule(id) {
@@ -837,16 +904,15 @@
     document.getElementById('form-step-title').innerText = `✏️ Editando Módulo: ${step.title}`;
     document.getElementById('btn-save-module').innerText = "Atualizar Módulo";
     document.getElementById('btn-cancel-edit').classList.remove('hidden');
-    
-    document.getElementById('details-form-step').open = true;
-    document.getElementById('details-form-step').scrollIntoView({ behavior: 'smooth' });
+
+    switchAdminTab('modules-form');
   }
 
   function resetModuleForm() {
     document.getElementById('edit-module-id').value = '';
     document.getElementById('form-add-step').reset();
     clearSubmoduleFields();
-    document.getElementById('form-step-title').innerText = "📚 2. Cadastrar / Editar Módulo";
+    document.getElementById('form-step-title').innerText = "Cadastrar Novo Módulo";
     document.getElementById('btn-save-module').innerText = "Salvar Módulo";
     document.getElementById('btn-cancel-edit').classList.add('hidden');
   }
@@ -882,6 +948,7 @@
       desc: document.getElementById('new-desc').value,
       videoUrl: convertToEmbedUrl(document.getElementById('new-video').value),
       docUrl: document.getElementById('new-doc').value,
+      status: "ativo",
       submodule: subTitle ? {
         title: subTitle,
         desc: document.getElementById('sub-desc').value,
@@ -890,12 +957,13 @@
       } : null
     };
 
-    await db.collection('steps').doc(id).set(moduleData);
+    await db.collection('steps').doc(id).set(moduleData, { merge: true });
     await loadCloudData();
 
-    alert("✅ Módulo salvo com sucesso no banco em nuvem!");
+    alert("✅ Módulo salvo com sucesso na nuvem!");
     resetModuleForm();
     renderAdminDashboard();
+    switchAdminTab('modules-list');
   });
 
   // 3. CADASTRAR / GERENCIAR ALUNOS E CERTIFICADOS
@@ -944,7 +1012,7 @@
         const course = cachedCourses.find(c => c.id === cId);
         if (!course) return;
 
-        const cSteps = cachedSteps.filter(s => s.courseId === cId);
+        const cSteps = cachedSteps.filter(s => s.courseId === cId && s.status !== "inativo");
         let doneCount = 0;
         cSteps.forEach(s => {
           const isMain = !!(u.progress && u.progress[s.id]);
