@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v2.0</title>
+  <title>LifeApps Academy v2.1</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush (Para Rubricas) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -418,7 +418,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 2.0</p>
+    <p><strong>LifeApps Academy</strong> • Versão 2.1</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -450,6 +450,36 @@
   ];
 
   let currentStudent = null;
+
+  // ==========================================
+  // MIGRAÇÃO E GARANTIA DE DADOS ANTERIORES
+  // ==========================================
+  function migrateLegacyData() {
+    const courses = getCourses();
+    const steps = getSteps();
+    const users = getUsers();
+
+    // 1. Garantir que os módulos existentes possuem vinculação com o Curso Padrão
+    let stepsChanged = false;
+    steps.forEach(s => {
+      if (!s.courseId) {
+        s.courseId = "c1";
+        stepsChanged = true;
+      }
+    });
+    if (stepsChanged) saveSteps(steps);
+
+    // 2. Garantir que os Alunos das Versões 1.0 a 1.7 tenham o curso Padrão em "enrolledCourses"
+    let usersChanged = false;
+    Object.keys(users).forEach(email => {
+      const u = users[email];
+      if (!u.enrolledCourses || u.enrolledCourses.length === 0) {
+        u.enrolledCourses = ["c1"];
+        usersChanged = true;
+      }
+    });
+    if (usersChanged) saveUsers(users);
+  }
 
   function convertToEmbedUrl(url) {
     if (!url) return "";
@@ -508,6 +538,9 @@
   function saveUsers(users) {
     localStorage.setItem('lifeapps_all_users', JSON.stringify(users));
   }
+
+  // Executa migração logo ao carregar o script
+  migrateLegacyData();
 
   // ==========================================
   // ÁREA DO COLABORADOR
@@ -817,7 +850,7 @@
   }
 
   function deleteCourse(courseId) {
-    if (confirm("Excluir este curso? Todos os módulos associados a ele serão mantidos ou devem ser reatribuídos.")) {
+    if (confirm("Excluir este curso?")) {
       let courses = getCourses();
       courses = courses.filter(c => c.id !== courseId);
       saveCourses(courses);
