@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.0</title>
+  <title>Onboarding LifeApps v1.1</title>
   
   <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -163,15 +163,15 @@
       background-color: var(--primary); 
       color: white; 
       border: none; 
-      padding: 12px 20px; 
+      padding: 10px 18px; 
       border-radius: 8px; 
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600; 
       cursor: pointer; 
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s;
     }
 
@@ -179,6 +179,13 @@
       background-color: var(--primary-dark); 
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-secondary {
+      background-color: #64748b;
+    }
+    .btn-secondary:hover {
+      background-color: #475569;
     }
 
     .btn-danger { background-color: var(--danger); }
@@ -248,6 +255,16 @@
     }
 
     .step-content.active { display: block; }
+
+    /* SUBMÓDULO ESTILIZADO */
+    .submodule-card {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
 
     /* TABELA DE GESTÃO */
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
@@ -383,23 +400,27 @@
   <div id="view-admin" class="card hidden">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom:12px; border-bottom:1px solid var(--border);">
       <h2>Painel Exclusivo de Gestão</h2>
-      <button class="btn" style="background:#64748b;" onclick="closeAdmin()">Sair da Gestão</button>
+      <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. GERENCIAR E EXCLUIR MÓDULOS -->
-    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+    <!-- 1. GERENCIAR E EDITAR/EXCLUIR MÓDULOS -->
+    <details open style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
       <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">📚 Gerenciar Módulos Existentes</summary>
       <div id="admin-modules-list" style="margin-top: 15px;"></div>
     </details>
 
-    <!-- 2. ADICIONAR NOVO MÓDULO -->
-    <details style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
-      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">➕ Adicionar Novo Módulo à Trilha</summary>
+    <!-- 2. ADICIONAR / EDITAR MÓDULO -->
+    <details id="details-form-step" style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);" id="form-step-title">➕ Cadastrar Novo Módulo</summary>
+      
       <form id="form-add-step" style="margin-top: 15px;">
+        <input type="hidden" id="edit-module-id" value="">
+        
+        <h4 style="color:var(--primary); margin-bottom:10px;">Conteúdo Principal do Módulo</h4>
         <label>Título do Módulo</label>
         <input type="text" id="new-title" placeholder="Ex: 7. Cultura e Benefícios" required>
         
-        <label>Descrição/Instruções</label>
+        <label>Descrição / Instruções</label>
         <textarea id="new-desc" rows="3" placeholder="Descreva o que o colaborador deve aprender nesta etapa..." required></textarea>
         
         <label>Link do Vídeo do YouTube (Pode colar o link normal)</label>
@@ -408,11 +429,30 @@
         <label>Link do Documento (PDF / Notion / Drive)</label>
         <input type="url" id="new-doc" placeholder="https://...">
 
-        <button type="submit" class="btn" style="margin-top:10px;">Cadastrar Módulo</button>
+        <hr style="margin:20px 0; border:none; border-top:1px dashed var(--border);">
+
+        <!-- SUBMÓDULO OPCIONAL -->
+        <h4 style="color:var(--accent); margin-bottom:10px;">Submódulo (Opcional)</h4>
+        <label>Título do Submódulo</label>
+        <input type="text" id="sub-title" placeholder="Ex: Material Prático / Aprofundamento">
+        
+        <label>Descrição do Submódulo</label>
+        <textarea id="sub-desc" rows="2" placeholder="Instruções específicas para esta parte secundária..."></textarea>
+        
+        <label>Link do Vídeo do Submódulo (YouTube)</label>
+        <input type="url" id="sub-video" placeholder="https://www.youtube.com/watch?v=...">
+        
+        <label>Link do Documento do Submódulo</label>
+        <input type="url" id="sub-doc" placeholder="https://...">
+
+        <div style="display:flex; gap:10px; margin-top:15px;">
+          <button type="submit" class="btn" id="btn-save-module">Salvar Módulo</button>
+          <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" onclick="resetModuleForm()">Cancelar Edição</button>
+        </div>
       </form>
     </details>
 
-    <!-- 3. GERENCIAR COLABORADORES E EXCLUIR -->
+    <!-- 3. GERENCIAR COLABORADORES -->
     <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
     <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso dos novos colaboradores ou apague registros antigos.</p>
     
@@ -432,7 +472,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.0</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.1</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -549,12 +589,25 @@
     const listContainer = document.getElementById('steps-list');
     listContainer.innerHTML = '';
 
-    let completedCount = 0;
+    let totalItemsCount = 0;
+    let completedItemsCount = 0;
 
     steps.forEach((step) => {
-      const isDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
-      if (isDone) completedCount++;
+      // Contagem de itens (módulo principal + submódulo se existir)
+      totalItemsCount++;
+      const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
+      if (isMainDone) completedItemsCount++;
 
+      let hasSub = step.submodule && step.submodule.title;
+      let isSubDone = false;
+
+      if (hasSub) {
+        totalItemsCount++;
+        isSubDone = !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]);
+        if (isSubDone) completedItemsCount++;
+      }
+
+      const isModuleFullyDone = hasSub ? (isMainDone && isSubDone) : isMainDone;
       const embedVideo = convertToEmbedUrl(step.videoUrl);
 
       const el = document.createElement('div');
@@ -562,24 +615,43 @@
       el.innerHTML = `
         <div class="step-header" onclick="toggleContent('step-${step.id}')">
           <span>${step.title}</span>
-          ${isDone ? '<span class="badge">Concluído</span>' : '<span style="font-size:0.8rem; color:var(--text-muted);">Acessar aula ▾</span>'}
+          ${isModuleFullyDone 
+            ? '<span class="badge">Concluído</span>' 
+            : '<span style="font-size:0.8rem; color:var(--text-muted);">Acessar aula ▾</span>'}
         </div>
         <div class="step-content" id="step-${step.id}">
+          <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
           ${embedVideo ? `<iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none; margin-bottom:12px;"></iframe>` : ''}
           ${step.docUrl ? `<p style="margin-bottom:12px;"><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 Abrir Documento de Apoio →</a></p>` : ''}
-          <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
+          
+          <div style="margin-top: 10px; padding-top:10px; border-top:1px dashed var(--border);">
             <label style="font-weight:600; cursor:pointer; color:var(--text); display:flex; gap:8px; align-items:center;">
-              <input type="checkbox" style="width:18px; height:18px;" ${isDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
-              Marcar esta etapa como concluída
+              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked' : ''} onchange="markStep('${step.id}', this.checked)">
+              Concluir módulo principal
             </label>
           </div>
+
+          <!-- SUBMÓDULO OPCIONAL -->
+          ${hasSub ? `
+            <div class="submodule-card">
+              <h4 style="color:var(--accent); font-size:0.95rem; margin-bottom:6px;">📌 Submódulo: ${step.submodule.title}</h4>
+              ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
+              ${step.submodule.videoUrl ? `<iframe width="100%" height="250" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
+              ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material do Submódulo →</a></p>` : ''}
+              
+              <label style="font-weight:600; cursor:pointer; font-size:0.9rem; color:var(--text); display:flex; gap:8px; align-items:center; margin-top:8px;">
+                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked' : ''} onchange="markStep('${step.id}_sub', this.checked)">
+                Concluir submódulo
+              </label>
+            </div>
+          ` : ''}
         </div>
       `;
       listContainer.appendChild(el);
     });
 
-    const pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
+    const pct = totalItemsCount ? Math.round((completedItemsCount / totalItemsCount) * 100) : 0;
     document.getElementById('progress-bar').style.width = `${pct}%`;
     document.getElementById('progress-text').innerText = `${pct}%`;
 
@@ -594,9 +666,9 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  function markStep(stepId, isChecked) {
+  function markStep(stepKey, isChecked) {
     if (!currentStudent.progress) currentStudent.progress = {};
-    currentStudent.progress[stepId] = isChecked;
+    currentStudent.progress[stepKey] = isChecked;
 
     const users = getUsers();
     users[currentStudent.email].progress = currentStudent.progress;
@@ -646,11 +718,63 @@
       const item = document.createElement('div');
       item.className = 'module-manage-item';
       item.innerHTML = `
-        <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
-        <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
+        <div>
+          <span style="font-weight:600; font-size:0.9rem;">${step.title}</span>
+          ${step.submodule && step.submodule.title ? `<span style="display:block; font-size:0.75rem; color:var(--accent);">+ Submódulo: ${step.submodule.title}</span>` : ''}
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="editModule('${step.id}')">Editar</button>
+          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteModule('${step.id}')">Excluir</button>
+        </div>
       `;
       container.appendChild(item);
     });
+  }
+
+  function editModule(id) {
+    const steps = getSteps();
+    const step = steps.find(s => s.id === id);
+    if (!step) return;
+
+    document.getElementById('edit-module-id').value = step.id;
+    document.getElementById('new-title').value = step.title || '';
+    document.getElementById('new-desc').value = step.desc || '';
+    document.getElementById('new-video').value = step.videoUrl || '';
+    document.getElementById('new-doc').value = step.docUrl || '';
+
+    // Preencher Submódulo se existir
+    if (step.submodule) {
+      document.getElementById('sub-title').value = step.submodule.title || '';
+      document.getElementById('sub-desc').value = step.submodule.desc || '';
+      document.getElementById('sub-video').value = step.submodule.videoUrl || '';
+      document.getElementById('sub-doc').value = step.submodule.docUrl || '';
+    } else {
+      clearSubmoduleFields();
+    }
+
+    document.getElementById('form-step-title').innerText = `✏️ Editando Módulo: ${step.title}`;
+    document.getElementById('btn-save-module').innerText = "Atualizar Módulo";
+    document.getElementById('btn-cancel-edit').classList.remove('hidden');
+    
+    document.getElementById('details-form-step').open = true;
+    document.getElementById('details-form-step').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetModuleForm() {
+    document.getElementById('edit-module-id').value = '';
+    document.getElementById('form-add-step').reset();
+    clearSubmoduleFields();
+
+    document.getElementById('form-step-title').innerText = "➕ Cadastrar Novo Módulo";
+    document.getElementById('btn-save-module').innerText = "Salvar Módulo";
+    document.getElementById('btn-cancel-edit').classList.add('hidden');
+  }
+
+  function clearSubmoduleFields() {
+    document.getElementById('sub-title').value = '';
+    document.getElementById('sub-desc').value = '';
+    document.getElementById('sub-video').value = '';
+    document.getElementById('sub-doc').value = '';
   }
 
   function deleteModule(id) {
@@ -659,6 +783,7 @@
       steps = steps.filter(s => s.id !== id);
       saveSteps(steps);
       renderAdminDashboard();
+      resetModuleForm();
     }
   }
 
@@ -699,25 +824,44 @@
     }
   }
 
+  // CADASTRAR / ATUALIZAR MÓDULO
   document.getElementById('form-add-step').addEventListener('submit', (e) => {
     e.preventDefault();
-    const steps = getSteps();
+    let steps = getSteps();
+    const editId = document.getElementById('edit-module-id').value;
 
     const rawVideoUrl = document.getElementById('new-video').value;
+    const subTitle = document.getElementById('sub-title').value.trim();
 
-    const newStep = {
-      id: Date.now().toString(),
+    const moduleData = {
+      id: editId ? editId : Date.now().toString(),
       title: document.getElementById('new-title').value,
       desc: document.getElementById('new-desc').value,
       videoUrl: convertToEmbedUrl(rawVideoUrl),
-      docUrl: document.getElementById('new-doc').value
+      docUrl: document.getElementById('new-doc').value,
+      submodule: subTitle ? {
+        title: subTitle,
+        desc: document.getElementById('sub-desc').value,
+        videoUrl: convertToEmbedUrl(document.getElementById('sub-video').value),
+        docUrl: document.getElementById('sub-doc').value
+      } : null
     };
 
-    steps.push(newStep);
-    saveSteps(steps);
+    if (editId) {
+      // Atualizar módulo existente
+      const index = steps.findIndex(s => s.id === editId);
+      if (index !== -1) {
+        steps[index] = moduleData;
+      }
+      alert("✅ Módulo atualizado com sucesso!");
+    } else {
+      // Cadastrar novo módulo
+      steps.push(moduleData);
+      alert("✅ Novo módulo cadastrado com sucesso!");
+    }
 
-    alert("✅ Novo módulo cadastrado com sucesso!");
-    document.getElementById('form-add-step').reset();
+    saveSteps(steps);
+    resetModuleForm();
     renderAdminDashboard();
   });
 </script>
