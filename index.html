@@ -364,13 +364,14 @@
   // CONFIGURAÇÃO DO FIREBASE (SUBSTITUA AQUI)
   // ==========================================
   const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "SEU_PROJECT_ID.firebaseapp.com",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_PROJECT_ID.appspot.com",
-    messagingSenderId: "SEU_SENDER_ID",
-    appId: "SEU_APP_ID"
-  };
+  apiKey: "AIzaSyDHsLURW9stnnXCHDdmHnjCgW4Dxwswg1Q",
+  authDomain: "cursos-life-apps.firebaseapp.com",
+  projectId: "cursos-life-apps",
+  storageBucket: "cursos-life-apps.firebasestorage.app",
+  messagingSenderId: "734362005580",
+  appId: "1:734362005580:web:b10f335649de9b562444e9"
+};
+
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
@@ -1061,18 +1062,6 @@
     const cleanFileName = u.name.replace(/[^a-zA-Z0-9]/g, "_");
     doc.save(`Certificado_LifeApps_${cleanFileName}.pdf`);
   }
-  // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDHsLURW9stnnXCHDdmHnjCgW4Dxwswg1Q",
-  authDomain: "cursos-life-apps.firebaseapp.com",
-  projectId: "cursos-life-apps",
-  storageBucket: "cursos-life-apps.firebasestorage.app",
-  messagingSenderId: "734362005580",
-  appId: "1:734362005580:web:b10f335649de9b562444e9"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 </script>
 
 </body>
