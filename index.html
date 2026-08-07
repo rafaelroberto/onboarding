@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.6</title>
+  <title>Onboarding LifeApps v1.7</title>
   
   <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -376,7 +376,7 @@
   <!-- CABEÇALHO -->
   <header>
     <div class="header-top">
-      <span class="title-badge">Trilha Comercial</span>
+      <span class="title-badge">Trilha de Aprendizagem</span>
       <button class="btn-secret" onclick="openAdminModal()">🔒 Gestão</button>
     </div>
     <h1>LifeApps Onboarding</h1>
@@ -431,11 +431,11 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. CADASTRAR NOVO COLABORADOR (EXCLUSIVO DO GESTOR) -->
+    <!-- 1. CADASTRAR NOVO COLABORADOR (NOME, EMAIL, DEPARTAMENTO) -->
     <details open style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
       <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">👤 Cadastrar Novo Colaborador</summary>
       <form id="form-add-user" style="margin-top: 15px;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
           <div>
             <label>Nome Completo *</label>
             <input type="text" id="admin-user-name" required placeholder="Ex: João da Silva">
@@ -443,6 +443,20 @@
           <div>
             <label>E-mail Corporativo *</label>
             <input type="email" id="admin-user-email" required placeholder="joao@lifeapps.com.br">
+          </div>
+          <div>
+            <label>Departamento *</label>
+            <select id="admin-user-dept" required>
+              <option value="">Selecione...</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Financeiro">Financeiro</option>
+              <option value="Desenvolvimento">Desenvolvimento</option>
+              <option value="Administrativo">Administrativo</option>
+              <option value="Customer Success">Customer Success</option>
+              <option value="Suporte">Suporte</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Recepção">Recepção</option>
+            </select>
           </div>
         </div>
         <button type="submit" class="btn" style="margin-top:10px;">Cadastrar Colaborador</button>
@@ -507,6 +521,7 @@
         <tr>
           <th>Nome</th>
           <th>E-mail</th>
+          <th>Departamento</th>
           <th>Status</th>
           <th>Progresso</th>
           <th>Ações e Gestão</th>
@@ -518,7 +533,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.6</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.7</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -612,7 +627,6 @@
   // ÁREA DO COLABORADOR
   // ==========================================
 
-  // LOGIN DO ALUNO (SÓ PEDE EMAIL)
   document.getElementById('form-user').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('u-email').value.toLowerCase().trim();
@@ -648,7 +662,7 @@
   function renderTrail() {
     document.getElementById('user-info').innerHTML = `
       <strong style="font-size:1rem; color:var(--text);">${currentStudent.name}</strong>
-      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.email}</span>
+      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.dept || 'Geral'} • ${currentStudent.email}</span>
     `;
 
     const steps = getSteps();
@@ -656,7 +670,7 @@
     listContainer.innerHTML = '';
 
     let completedModulesCount = 0;
-    let previousModuleFullyCompleted = true; // Primeiro módulo sempre desbloqueado
+    let previousModuleFullyCompleted = true;
 
     steps.forEach((step) => {
       const stepTimes = (currentStudent.times && currentStudent.times[step.id]) || {};
@@ -703,7 +717,6 @@
           <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
 
-          <!-- PLAYER DE VÍDEO PRINCIPAL COM OVERLAY -->
           ${embedVideo ? `
             <div class="media-container-locked">
               ${!isStarted ? `
@@ -717,7 +730,6 @@
             </div>
           ` : ''}
 
-          <!-- DOCUMENTO DO MÓDULO PRINCIPAL -->
           ${step.docUrl ? `
             <p style="margin-bottom:12px;">
               <a href="${step.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
@@ -906,11 +918,12 @@
     renderUsersManagement();
   }
 
-  // CADASTRAR NOVO ALUNO (EXCLUSIVO DO GESTOR)
+  // CADASTRAR NOVO ALUNO COM DEPARTAMENTO
   document.getElementById('form-add-user').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
     const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
+    const dept = document.getElementById('admin-user-dept').value;
 
     const users = getUsers();
 
@@ -922,7 +935,8 @@
     users[email] = {
       name: name,
       email: email,
-      status: "ativo", // Por padrão nasce Ativo
+      dept: dept,
+      status: "ativo",
       pct: 0,
       progress: {},
       times: {},
@@ -930,7 +944,7 @@
     };
 
     saveUsers(users);
-    alert(`✅ Colaborador ${name} cadastrado com sucesso!`);
+    alert(`✅ Colaborador ${name} cadastrado com sucesso no departamento ${dept}!`);
     document.getElementById('form-add-user').reset();
     renderUsersManagement();
   });
@@ -1025,7 +1039,7 @@
     const userKeys = Object.keys(users);
 
     if (userKeys.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado ainda.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Nenhum colaborador cadastrado ainda.</td></tr>`;
       return;
     }
 
@@ -1038,6 +1052,7 @@
       tr.innerHTML = `
         <td><strong>${u.name || '-'}</strong></td>
         <td>${u.email}</td>
+        <td><span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">${u.dept || 'Geral'}</span></td>
         <td>
           <span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span>
         </td>
@@ -1058,7 +1073,6 @@
     });
   }
 
-  // ALTERAR STATUS ATIVO / INATIVO (MANTÉM TODO O HISTÓRICO)
   function toggleUserStatus(email) {
     const users = getUsers();
     const u = users[email];
@@ -1143,7 +1157,7 @@
 
     if (!u) return;
 
-    let msg = `⏱ TEMPOS DE EXECUÇÃO E OBSERVAÇÕES - ${u.name.toUpperCase()}\n\n`;
+    let msg = `⏱ TEMPOS DE EXECUÇÃO E OBSERVAÇÕES - ${u.name.toUpperCase()} (${u.dept || 'Geral'})\n\n`;
 
     steps.forEach(s => {
       const t = (u.times && u.times[s.id]) || {};
@@ -1235,7 +1249,7 @@
     doc.setFont("helvetica", "normal");
     doc.setFontSize(13);
     doc.setTextColor(51, 65, 85);
-    doc.text("concluiu com êxito o programa de capacitação", 148.5, 106, { align: "center" });
+    doc.text(`do departamento de ${u.dept || 'Geral'}, concluiu com êxito o programa de capacitação`, 148.5, 106, { align: "center" });
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(15);
