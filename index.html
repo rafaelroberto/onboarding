@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.3</title>
+  <title>Onboarding LifeApps v1.4</title>
   
   <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,7 @@
       --accent: #06b6d4;
       --danger: #ef4444;
       --danger-hover: #dc2626;
+      --warning: #f59e0b;
       --bg: #f1f5f9;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -154,6 +155,8 @@
     .btn:hover { background-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
     .btn-secondary { background-color: #64748b; }
     .btn-secondary:hover { background-color: #475569; }
+    .btn-warning { background-color: var(--warning); color: white; }
+    .btn-warning:hover { background-color: #d97706; }
     .btn-danger { background-color: var(--danger); }
     .btn-danger:hover { background-color: var(--danger-hover); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
     
@@ -226,7 +229,7 @@
       margin-bottom: 16px;
     }
 
-    /* HISTÓRICO DE COMENTÁRIOS / CRM */
+    /* HISTÓRICO DE COMENTÁRIOS */
     .comments-history {
       max-height: 150px;
       overflow-y: auto;
@@ -432,7 +435,7 @@
 
     <!-- 3. GERENCIAR COLABORADORES -->
     <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso, tempos e emita certificados para quem concluiu 100%.</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso, tempos, resete módulos e emita certificados.</p>
     
     <table>
       <thead>
@@ -441,7 +444,7 @@
           <th>E-mail</th>
           <th>Cargo</th>
           <th>Progresso</th>
-          <th>Ações e Certificado</th>
+          <th>Ações e Gestão</th>
         </tr>
       </thead>
       <tbody id="admin-users-table"></tbody>
@@ -450,7 +453,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.3</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.4</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -604,7 +607,7 @@
       const hasSub = step.submodule && step.submodule.title;
       const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
 
-      // Só considera o módulo 100% concluído se módulo e submódulo forem marcados
+      // Módulo 100% concluído
       const isModuleFullyDone = isMainDone && isSubDone;
       if (isModuleFullyDone) completedModulesCount++;
 
@@ -613,6 +616,9 @@
 
       const embedVideo = convertToEmbedUrl(step.videoUrl);
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
+
+      // Módulo principal só pode ser concluído se NÃO houver submódulo pendente
+      const canCompleteMain = isStarted && (!hasSub || isSubDone);
 
       const el = document.createElement('div');
       el.className = `step-item ${isLocked ? 'locked' : ''}`;
@@ -627,7 +633,7 @@
         </div>
         
         <div class="step-content" id="step-${step.id}">
-          <!-- BOTÃO INICIAR E DATAS DE EXECUÇÃO -->
+          <!-- BOTÃO INICIAR E DATAS -->
           <div class="time-info-box">
             ${!isStarted ? `
               <button type="button" class="btn" style="padding:8px 14px; font-size:0.85rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
@@ -642,14 +648,6 @@
           ${embedVideo ? `<iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none; margin-bottom:12px;"></iframe>` : ''}
           ${step.docUrl ? `<p style="margin-bottom:12px;"><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 Abrir Documento de Apoio →</a></p>` : ''}
           
-          <div style="margin-top: 10px; padding-top:10px; border-top:1px dashed var(--border);">
-            <label style="font-weight:600; cursor:pointer; color:var(--text); display:flex; gap:8px; align-items:center;">
-              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'main', this.checked)">
-              Concluir módulo principal
-            </label>
-            ${!isStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:2px;">Clique em "Iniciar Módulo" acima para liberar.</span>' : ''}
-          </div>
-
           <!-- SUBMÓDULO OPCIONAL -->
           ${hasSub ? `
             <div class="submodule-card">
@@ -659,11 +657,21 @@
               ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material do Submódulo →</a></p>` : ''}
               
               <label style="font-weight:600; cursor:pointer; font-size:0.9rem; color:var(--text); display:flex; gap:8px; align-items:center; margin-top:8px;">
-                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
-                Concluir submódulo
+                <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
+                ${isSubDone ? 'Submódulo Concluído (Travado)' : 'Concluir submódulo'}
               </label>
             </div>
           ` : ''}
+
+          <!-- CHECKBOX MÓDULO PRINCIPAL -->
+          <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
+            <label style="font-weight:600; cursor:${isMainDone ? 'default' : 'pointer'}; color:var(--text); display:flex; gap:8px; align-items:center;">
+              <input type="checkbox" style="width:18px; height:18px;" ${isMainDone ? 'checked disabled' : ''} ${!canCompleteMain ? 'disabled' : ''} onchange="markStep('${step.id}', 'main', this.checked)">
+              ${isMainDone ? 'Módulo Principal Concluído (Travado)' : 'Concluir módulo principal'}
+            </label>
+            ${!isStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:2px;">Clique em "Iniciar Módulo" acima para liberar.</span>' : ''}
+            ${isStarted && hasSub && !isSubDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:2px;">⚠️ Conclua o submódulo acima para liberar a conclusão do módulo principal.</span>' : ''}
+          </div>
 
           <!-- MINI CRM DE COMENTÁRIOS E ANOTAÇÕES -->
           <div style="margin-top:18px; padding-top:12px; border-top:1px solid var(--border);">
@@ -705,7 +713,6 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  // Iniciar Módulo sem resetar a tela
   function startModule(event, stepId) {
     if (event) {
       event.preventDefault();
@@ -719,7 +726,6 @@
       users[currentStudent.email].times = currentStudent.times;
       saveUsers(users);
       
-      // Mantém a sanfona aberta e atualiza visualmente
       renderTrail();
       document.getElementById(`step-${stepId}`).classList.add('active');
     }
@@ -743,8 +749,6 @@
 
     if (isMainDone && isSubDone) {
       currentStudent.times[stepId].end = new Date().toISOString();
-    } else {
-      delete currentStudent.times[stepId].end;
     }
 
     const users = getUsers();
@@ -756,7 +760,6 @@
     document.getElementById(`step-${stepId}`).classList.add('active');
   }
 
-  // Mini CRM de Comentários
   function addComment(stepId) {
     const input = document.getElementById(`input-comment-${stepId}`);
     const text = input.value.trim();
@@ -914,13 +917,80 @@
         <td>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempos</button>
-            <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" ${!isCompleted ? 'disabled title="O colaborador precisa atingir 100% de progresso"' : ''} onclick="generateCertificate('${u.email}')">📜 Emitir Certificado</button>
+            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem;" onclick="resetUserProgressOptions('${u.email}')">🔄 Resetar</button>
+            <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" ${!isCompleted ? 'disabled title="O colaborador precisa atingir 100% de progresso"' : ''} onclick="generateCertificate('${u.email}')">📜 Certificado</button>
             <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
           </div>
         </td>
       `;
       tbody.appendChild(tr);
     });
+  }
+
+  // OPÇÕES DE RESETAR CURSO / MÓDULO ESPECÍFICO
+  function resetUserProgressOptions(email) {
+    const users = getUsers();
+    const steps = getSteps();
+    const u = users[email];
+    if (!u) return;
+
+    const option = prompt(
+      `🔄 OPÇÕES DE RESET - ${u.name.toUpperCase()}\n\n` +
+      `Digite:\n` +
+      `1 - Resetar o CURSO COMPLETO (Apaga todo o progresso do aluno)\n` +
+      `2 - Resetar APENAS UM MÓDULO específico\n\n` +
+      `Sua opção (1 ou 2):`
+    );
+
+    if (option === '1') {
+      if (confirm(`Tem certeza que deseja resetar TODO o curso de ${u.name}?`)) {
+        u.progress = {};
+        u.times = {};
+        u.notes = {};
+        u.pct = 0;
+        saveUsers(users);
+        alert(`✅ Curso resetado com sucesso para ${u.name}!`);
+        renderAdminDashboard();
+      }
+    } else if (option === '2') {
+      let menuSteps = `Selecione o número do módulo a ser resetado para ${u.name}:\n\n`;
+      steps.forEach((s, i) => {
+        menuSteps += `${i + 1}. ${s.title}\n`;
+      });
+
+      const selectedNum = prompt(menuSteps);
+      const index = parseInt(selectedNum) - 1;
+
+      if (!isNaN(index) && steps[index]) {
+        const targetStep = steps[index];
+        if (confirm(`Resetar apenas o módulo "${targetStep.title}" para ${u.name}?`)) {
+          // Limpa progresso principal e submódulo
+          if (u.progress) {
+            delete u.progress[targetStep.id];
+            delete u.progress[`${targetStep.id}_sub`];
+          }
+          if (u.times) delete u.times[targetStep.id];
+          if (u.notes) delete u.notes[targetStep.id];
+
+          // Recalcula a porcentagem %
+          let completedCount = 0;
+          steps.forEach(s => {
+            const isMainDone = !!(u.progress && u.progress[s.id]);
+            const hasSub = s.submodule && s.submodule.title;
+            const isSubDone = hasSub ? !!(u.progress && u.progress[`${s.id}_sub`]) : true;
+            if (isMainDone && isSubDone) completedCount++;
+          });
+
+          u.pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
+
+          saveUsers(users);
+          alert(`✅ Módulo "${targetStep.title}" resetado com sucesso!`);
+          renderAdminDashboard();
+        }
+      } else if (selectedNum !== null) {
+        alert("❌ Opção de módulo inválida.");
+      }
+    }
   }
 
   function viewUserTimes(email) {
@@ -962,7 +1032,7 @@
     }
   }
 
-  // GENERATE PDF CERTIFICATE (jsPDF) - LANDSCAPE FORMAT
+  // GERAR PDF DO CERTIFICADO
   function generateCertificate(email) {
     const users = getUsers();
     const steps = getSteps();
@@ -970,7 +1040,6 @@
 
     if (!u) return;
 
-    // Calcular total acumulado de tempo em ms
     let totalMs = 0;
     steps.forEach(s => {
       const t = (u.times && u.times[s.id]) || {};
@@ -980,7 +1049,6 @@
     const durationFormatted = formatDurationText(totalMs);
     const issueDate = new Date().toLocaleDateString('pt-BR');
 
-    // Inicializa jsPDF no formato Paisagem (Landscape: 297mm x 210mm)
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
       orientation: 'landscape',
@@ -989,11 +1057,11 @@
     });
 
     // MOLDURA DO CERTIFICADO
-    doc.setDrawColor(37, 99, 235); // Azul Primary
+    doc.setDrawColor(37, 99, 235);
     doc.setLineWidth(3);
     doc.rect(10, 10, 277, 190);
 
-    doc.setDrawColor(6, 182, 212); // Azul Accent
+    doc.setDrawColor(6, 182, 212);
     doc.setLineWidth(1);
     doc.rect(14, 14, 269, 182);
 
@@ -1062,7 +1130,6 @@
     doc.setTextColor(100, 116, 139);
     doc.text("Colaborador(a)", 212, 173, { align: "center" });
 
-    // Salvar/Baixar o PDF
     const cleanFileName = u.name.replace(/[^a-zA-Z0-9]/g, "_");
     doc.save(`Certificado_LifeApps_${cleanFileName}.pdf`);
   }
