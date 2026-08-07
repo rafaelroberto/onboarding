@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.5</title>
+  <title>Onboarding LifeApps v1.6</title>
   
   <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,7 +165,7 @@
     
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
-    /* CAIXA DE AVISO EM DESTAQUE */
+    /* CAIXA DE AVISO */
     .student-notice-box {
       background-color: #fffbe3;
       border: 1px solid #fde047;
@@ -178,7 +178,7 @@
       line-height: 1.4;
     }
 
-    /* BLOQUEIO DE MÍDIA (OVERLAY) */
+    /* BLOQUEIO DE MÍDIA */
     .media-container-locked {
       position: relative;
       border-radius: 8px;
@@ -342,6 +342,14 @@
       font-size: 0.75rem;
       font-weight: 600;
     }
+    .badge-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
 
     /* RODAPÉ */
     footer {
@@ -375,36 +383,16 @@
     <p>Capacitação oficial e integração de novos colaboradores.</p>
   </header>
 
-  <!-- VISTA 1: ENTRADA DO COLABORADOR -->
+  <!-- VISTA 1: ENTRADA DO COLABORADOR (APENAS E-MAIL) -->
   <div id="view-welcome" class="card">
-    <h2>Bem-vindo à sua jornada!</h2>
+    <h2>Acesso do Colaborador</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-      Informe seus dados abaixo para iniciar ou continuar o seu progresso salvo.
+      Digite seu e-mail cadastrado pelo gestor para acessar a sua trilha.
     </p>
     <form id="form-user">
       <div class="form-group">
         <label>E-mail corporativo *</label>
         <input type="email" id="u-email" required placeholder="seu.nome@lifeapps.com.br">
-      </div>
-      <div class="form-group">
-        <label>Nome Completo *</label>
-        <input type="text" id="u-name" required placeholder="Digite seu nome completo">
-      </div>
-      <div class="form-group">
-        <label>Telefone / WhatsApp *</label>
-        <input type="tel" id="u-phone" required placeholder="(00) 00000-0000">
-      </div>
-      <div class="form-group">
-        <label>Função / Cargo *</label>
-        <select id="u-role" required>
-          <option value="">Selecione sua função...</option>
-          <option value="SDR">SDR</option>
-          <option value="BDR">BDR</option>
-          <option value="Inside Sales">Inside Sales</option>
-          <option value="Field Sales">Field Sales</option>
-          <option value="Coordenador">Coordenador</option>
-          <option value="Gerente">Gerente</option>
-        </select>
       </div>
       <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Acessar Trilha de Aprendizagem</button>
     </form>
@@ -443,13 +431,31 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- 1. GERENCIAR E EDITAR/EXCLUIR MÓDULOS -->
+    <!-- 1. CADASTRAR NOVO COLABORADOR (EXCLUSIVO DO GESTOR) -->
     <details open style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">👤 Cadastrar Novo Colaborador</summary>
+      <form id="form-add-user" style="margin-top: 15px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label>Nome Completo *</label>
+            <input type="text" id="admin-user-name" required placeholder="Ex: João da Silva">
+          </div>
+          <div>
+            <label>E-mail Corporativo *</label>
+            <input type="email" id="admin-user-email" required placeholder="joao@lifeapps.com.br">
+          </div>
+        </div>
+        <button type="submit" class="btn" style="margin-top:10px;">Cadastrar Colaborador</button>
+      </form>
+    </details>
+
+    <!-- 2. GERENCIAR E EDITAR/EXCLUIR MÓDULOS -->
+    <details style="margin-bottom: 20px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
       <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">📚 Gerenciar Módulos Existentes</summary>
       <div id="admin-modules-list" style="margin-top: 15px;"></div>
     </details>
 
-    <!-- 2. ADICIONAR / EDITAR MÓDULO -->
+    <!-- 3. ADICIONAR / EDITAR MÓDULO -->
     <details id="details-form-step" style="margin-bottom: 24px; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background:#fff;">
       <summary style="font-weight: 600; cursor: pointer; color: var(--primary);" id="form-step-title">➕ Cadastrar Novo Módulo</summary>
       
@@ -492,16 +498,16 @@
       </form>
     </details>
 
-    <!-- 3. GERENCIAR COLABORADORES -->
-    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores em Onboarding</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Monitore o progresso, tempos, resete módulos e emita certificados.</p>
+    <!-- 4. GERENCIAR COLABORADORES -->
+    <h3 style="font-size:1.1rem; margin-top:20px;">Colaboradores Cadastrados</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 12px;">Controle o acesso (Ativo/Inativo), monitore progresso e emita certificados.</p>
     
     <table>
       <thead>
         <tr>
           <th>Nome</th>
           <th>E-mail</th>
-          <th>Cargo</th>
+          <th>Status</th>
           <th>Progresso</th>
           <th>Ações e Gestão</th>
         </tr>
@@ -512,7 +518,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.5</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.6</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -606,32 +612,25 @@
   // ÁREA DO COLABORADOR
   // ==========================================
 
-  document.getElementById('u-email').addEventListener('blur', (e) => {
-    const email = e.target.value.toLowerCase().trim();
-    const users = getUsers();
-    if (users[email]) {
-      document.getElementById('u-name').value = users[email].name || '';
-      document.getElementById('u-phone').value = users[email].phone || '';
-      document.getElementById('u-role').value = users[email].role || '';
-    }
-  });
-
+  // LOGIN DO ALUNO (SÓ PEDE EMAIL)
   document.getElementById('form-user').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('u-email').value.toLowerCase().trim();
     
     const users = getUsers();
-    if (!users[email]) {
-      users[email] = { progress: {}, times: {}, notes: {} };
+    const userFound = users[email];
+
+    if (!userFound) {
+      alert("❌ E-mail não encontrado! Entre em contato com o gestor para realizar o seu cadastro.");
+      return;
     }
 
-    users[email].name = document.getElementById('u-name').value;
-    users[email].phone = document.getElementById('u-phone').value;
-    users[email].role = document.getElementById('u-role').value;
-    users[email].email = email;
+    if (userFound.status === "inativo") {
+      alert("⚠️ Seu acesso está inativo no momento. Entre em contato com o gestor para reativar seu usuário.");
+      return;
+    }
 
-    saveUsers(users);
-    currentStudent = users[email];
+    currentStudent = userFound;
 
     document.getElementById('view-welcome').classList.add('hidden');
     document.getElementById('view-trail').classList.remove('hidden');
@@ -643,12 +642,13 @@
     currentStudent = null;
     document.getElementById('view-trail').classList.add('hidden');
     document.getElementById('view-welcome').classList.remove('hidden');
+    document.getElementById('u-email').value = '';
   }
 
   function renderTrail() {
     document.getElementById('user-info').innerHTML = `
       <strong style="font-size:1rem; color:var(--text);">${currentStudent.name}</strong>
-      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.role} • ${currentStudent.email}</span>
+      <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${currentStudent.email}</span>
     `;
 
     const steps = getSteps();
@@ -703,7 +703,7 @@
           <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
 
-          <!-- PLAYER DE VÍDEO PRINCIPAL COM OVERLAY SE NÃO INICIADO -->
+          <!-- PLAYER DE VÍDEO PRINCIPAL COM OVERLAY -->
           ${embedVideo ? `
             <div class="media-container-locked">
               ${!isStarted ? `
@@ -732,7 +732,6 @@
               <h4 style="color:var(--accent); font-size:0.95rem; margin-bottom:6px;">📌 Submódulo: ${step.submodule.title}</h4>
               ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
               
-              <!-- VÍDEO DO SUBMÓDULO COM OVERLAY -->
               ${step.submodule.videoUrl ? `
                 <div class="media-container-locked">
                   ${!isStarted ? `
@@ -745,7 +744,6 @@
                 </div>
               ` : ''}
 
-              <!-- DOCUMENTO DO SUBMÓDULO -->
               ${step.submodule.docUrl ? `
                 <p style="margin-bottom:10px;">
                   <a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">
@@ -908,6 +906,35 @@
     renderUsersManagement();
   }
 
+  // CADASTRAR NOVO ALUNO (EXCLUSIVO DO GESTOR)
+  document.getElementById('form-add-user').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('admin-user-name').value.trim();
+    const email = document.getElementById('admin-user-email').value.toLowerCase().trim();
+
+    const users = getUsers();
+
+    if (users[email]) {
+      alert("⚠️ Este e-mail já está cadastrado!");
+      return;
+    }
+
+    users[email] = {
+      name: name,
+      email: email,
+      status: "ativo", // Por padrão nasce Ativo
+      pct: 0,
+      progress: {},
+      times: {},
+      notes: {}
+    };
+
+    saveUsers(users);
+    alert(`✅ Colaborador ${name} cadastrado com sucesso!`);
+    document.getElementById('form-add-user').reset();
+    renderUsersManagement();
+  });
+
   function renderModulesManagement() {
     const steps = getSteps();
     const container = document.getElementById('admin-modules-list');
@@ -1005,17 +1032,23 @@
     userKeys.forEach(email => {
       const u = users[email];
       const isCompleted = u.pct === 100;
+      const isActive = (u.status !== "inativo");
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><strong>${u.name || '-'}</strong></td>
         <td>${u.email}</td>
-        <td>${u.role || '-'}</td>
+        <td>
+          <span class="${isActive ? 'badge' : 'badge-inactive'}">${isActive ? 'Ativo' : 'Inativo'}</span>
+        </td>
         <td><span class="badge">${u.pct || 0}%</span></td>
         <td>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn ${isActive ? 'btn-warning' : 'btn-success'}" style="padding:4px 8px; font-size:0.75rem;" onclick="toggleUserStatus('${u.email}')">
+              ${isActive ? '⏸ Inativar' : '▶ Ativar'}
+            </button>
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewUserTimes('${u.email}')">⏱ Tempos</button>
-            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem;" onclick="resetUserProgressOptions('${u.email}')">🔄 Resetar</button>
+            <button class="btn btn-warning" style="padding:4px 8px; font-size:0.75rem; background:#d97706;" onclick="resetUserProgressOptions('${u.email}')">🔄 Resetar</button>
             <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" ${!isCompleted ? 'disabled title="O colaborador precisa atingir 100% de progresso"' : ''} onclick="generateCertificate('${u.email}')">📜 Certificado</button>
             <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser('${u.email}')">Excluir</button>
           </div>
@@ -1023,6 +1056,21 @@
       `;
       tbody.appendChild(tr);
     });
+  }
+
+  // ALTERAR STATUS ATIVO / INATIVO (MANTÉM TODO O HISTÓRICO)
+  function toggleUserStatus(email) {
+    const users = getUsers();
+    const u = users[email];
+    if (!u) return;
+
+    const currentStatus = u.status || "ativo";
+    const newStatus = currentStatus === "ativo" ? "inativo" : "ativo";
+
+    u.status = newStatus;
+    saveUsers(users);
+
+    renderUsersManagement();
   }
 
   function resetUserProgressOptions(email) {
@@ -1119,7 +1167,7 @@
   }
 
   function deleteUser(email) {
-    if (confirm(`Tem certeza que deseja apagar os dados de ${email}?`)) {
+    if (confirm(`Tem certeza que deseja apagar DEFINITIVAMENTE os dados de ${email}? Todos os relatórios e históricos serão excluídos.`)) {
       const users = getUsers();
       delete users[email];
       saveUsers(users);
@@ -1183,11 +1231,11 @@
     doc.setTextColor(15, 23, 42);
     doc.text(u.name.toUpperCase(), 148.5, 92, { align: "center" });
 
-    // CARGO E DETALHES
+    // DETALHES
     doc.setFont("helvetica", "normal");
     doc.setFontSize(13);
     doc.setTextColor(51, 65, 85);
-    doc.text(`no cargo de ${u.role}, concluiu com êxito o programa de`, 148.5, 106, { align: "center" });
+    doc.text("concluiu com êxito o programa de capacitação", 148.5, 106, { align: "center" });
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(15);
