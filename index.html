@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding LifeApps v1.4</title>
+  <title>Onboarding LifeApps v1.5</title>
   
   <!-- Fonte Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,9 +165,62 @@
     
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
+    /* CAIXA DE AVISO EM DESTAQUE */
+    .student-notice-box {
+      background-color: #fffbe3;
+      border: 1px solid #fde047;
+      border-left: 5px solid var(--warning);
+      color: #713f12;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* BLOQUEIO DE MÍDIA (OVERLAY) */
+    .media-container-locked {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .media-overlay-lock {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .media-overlay-lock span {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+
+    .link-disabled {
+      pointer-events: none;
+      opacity: 0.4;
+      text-decoration: none !important;
+      cursor: not-allowed;
+    }
+
     /* BARRA DE PROGRESSO */
     .progress-container { 
-      margin: 24px 0; 
+      margin: 20px 0; 
       background: var(--primary-light);
       padding: 16px 20px;
       border-radius: 10px;
@@ -364,6 +417,7 @@
       <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
 
+    <!-- PROGRESSO -->
     <div class="progress-container">
       <div class="progress-header">
         <span>SEU PROGRESSO TOTAL</span>
@@ -372,6 +426,11 @@
       <div class="progress-bar-bg">
         <div id="progress-bar" class="progress-bar-fill"></div>
       </div>
+    </div>
+
+    <!-- AVISO EM DESTAQUE AO ALUNO -->
+    <div class="student-notice-box">
+      <strong>💡 Observação Importante:</strong> Para iniciar o conteúdo de qualquer etapa, liberar os vídeos e fazer o download dos materiais, você deve obrigatoriamente clicar no botão <strong>"▶ Iniciar Módulo"</strong> dentro de cada etapa.
     </div>
 
     <div id="steps-list"></div>
@@ -453,7 +512,7 @@
 
   <!-- RODAPÉ COMPLETO -->
   <footer>
-    <p><strong>Onboarding LifeApps</strong> • Versão 1.4</p>
+    <p><strong>Onboarding LifeApps</strong> • Versão 1.5</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -607,7 +666,6 @@
       const hasSub = step.submodule && step.submodule.title;
       const isSubDone = hasSub ? !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub`]) : true;
 
-      // Módulo 100% concluído
       const isModuleFullyDone = isMainDone && isSubDone;
       if (isModuleFullyDone) completedModulesCount++;
 
@@ -617,7 +675,6 @@
       const embedVideo = convertToEmbedUrl(step.videoUrl);
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
 
-      // Módulo principal só pode ser concluído se NÃO houver submódulo pendente
       const canCompleteMain = isStarted && (!hasSub || isSubDone);
 
       const el = document.createElement('div');
@@ -645,16 +702,57 @@
 
           <!-- MÓDULO PRINCIPAL -->
           <p style="margin-bottom:12px; color:#475569; font-size:0.95rem;">${step.desc}</p>
-          ${embedVideo ? `<iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none; margin-bottom:12px;"></iframe>` : ''}
-          ${step.docUrl ? `<p style="margin-bottom:12px;"><a href="${step.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 Abrir Documento de Apoio →</a></p>` : ''}
+
+          <!-- PLAYER DE VÍDEO PRINCIPAL COM OVERLAY SE NÃO INICIADO -->
+          ${embedVideo ? `
+            <div class="media-container-locked">
+              ${!isStarted ? `
+                <div class="media-overlay-lock" onclick="alert('⚠️ Clique no botão \'▶ Iniciar Módulo\' acima para liberar o player do vídeo e o tempo de execução!')">
+                  <span style="font-size:1.5rem;">🔒</span>
+                  <span>Vídeo Bloqueado</span>
+                  <span style="font-size:0.75rem; opacity:0.8; margin-top:2px;">Clique em "▶ Iniciar Módulo" acima para liberar.</span>
+                </div>
+              ` : ''}
+              <iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
+            </div>
+          ` : ''}
+
+          <!-- DOCUMENTO DO MÓDULO PRINCIPAL -->
+          ${step.docUrl ? `
+            <p style="margin-bottom:12px;">
+              <a href="${step.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
+                📄 Abrir Documento de Apoio → ${!isStarted ? '(Inicie o módulo para abrir)' : ''}
+              </a>
+            </p>
+          ` : ''}
           
           <!-- SUBMÓDULO OPCIONAL -->
           ${hasSub ? `
             <div class="submodule-card">
               <h4 style="color:var(--accent); font-size:0.95rem; margin-bottom:6px;">📌 Submódulo: ${step.submodule.title}</h4>
               ${step.submodule.desc ? `<p style="font-size:0.9rem; color:#475569; margin-bottom:10px;">${step.submodule.desc}</p>` : ''}
-              ${step.submodule.videoUrl ? `<iframe width="100%" height="250" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none; margin-bottom:10px;"></iframe>` : ''}
-              ${step.submodule.docUrl ? `<p style="margin-bottom:10px;"><a href="${step.submodule.docUrl}" target="_blank" style="color:var(--primary); font-weight:600; font-size:0.85rem;">📄 Material do Submódulo →</a></p>` : ''}
+              
+              <!-- VÍDEO DO SUBMÓDULO COM OVERLAY -->
+              ${step.submodule.videoUrl ? `
+                <div class="media-container-locked">
+                  ${!isStarted ? `
+                    <div class="media-overlay-lock" onclick="alert('⚠️ Clique no botão \'▶ Iniciar Módulo\' acima para liberar o vídeo!')">
+                      <span style="font-size:1.5rem;">🔒</span>
+                      <span>Vídeo do Submódulo Bloqueado</span>
+                    </div>
+                  ` : ''}
+                  <iframe width="100%" height="250" src="${convertToEmbedUrl(step.submodule.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
+                </div>
+              ` : ''}
+
+              <!-- DOCUMENTO DO SUBMÓDULO -->
+              ${step.submodule.docUrl ? `
+                <p style="margin-bottom:10px;">
+                  <a href="${step.submodule.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.85rem;">
+                    📄 Material do Submódulo → ${!isStarted ? '(Bloqueado)' : ''}
+                  </a>
+                </p>
+              ` : ''}
               
               <label style="font-weight:600; cursor:pointer; font-size:0.9rem; color:var(--text); display:flex; gap:8px; align-items:center; margin-top:8px;">
                 <input type="checkbox" style="width:16px; height:16px;" ${isSubDone ? 'checked disabled' : ''} ${!isStarted ? 'disabled' : ''} onchange="markStep('${step.id}', 'sub', this.checked)">
@@ -673,7 +771,7 @@
             ${isStarted && hasSub && !isSubDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:2px;">⚠️ Conclua o submódulo acima para liberar a conclusão do módulo principal.</span>' : ''}
           </div>
 
-          <!-- MINI CRM DE COMENTÁRIOS E ANOTAÇÕES -->
+          <!-- MINI CRM DE COMENTÁRIOS -->
           <div style="margin-top:18px; padding-top:12px; border-top:1px solid var(--border);">
             <label style="font-size:0.85rem; font-weight:600; color:var(--text);">📝 Histórico de Comentários e Observações:</label>
             
@@ -927,7 +1025,6 @@
     });
   }
 
-  // OPÇÕES DE RESETAR CURSO / MÓDULO ESPECÍFICO
   function resetUserProgressOptions(email) {
     const users = getUsers();
     const steps = getSteps();
@@ -964,7 +1061,6 @@
       if (!isNaN(index) && steps[index]) {
         const targetStep = steps[index];
         if (confirm(`Resetar apenas o módulo "${targetStep.title}" para ${u.name}?`)) {
-          // Limpa progresso principal e submódulo
           if (u.progress) {
             delete u.progress[targetStep.id];
             delete u.progress[`${targetStep.id}_sub`];
@@ -972,7 +1068,6 @@
           if (u.times) delete u.times[targetStep.id];
           if (u.notes) delete u.notes[targetStep.id];
 
-          // Recalcula a porcentagem %
           let completedCount = 0;
           steps.forEach(s => {
             const isMainDone = !!(u.progress && u.progress[s.id]);
