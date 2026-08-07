@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v3.2 Cloud</title>
+  <title>LifeApps Academy v3.3 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -116,14 +116,19 @@
     .btn-success:hover { background-color: #059669; }
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
-    /* KPIS ALUNO */
+    /* KPIS GRID */
     .kpi-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
     }
 
-    .kpi-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+    .kpi-card { 
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; 
+      padding: 14px 10px; text-align: center; transition: all 0.2s;
+    }
+    .kpi-card.interactive { cursor: pointer; }
+    .kpi-card.interactive:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
     .kpi-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-    .kpi-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
+    .kpi-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
 
     /* ESTRELAS DE AVALIAÇÃO */
     .star-rating { display: inline-flex; gap: 4px; font-size: 1.3rem; cursor: pointer; }
@@ -148,7 +153,7 @@
 
     .student-notice-box {
       background-color: #fffbe3; border: 1px solid #fde047; border-left: 5px solid var(--warning);
-      color: #713f12; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem;
+      color: #713f12; padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.85rem;
     }
 
     .media-container-locked { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
@@ -180,7 +185,6 @@
     .step-content { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
     .step-content.active { display: block; }
 
-    /* SUBMÓDULO SANFONADO */
     .submodule-card {
       background-color: white; border: 1px solid #cbd5e1; border-left: 4px solid var(--accent);
       border-radius: 8px; padding: 12px 14px; margin-top: 12px;
@@ -200,6 +204,18 @@
     .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
     .comment-date { font-size: 0.68rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
+    /* MODAL ESTILIZADO */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-card {
+      background: white; border-radius: 12px; padding: 24px; max-width: 680px; width: 100%;
+      max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+    }
+
+    /* TABELAS RESPONSIVAS */
     .table-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; min-width: 600px; }
     th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
@@ -225,7 +241,7 @@
       header { padding: 20px 16px; }
       header h1 { font-size: 1.5rem; }
       .card { padding: 16px; }
-      .kpi-grid { grid-template-columns: 1fr; gap: 8px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
       .checkbox-grid { grid-template-columns: 1fr; }
       .form-grid-mobile { display: flex; flex-direction: column; gap: 8px; }
       .module-manage-header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -285,7 +301,7 @@
         <div class="kpi-number" id="kpi-ongoing" style="color: var(--warning);">0</div>
         <div class="kpi-label">Em Andamento</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="grid-column: span 2;">
         <div class="kpi-number" id="kpi-completed" style="color: var(--success);">0</div>
         <div class="kpi-label">Concluídos</div>
       </div>
@@ -310,14 +326,43 @@
 
     <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
-      <button class="tab-btn active" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
+      <button class="tab-btn active" id="tab-btn-kpis" onclick="switchAdminTab('kpis')">📊 KPIs & Relatórios</button>
+      <button class="tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
       <button class="tab-btn" id="tab-btn-courses" onclick="switchAdminTab('courses')">🎓 Cursos</button>
       <button class="tab-btn" id="tab-btn-modules-form" onclick="switchAdminTab('modules-form', true)">➕ Novo Módulo</button>
       <button class="tab-btn" id="tab-btn-modules-list" onclick="switchAdminTab('modules-list')">⚙️ Gerenciar Módulos</button>
     </div>
 
+    <!-- ABA KPI & ANALYTICS -->
+    <div id="tab-kpis" class="tab-content active">
+      <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);">Métricas Globais do Treinamento</h3>
+      
+      <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="kpi-card">
+          <div class="kpi-number" id="admin-kpi-users">0</div>
+          <div class="kpi-label">Matriculados</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-number" id="admin-kpi-courses" style="color:var(--accent);">0</div>
+          <div class="kpi-label">Cursos Criados</div>
+        </div>
+        <div class="kpi-card interactive" onclick="openKpiCompletedModal()" title="Clique para ver o detalhamento por aluno">
+          <div class="kpi-number" id="admin-kpi-completed" style="color:var(--success);">0</div>
+          <div class="kpi-label">Cursos Concluídos 🔍</div>
+        </div>
+        <div class="kpi-card interactive" onclick="openKpiTimeModal()" title="Clique para ver o tempo detalhado por colaborador">
+          <div class="kpi-number" id="admin-kpi-avg-time" style="font-size:1.1rem; color:var(--warning); margin-top:6px;">-</div>
+          <div class="kpi-label">Média de Tempo 🔍</div>
+        </div>
+      </div>
+
+      <div style="background:#f8fafc; border:1px solid var(--border); padding:16px; border-radius:8px; font-size:0.85rem; color:var(--text-muted);">
+        💡 <strong>Dica de Gestão:</strong> Clique nos cards <strong>"Cursos Concluídos"</strong> ou <strong>"Média de Tempo"</strong> para abrir o relatório completo detalhado por colaborador e identificar módulos pendentes.
+      </div>
+    </div>
+
     <!-- ABA 1: COLABORADORES -->
-    <div id="tab-users" class="tab-content active">
+    <div id="tab-users" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
         <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);" id="form-user-title">Cadastrar Novo Colaborador</h3>
         <form id="form-add-user">
@@ -425,7 +470,6 @@
 
           <hr style="margin:16px 0; border:none; border-top:1px dashed var(--border);">
 
-          <!-- GERENCIADOR DE MÚLTIPLOS SUBMÓDULOS -->
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <h4 style="color:var(--accent); font-size:0.9rem;">Submódulos Adicionais (Ilimitados)</h4>
             <button type="button" class="btn btn-secondary" style="font-size:0.75rem; padding:4px 8px;" onclick="addSubmoduleFormBlock()">➕ Adicionar Outro Submódulo</button>
@@ -452,8 +496,19 @@
 
   </div>
 
+  <!-- MODAIS DE DRILL-DOWN DOS KPIS -->
+  <div id="kpi-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+        <h3 id="modal-title" style="color:var(--primary); font-size:1.1rem;">Detalhamento</h3>
+        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="closeKpiModal()">✕ Fechar</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 3.2 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 3.3 Cloud Analytics</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -515,7 +570,6 @@
     const activeContent = document.getElementById(`tab-${tabName}`);
     if (activeContent) activeContent.classList.add('active');
 
-    // REGRA DE OURO v3.2: Só reseta o formulário se a pessoa clicou diretamente no botão '➕ Novo Módulo'
     if (tabName === 'modules-form' && forceResetModule) {
       resetModuleForm();
     }
@@ -944,7 +998,7 @@
   }
 
   // ==========================================
-  // ÁREA DE GESTÃO RESTRITA
+  // ÁREA DE GESTÃO RESTRITA & KPIS ANALYTICS
   // ==========================================
 
   async function openAdminModal() {
@@ -964,11 +1018,192 @@
   }
 
   function renderAdminDashboard() {
+    renderAdminKPIs();
     renderAdminCourses();
     renderCourseDropdownInModules();
     renderAdminEnrollCheckboxes();
     renderModulesManagement();
     renderUsersManagement();
+  }
+
+  // MÉTODOS DE KPIS DA GESTÃO
+  function renderAdminKPIs() {
+    const userKeys = Object.keys(cachedUsers);
+    const activeUsers = userKeys.map(k => cachedUsers[k]).filter(u => u.status !== "inativo");
+    
+    document.getElementById('admin-kpi-users').innerText = activeUsers.length;
+    document.getElementById('admin-kpi-courses').innerText = cachedCourses.filter(c => c.status !== "inativo").length;
+
+    let totalCompletedCourses = 0;
+    let grandTotalMs = 0;
+    let completedCourseInstancesCount = 0;
+
+    activeUsers.forEach(u => {
+      const enrolled = u.enrolledCourses || [];
+      enrolled.forEach(cId => {
+        const cSteps = cachedSteps.filter(s => s.courseId === cId && s.status !== "inativo");
+        let doneCount = 0;
+        let userCourseMs = 0;
+
+        cSteps.forEach(s => {
+          const isMain = !!(u.progress && u.progress[s.id]);
+          const subList = s.submodules || (s.submodule && s.submodule.title ? [s.submodule] : []);
+          let allSubs = true;
+          subList.forEach((sub, sIdx) => {
+            if (!(u.progress && u.progress[`${s.id}_sub_${sIdx}`])) allSubs = false;
+          });
+
+          if (isMain && allSubs) doneCount++;
+
+          const t = (u.times && u.times[s.id]) || {};
+          userCourseMs += calculateDurationInMs(t.start, t.end);
+        });
+
+        if (cSteps.length > 0 && doneCount === cSteps.length) {
+          totalCompletedCourses++;
+        }
+
+        if (userCourseMs > 0) {
+          grandTotalMs += userCourseMs;
+          completedCourseInstancesCount++;
+        }
+      });
+    });
+
+    document.getElementById('admin-kpi-completed').innerText = totalCompletedCourses;
+
+    const avgMs = completedCourseInstancesCount > 0 ? (grandTotalMs / completedCourseInstancesCount) : 0;
+    document.getElementById('admin-kpi-avg-time').innerText = formatDurationText(avgMs);
+  }
+
+  function openKpiCompletedModal() {
+    document.getElementById('modal-title').innerText = "📊 Relatório: Cursos e Módulos Pendentes por Aluno";
+    const body = document.getElementById('modal-body');
+    body.innerHTML = '';
+
+    const activeUsers = Object.keys(cachedUsers).map(k => cachedUsers[k]).filter(u => u.status !== "inativo");
+
+    if (activeUsers.length === 0) {
+      body.innerHTML = '<p style="color:var(--text-muted);">Nenhum colaborador ativo cadastrado.</p>';
+    } else {
+      let html = '<div style="display:flex; flex-direction:column; gap:12px;">';
+
+      activeUsers.forEach(u => {
+        const enrolled = u.enrolledCourses || [];
+        html += `<div style="background:#f8fafc; border:1px solid var(--border); padding:12px; border-radius:8px;">`;
+        html += `<strong>👤 ${u.name}</strong> (${u.email})<br>`;
+
+        if (enrolled.length === 0) {
+          html += `<span style="font-size:0.8rem; color:var(--text-muted);">Nenhum curso matriculado.</span>`;
+        } else {
+          enrolled.forEach(cId => {
+            const course = cachedCourses.find(c => c.id === cId);
+            if (!course) return;
+
+            const cSteps = cachedSteps.filter(s => s.courseId === cId && s.status !== "inativo");
+            const pendingModules = [];
+            let doneCount = 0;
+
+            cSteps.forEach(s => {
+              const isMain = !!(u.progress && u.progress[s.id]);
+              const subList = s.submodules || (s.submodule && s.submodule.title ? [s.submodule] : []);
+              let allSubs = true;
+              subList.forEach((sub, sIdx) => {
+                if (!(u.progress && u.progress[`${s.id}_sub_${sIdx}`])) allSubs = false;
+              });
+
+              if (isMain && allSubs) {
+                doneCount++;
+              } else {
+                pendingModules.push(s.title);
+              }
+            });
+
+            const pct = cSteps.length ? Math.round((doneCount / cSteps.length) * 100) : 0;
+
+            html += `<div style="margin-top:6px; padding:6px; background:white; border-radius:6px; font-size:0.82rem;">`;
+            html += `<div style="display:flex; justify-content:space-between;"><strong>🎓 ${course.title}</strong> <span class="badge">${pct}%</span></div>`;
+
+            if (pct === 100) {
+              html += `<span style="color:var(--success); font-weight:bold;">✅ Curso 100% Concluído</span>`;
+            } else {
+              html += `<span style="color:var(--danger); font-weight:600;">⚠️ Módulos pendentes (${pendingModules.length}):</span>`;
+              html += `<ul style="padding-left:18px; color:var(--text-muted); margin-top:2px;">`;
+              pendingModules.forEach(p => { html += `<li>${p}</li>`; });
+              html += `</ul>`;
+            }
+
+            html += `</div>`;
+          });
+        }
+
+        html += `</div>`;
+      });
+
+      html += '</div>';
+      body.innerHTML = html;
+    }
+
+    document.getElementById('kpi-modal').classList.remove('hidden');
+  }
+
+  function openKpiTimeModal() {
+    document.getElementById('modal-title').innerText = "⏱ Relatório: Tempos de Execução por Colaborador";
+    const body = document.getElementById('modal-body');
+    body.innerHTML = '';
+
+    const activeUsers = Object.keys(cachedUsers).map(k => cachedUsers[k]).filter(u => u.status !== "inativo");
+
+    if (activeUsers.length === 0) {
+      body.innerHTML = '<p style="color:var(--text-muted);">Nenhum colaborador ativo cadastrado.</p>';
+    } else {
+      let html = '<div style="display:flex; flex-direction:column; gap:12px;">';
+
+      activeUsers.forEach(u => {
+        html += `<div style="background:#f8fafc; border:1px solid var(--border); padding:12px; border-radius:8px;">`;
+        html += `<strong>👤 ${u.name}</strong> (${u.email})<br>`;
+
+        const enrolled = u.enrolledCourses || [];
+        enrolled.forEach(cId => {
+          const course = cachedCourses.find(c => c.id === cId);
+          if (!course) return;
+
+          const cSteps = cachedSteps.filter(s => s.courseId === cId && s.status !== "inativo");
+          let courseMs = 0;
+          let firstStart = null;
+          let lastEnd = null;
+
+          cSteps.forEach(s => {
+            const t = (u.times && u.times[s.id]) || {};
+            if (t.start) {
+              if (!firstStart || new Date(t.start) < new Date(firstStart)) firstStart = t.start;
+            }
+            if (t.end) {
+              if (!lastEnd || new Date(t.end) > new Date(lastEnd)) lastEnd = t.end;
+            }
+            courseMs += calculateDurationInMs(t.start, t.end);
+          });
+
+          html += `<div style="margin-top:6px; padding:8px; background:white; border-radius:6px; font-size:0.82rem;">`;
+          html += `<strong>🎓 ${course.title}</strong><br>`;
+          html += `• PrimeirA Aula Iniciada em: ${formatDate(firstStart)}<br>`;
+          html += `• Último Módulo Finalizado em: ${formatDate(lastEnd)}<br>`;
+          html += `• <strong>Tempo Dedicado no Curso:</strong> ${formatDurationText(courseMs)}`;
+          html += `</div>`;
+        });
+
+        html += `</div>`;
+      });
+
+      html += '</div>';
+      body.innerHTML = html;
+    }
+
+    document.getElementById('kpi-modal').classList.remove('hidden');
+  }
+
+  function closeKpiModal() {
+    document.getElementById('kpi-modal').classList.add('hidden');
   }
 
   // 1. GESTÃO E EDIÇÃO DE CURSOS
@@ -1206,7 +1441,6 @@
     const step = cachedSteps.find(s => s.id === id);
     if (!step) return;
 
-    // PREENCHE O ID DO MÓDULO PARA GARANTIR EDIÇÃO E NÃO DUPLICAÇÃO
     document.getElementById('edit-module-id').value = step.id;
     document.getElementById('module-course-id').value = step.courseId || '';
     document.getElementById('new-title').value = step.title || '';
@@ -1259,7 +1493,6 @@
     const editId = document.getElementById('edit-module-id').value;
     const courseId = document.getElementById('module-course-id').value;
 
-    // SE ESTIVER EDITANDO, MANTÉM O MESMO ID DO FIRESTORE (SEM DUPLICAR)
     const id = editId ? editId : Date.now().toString();
 
     const subBlocks = document.querySelectorAll('.admin-submodule-box');
