@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v4.3 Cloud</title>
+  <title>LifeApps Academy v4.4 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,7 +189,6 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
     
-    /* PADRONIZAÇÃO DOS BOTÕES */
     .btn { 
       background-color: var(--primary); color: white; border: none; padding: 10px 18px; 
       border-radius: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer; 
@@ -456,6 +455,7 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
+    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
       <button class="tab-btn active" id="tab-btn-kpis" onclick="switchAdminTab('kpis')">📊 KPIs & Relatórios</button>
       <button class="tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
@@ -633,7 +633,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 4.3 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 4.4 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -982,7 +982,7 @@
       const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
       let allSubsDone = true;
 
-      // HTML DOS SUBMÓDULOS COM INÍCIO INDIVIDUAL
+      // RENDEREIZAÇÃO DOS SUBMÓDULOS COM REGRAS INDEPENDENTES
       let subModulesHtml = '';
       subList.forEach((sub, sIdx) => {
         const subTimeKey = `${step.id}_sub_${sIdx}`;
@@ -1036,7 +1036,7 @@
       const embedVideo = convertToEmbedUrl(step.videoUrl);
       const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
       
-      // MÓDULO PRINCIPAL SÓ PODE CONCLUIR SE FOI INICIADO E SE TODOS OS SUBMÓDULOS ESTÃO CONCLUÍDOS
+      // REGRA DE OURO v4.4: MÓDULO PRINCIPAL SÓ CONCLUI SE INICIADO E COM TODOS OS SUBMÓDULOS CONCLUÍDOS
       const canCompleteMain = isMainStarted && allSubsDone;
 
       const el = document.createElement('div');
@@ -1077,13 +1077,13 @@
           
           ${subModulesHtml}
 
-          <!-- BOTÃO CONCLUIR MÓDULO PRINCIPAL -->
+          <!-- BOTÃO CONCLUIR MÓDULO PRINCIPAL COM VALIDAÇÃO CORRETA -->
           <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
             <button type="button" class="btn btn-success" style="width:100%;" id="btn-main-complete-${step.id}" ${(!canCompleteMain || isMainDone) ? 'disabled' : ''} onclick="markMainStep(event, '${step.id}')">
               ${isMainDone ? '✅ Módulo Principal Concluído' : '✅ Concluir Módulo Principal'}
             </button>
             ${!isMainStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:4px; text-align:center;">Clique em "▶ Iniciar Módulo" acima para liberar este botão.</span>' : ''}
-            ${isMainStarted && !allSubsDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:4px; text-align:center;">⚠️ Conclua todos os submódulos acima para liberar a conclusão do módulo principal.</span>' : ''}
+            ${isMainStarted && subList.length > 0 && !allSubsDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:4px; text-align:center;">⚠️ Conclua todos os submódulos acima para liberar a conclusão do módulo principal.</span>' : ''}
           </div>
 
           <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border);">
@@ -1131,6 +1131,14 @@
       const contentBox = document.getElementById(`step-${stepId}`);
       if (contentBox) {
         contentBox.querySelectorAll('.link-disabled').forEach(l => l.classList.remove('link-disabled'));
+        
+        // Se o módulo NÃO tiver submódulos, libera o botão de conclusão do módulo principal
+        const stepObj = cachedSteps.find(s => s.id === stepId);
+        const subList = stepObj.submodules || (stepObj.submodule && stepObj.submodule.title ? [stepObj.submodule] : []);
+        if (subList.length === 0) {
+          const btnMain = document.getElementById(`btn-main-complete-${stepId}`);
+          if (btnMain) btnMain.removeAttribute('disabled');
+        }
       }
 
       await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
@@ -1195,6 +1203,21 @@
     if (btnSub) {
       btnSub.innerText = '✅ Submódulo Concluído';
       btnSub.setAttribute('disabled', 'disabled');
+    }
+
+    // REGRA v4.4: ATUALIZA AUTOMATICAMENTE A LIBERAÇÃO DO MÓDULO PRINCIPAL
+    const stepObj = cachedSteps.find(s => s.id === stepId);
+    const subList = stepObj.submodules || (stepObj.submodule && stepObj.submodule.title ? [stepObj.submodule] : []);
+    const isMainStarted = !!(currentStudent.times && currentStudent.times[stepId] && currentStudent.times[stepId].start);
+    
+    let allSubsDone = true;
+    subList.forEach((sub, sI) => {
+      if (!currentStudent.progress[`${stepId}_sub_${sI}`]) allSubsDone = false;
+    });
+
+    if (isMainStarted && allSubsDone) {
+      const btnMain = document.getElementById(`btn-main-complete-${stepId}`);
+      if (btnMain) btnMain.removeAttribute('disabled');
     }
 
     renderStudentCourses();
