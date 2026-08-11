@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v4.2 Cloud</title>
+  <title>LifeApps Academy v4.3 Cloud</title>
   
   <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -456,7 +456,6 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
       <button class="tab-btn active" id="tab-btn-kpis" onclick="switchAdminTab('kpis')">📊 KPIs & Relatórios</button>
       <button class="tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
@@ -634,7 +633,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 4.2 Cloud</p>
+    <p><strong>LifeApps Academy</strong> • Versão 4.3 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -977,30 +976,21 @@
 
     steps.forEach((step) => {
       const stepTimes = (currentStudent.times && currentStudent.times[step.id]) || {};
-      const isStarted = !!stepTimes.start;
-      
+      const isMainStarted = !!stepTimes.start;
       const isMainDone = !!(currentStudent.progress && currentStudent.progress[step.id]);
       
       const subList = step.submodules || (step.submodule && step.submodule.title ? [step.submodule] : []);
       let allSubsDone = true;
 
-      subList.forEach((sub, sIdx) => {
-        if (!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`])) {
-          allSubsDone = false;
-        }
-      });
-
-      const isModuleFullyDone = isMainDone && allSubsDone;
-      const isLocked = !previousModuleFullyCompleted;
-      previousModuleFullyCompleted = isModuleFullyDone;
-
-      const embedVideo = convertToEmbedUrl(step.videoUrl);
-      const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
-      const canCompleteMain = isStarted && allSubsDone;
-
+      // HTML DOS SUBMÓDULOS COM INÍCIO INDIVIDUAL
       let subModulesHtml = '';
       subList.forEach((sub, sIdx) => {
-        const isSubDone = !!(currentStudent.progress && currentStudent.progress[`${step.id}_sub_${sIdx}`]);
+        const subTimeKey = `${step.id}_sub_${sIdx}`;
+        const isSubStarted = !!(currentStudent.times && currentStudent.times[subTimeKey] && currentStudent.times[subTimeKey].start);
+        const isSubDone = !!(currentStudent.progress && currentStudent.progress[subTimeKey]);
+
+        if (!isSubDone) allSubsDone = false;
+
         subModulesHtml += `
           <div class="submodule-card">
             <div class="submodule-header" onclick="toggleSubmoduleContent('${step.id}', ${sIdx})">
@@ -1009,17 +999,28 @@
             </div>
 
             <div class="submodule-content" id="sub-body-${step.id}-${sIdx}">
+              <!-- BOTÃO INICIAR SUBMÓDULO INDIVIDUAL -->
+              <div class="time-info-box" id="time-box-sub-${step.id}-${sIdx}">
+                ${!isSubStarted ? `
+                  <button type="button" class="btn" style="width:100%; font-size:0.78rem;" onclick="startSubmodule(event, '${step.id}', ${sIdx})">▶ Iniciar Submódulo</button>
+                ` : `
+                  <p style="font-size:0.75rem;">🗓 <strong>Submódulo Iniciado em:</strong> ${formatDate(currentStudent.times[subTimeKey].start)}</p>
+                `}
+              </div>
+
               ${sub.desc ? `<p style="font-size:0.85rem; color:#475569; margin-bottom:8px;">${sub.desc}</p>` : ''}
+              
               ${sub.videoUrl ? `
                 <div class="media-container-locked" id="media-lock-sub-${step.id}-${sIdx}">
-                  ${!isStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' acima para liberar o vídeo!')"><span style="font-size:1.2rem;">🔒</span><span>Vídeo do Submódulo Bloqueado</span></div>` : ''}
+                  ${!isSubStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Submódulo\' acima para liberar o vídeo!')"><span style="font-size:1.2rem;">🔒</span><span>Vídeo do Submódulo Bloqueado</span></div>` : ''}
                   <iframe width="100%" height="260" src="${convertToEmbedUrl(sub.videoUrl)}" allowfullscreen style="border-radius:6px; border:none;"></iframe>
                 </div>
               ` : ''}
-              ${sub.docUrl ? `<p style="margin-bottom:8px;"><a href="${sub.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.82rem;">📄 Material Submódulo →</a></p>` : ''}
+
+              ${sub.docUrl ? `<p style="margin-bottom:8px;"><a href="${sub.docUrl}" target="_blank" class="${!isSubStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; font-size:0.82rem;">📄 Material Submódulo →</a></p>` : ''}
               
               <div style="margin-top:8px;">
-                <button type="button" class="btn btn-success" style="font-size:0.8rem; width:100%;" id="btn-sub-complete-${step.id}-${sIdx}" ${(!isStarted || isSubDone) ? 'disabled' : ''} onclick="markSubStep(event, '${step.id}', ${sIdx})">
+                <button type="button" class="btn btn-success" style="font-size:0.8rem; width:100%;" id="btn-sub-complete-${step.id}-${sIdx}" ${(!isSubStarted || isSubDone) ? 'disabled' : ''} onclick="markSubStep(event, '${step.id}', ${sIdx})">
                   ${isSubDone ? '✅ Submódulo Concluído' : '✅ Concluir Submódulo'}
                 </button>
               </div>
@@ -1027,6 +1028,16 @@
           </div>
         `;
       });
+
+      const isModuleFullyDone = isMainDone && allSubsDone;
+      const isLocked = !previousModuleFullyCompleted;
+      previousModuleFullyCompleted = isModuleFullyDone;
+
+      const embedVideo = convertToEmbedUrl(step.videoUrl);
+      const commentsList = (currentStudent.notes && currentStudent.notes[step.id]) || [];
+      
+      // MÓDULO PRINCIPAL SÓ PODE CONCLUIR SE FOI INICIADO E SE TODOS OS SUBMÓDULOS ESTÃO CONCLUÍDOS
+      const canCompleteMain = isMainStarted && allSubsDone;
 
       const el = document.createElement('div');
       el.className = `step-item ${isLocked ? 'locked' : ''}`;
@@ -1037,8 +1048,9 @@
         </div>
         
         <div class="step-content" id="step-${step.id}">
+          <!-- BOTÃO INICIAR MÓDULO PRINCIPAL INDIVIDUAL -->
           <div class="time-info-box" id="time-box-${step.id}">
-            ${!isStarted ? `
+            ${!isMainStarted ? `
               <button type="button" class="btn" style="width:100%;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
             ` : `
               <p>🗓 <strong>Iniciado em:</strong> ${formatDate(stepTimes.start)}</p>
@@ -1050,28 +1062,28 @@
 
           ${embedVideo ? `
             <div class="media-container-locked" id="media-lock-${step.id}">
-              ${!isStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' para liberar o vídeo!')"><span style="font-size:1.5rem;">🔒</span><span>Vídeo Bloqueado</span></div>` : ''}
+              ${!isMainStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' para liberar o vídeo!')"><span style="font-size:1.5rem;">🔒</span><span>Vídeo Bloqueado</span></div>` : ''}
               <iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
             </div>
           ` : ''}
 
           ${step.docUrl ? `
             <p style="margin-bottom:10px;">
-              <a href="${step.docUrl}" target="_blank" class="${!isStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
-                📄 Documento de Apoio → ${!isStarted ? '(Bloqueado)' : ''}
+              <a href="${step.docUrl}" target="_blank" class="${!isMainStarted ? 'link-disabled' : ''}" style="color:var(--primary); font-weight:600; text-decoration:none;">
+                📄 Documento de Apoio → ${!isMainStarted ? '(Bloqueado)' : ''}
               </a>
             </p>
           ` : ''}
           
           ${subModulesHtml}
 
-          <!-- BOTÃO PADRONIZADO IGUAL DE CONCLUIR MÓDULO -->
+          <!-- BOTÃO CONCLUIR MÓDULO PRINCIPAL -->
           <div style="margin-top: 14px; padding-top:10px; border-top:1px dashed var(--border);">
             <button type="button" class="btn btn-success" style="width:100%;" id="btn-main-complete-${step.id}" ${(!canCompleteMain || isMainDone) ? 'disabled' : ''} onclick="markMainStep(event, '${step.id}')">
               ${isMainDone ? '✅ Módulo Principal Concluído' : '✅ Concluir Módulo Principal'}
             </button>
-            ${!isStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:4px; text-align:center;">Clique em "▶ Iniciar Módulo" acima para liberar este botão.</span>' : ''}
-            ${isStarted && !canCompleteMain ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:4px; text-align:center;">⚠️ Conclua todos os submódulos acima para liberar.</span>' : ''}
+            ${!isMainStarted ? '<span style="font-size:0.75rem; color:var(--danger); display:block; margin-top:4px; text-align:center;">Clique em "▶ Iniciar Módulo" acima para liberar este botão.</span>' : ''}
+            ${isMainStarted && !allSubsDone ? '<span style="font-size:0.75rem; color:var(--warning); display:block; margin-top:4px; text-align:center;">⚠️ Conclua todos os submódulos acima para liberar a conclusão do módulo principal.</span>' : ''}
           </div>
 
           <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border);">
@@ -1094,7 +1106,7 @@
     document.getElementById(id).classList.toggle('active');
   }
 
-  /* REGRA v4.2: INICIA O MÓDULO SEM FECHAR / RETRAIR NENHUMA TELA */
+  /* INICIAR MÓDULO PRINCIPAL INDIVIDUALMENTE */
   async function startModule(event, stepId) {
     if (event) { event.preventDefault(); event.stopPropagation(); }
     if (!currentStudent.times) currentStudent.times = {};
@@ -1102,7 +1114,6 @@
       const nowIso = new Date().toISOString();
       currentStudent.times[stepId] = { start: nowIso };
 
-      // Atualiza o painel de início visualmente sem fechar a sanfona
       const timeBox = document.getElementById(`time-box-${stepId}`);
       if (timeBox) {
         timeBox.innerHTML = `
@@ -1111,7 +1122,6 @@
         `;
       }
 
-      // Remove os overlays dos vídeos instantaneamente
       const mediaLock = document.getElementById(`media-lock-${stepId}`);
       if (mediaLock) {
         const overlay = mediaLock.querySelector('.media-overlay-lock');
@@ -1121,27 +1131,36 @@
       const contentBox = document.getElementById(`step-${stepId}`);
       if (contentBox) {
         contentBox.querySelectorAll('.link-disabled').forEach(l => l.classList.remove('link-disabled'));
-        contentBox.querySelectorAll('.media-overlay-lock').forEach(o => o.remove());
-        
-        // Ativa o botão de Concluir Módulo Principal se não tiver submódulos pendentes
-        const stepObj = cachedSteps.find(s => s.id === stepId);
-        const subList = stepObj.submodules || (stepObj.submodule && stepObj.submodule.title ? [stepObj.submodule] : []);
-        if (subList.length === 0) {
-          const btnMain = document.getElementById(`btn-main-complete-${stepId}`);
-          if (btnMain) btnMain.removeAttribute('disabled');
-        }
-
-        // Ativa botões de submódulos
-        subList.forEach((sub, sIdx) => {
-          const isSubDone = !!(currentStudent.progress && currentStudent.progress[`${stepId}_sub_${sIdx}`]);
-          if (!isSubDone) {
-            const btnSub = document.getElementById(`btn-sub-complete-${stepId}-${sIdx}`);
-            if (btnSub) btnSub.removeAttribute('disabled');
-          }
-        });
       }
 
-      // Salva no Firestore
+      await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
+    }
+  }
+
+  /* INICIAR SUBMÓDULO INDIVIDUALMENTE */
+  async function startSubmodule(event, stepId, subIdx) {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    if (!currentStudent.times) currentStudent.times = {};
+    const subKey = `${stepId}_sub_${subIdx}`;
+
+    if (!currentStudent.times[subKey]) {
+      const nowIso = new Date().toISOString();
+      currentStudent.times[subKey] = { start: nowIso };
+
+      const subTimeBox = document.getElementById(`time-box-sub-${stepId}-${subIdx}`);
+      if (subTimeBox) {
+        subTimeBox.innerHTML = `<p style="font-size:0.75rem;">🗓 <strong>Submódulo Iniciado em:</strong> ${formatDate(nowIso)}</p>`;
+      }
+
+      const subMediaLock = document.getElementById(`media-lock-sub-${stepId}-${subIdx}`);
+      if (subMediaLock) {
+        const overlay = subMediaLock.querySelector('.media-overlay-lock');
+        if (overlay) overlay.remove();
+      }
+
+      const btnSubComp = document.getElementById(`btn-sub-complete-${stepId}-${subIdx}`);
+      if (btnSubComp) btnSubComp.removeAttribute('disabled');
+
       await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
     }
   }
@@ -1154,7 +1173,6 @@
     checkAndFinalizeStepTimer(stepId);
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
-    // Atualiza o botão localmente mantendo a tela aberta
     const btnMain = document.getElementById(`btn-main-complete-${stepId}`);
     if (btnMain) {
       btnMain.innerText = '✅ Módulo Principal Concluído';
@@ -1173,7 +1191,6 @@
     checkAndFinalizeStepTimer(stepId);
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
-    // Atualiza botão do submódulo mantendo a tela aberta
     const btnSub = document.getElementById(`btn-sub-complete-${stepId}-${subIdx}`);
     if (btnSub) {
       btnSub.innerText = '✅ Submódulo Concluído';
