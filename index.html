@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeApps Academy v4.0 Cloud</title>
+  <title>LifeApps Academy v4.1 Cloud</title>
   
-  <!-- Google Fonts: Inter + Alex Brush -->
+  <!-- Fonte Google Fonts: Inter + Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -115,7 +115,6 @@
       line-height: 1.5;
     }
 
-    /* ILUSTRAÇÃO MOCKUP E-LEARNING (EFEITO VISUAL) */
     .hero-mockup-card {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(12px);
@@ -141,7 +140,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* CARD DE LOGIN DE ENTRADA */
     .login-card {
       background: white;
       padding: 32px 28px;
@@ -177,7 +175,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
-    /* ELEMENTOS DE FORMULÁRIO E BOTÕES */
     .form-group { margin-bottom: 16px; }
     label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.82rem; color: #334155; }
 
@@ -209,7 +206,6 @@
     .btn-success:hover { background-color: #059669; }
     .btn:disabled { background-color: #cbd5e1 !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
-    /* CARDS GERAIS DAS TELAS INTERNAS */
     .card { 
       background: var(--card-bg); padding: 24px; border-radius: var(--radius); 
       box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border);
@@ -217,7 +213,6 @@
 
     .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
 
-    /* KPIS GRID */
     .kpi-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
     }
@@ -231,12 +226,10 @@
     .kpi-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
     .kpi-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
 
-    /* ESTRELAS DE AVALIAÇÃO */
     .star-rating { display: inline-flex; gap: 4px; font-size: 1.3rem; cursor: pointer; }
     .star-rating .star { color: #cbd5e1; transition: color 0.2s; }
     .star-rating .star.filled { color: #f59e0b; }
 
-    /* ABAS DE NAVEGAÇÃO */
     .admin-tabs {
       display: flex; gap: 6px; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; padding-bottom: 2px;
     }
@@ -305,7 +298,6 @@
     .comment-bubble { background: #f1f5f9; border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
     .comment-date { font-size: 0.68rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    /* MODAL */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
@@ -316,7 +308,6 @@
       max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
     }
 
-    /* TABELAS RESPONSIVAS */
     .table-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; min-width: 600px; }
     th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
@@ -337,7 +328,6 @@
     .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; }
     .checkbox-grid label { font-weight: normal; display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 0.82rem; }
 
-    /* RESPONSIVIDADE MOBILE (ANDROID / IOS) */
     @media (max-width: 820px) {
       .landing-wrapper { grid-template-columns: 1fr; gap: 16px; }
       .landing-hero { min-height: auto; padding: 28px 20px; }
@@ -370,7 +360,6 @@
 
   <!-- VISTA 1: TELA INICIAL HERO & LOGIN UNIFICADO -->
   <div id="view-landing" class="landing-wrapper">
-    <!-- LADO ESQUERDO: HERO VISUAL DE APRESENTAÇÃO -->
     <div class="landing-hero">
       <div>
         <div class="hero-badge">🚀 Plataforma Oficial Cloud</div>
@@ -389,14 +378,12 @@
       </div>
     </div>
 
-    <!-- LADO DIREITO: CARD DE LOGIN (ALUNO / ADMIN) -->
     <div class="login-card">
       <div class="login-tabs">
         <button class="login-tab-btn active" id="btn-tab-student" onclick="switchLoginMode('student')">👨‍🎓 Colaborador</button>
         <button class="login-tab-btn" id="btn-tab-admin" onclick="switchLoginMode('admin')">🔒 Gestão / Admin</button>
       </div>
 
-      <!-- LOGIN ALUNO -->
       <form id="form-student-login">
         <h2 style="font-size:1.15rem; margin-bottom:4px;">Área do Aluno</h2>
         <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:16px;">Informe seu e-mail cadastrado pelo gestor.</p>
@@ -409,7 +396,6 @@
         <button type="submit" class="btn" style="width:100%; padding:12px; margin-top:6px;">Acessar Cursos →</button>
       </form>
 
-      <!-- LOGIN GESTOR / ADMIN -->
       <form id="form-admin-login" class="hidden">
         <h2 style="font-size:1.15rem; margin-bottom:4px;">Acesso Administrativo</h2>
         <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:16px;">Painel exclusivo de gestão da plataforma.</p>
@@ -436,7 +422,6 @@
       <button class="btn-secret" style="background:#e2e8f0; color:#334155; border:none;" onclick="exitTrail()">Sair / Trocar Usuário</button>
     </div>
 
-    <!-- KPIS DO ALUNO -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-number" id="kpi-enrolled">0</div>
@@ -469,7 +454,6 @@
       <button class="btn btn-secondary" onclick="closeAdmin()">Sair da Gestão</button>
     </div>
 
-    <!-- ABAS DE NAVEGAÇÃO DE GESTÃO -->
     <div class="admin-tabs">
       <button class="tab-btn active" id="tab-btn-kpis" onclick="switchAdminTab('kpis')">📊 KPIs & Relatórios</button>
       <button class="tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')">👥 Colaboradores</button>
@@ -478,7 +462,6 @@
       <button class="tab-btn" id="tab-btn-modules-list" onclick="switchAdminTab('modules-list')">⚙️ Gerenciar Módulos</button>
     </div>
 
-    <!-- ABA KPI & ANALYTICS -->
     <div id="tab-kpis" class="tab-content active">
       <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);">Métricas Globais do Treinamento</h3>
       
@@ -506,7 +489,6 @@
       </div>
     </div>
 
-    <!-- ABA 1: COLABORADORES -->
     <div id="tab-users" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
         <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);" id="form-user-title">Cadastrar Novo Colaborador</h3>
@@ -565,7 +547,6 @@
       </div>
     </div>
 
-    <!-- ABA 2: CURSOS -->
     <div id="tab-courses" class="tab-content">
       <div style="border:1px solid var(--border); padding:16px; border-radius:8px; background:#fff; margin-bottom:20px;">
         <h3 style="font-size:0.95rem; margin-bottom:12px; color:var(--primary);" id="form-course-title">Criar Novo Curso</h3>
@@ -589,7 +570,6 @@
       <div id="admin-courses-list" style="margin-top: 12px;"></div>
     </div>
 
-    <!-- ABA 3: CADASTRAR / EDITAR MÓDULO -->
     <div id="tab-modules-form" class="tab-content">
       <div style="border:1px solid var(--border); padding:18px; border-radius:8px; background:#fff;">
         <h3 style="font-size:1rem; color:var(--primary); margin-bottom:12px;" id="form-step-title">Cadastrar Novo Módulo</h3>
@@ -630,7 +610,6 @@
       </div>
     </div>
 
-    <!-- ABA 4: GERENCIAR MÓDULOS -->
     <div id="tab-modules-list" class="tab-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="font-size:0.95rem;">Todos os Módulos Cadastrados</h3>
@@ -641,7 +620,6 @@
 
   </div>
 
-  <!-- MODAIS DE DRILL-DOWN DOS KPIS -->
   <div id="kpi-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:10px;">
@@ -653,7 +631,7 @@
   </div>
 
   <footer>
-    <p><strong>LifeApps Academy</strong> • Versão 4.0 Cloud Hero</p>
+    <p><strong>LifeApps Academy</strong> • Versão 4.1 Cloud</p>
     <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px;">Uso exclusivo para colaboradores LifeApps</p>
     <p>
       Desenvolvido por <strong>Rafael Roberto Nascimento</strong> 
@@ -705,7 +683,6 @@
   let cachedUsers = {};
   let allStudentCoursesExpanded = false;
 
-  // ALTERNAR MODO DE LOGIN
   function switchLoginMode(mode) {
     document.getElementById('btn-tab-student').classList.remove('active');
     document.getElementById('btn-tab-admin').classList.remove('active');
@@ -1055,7 +1032,7 @@
         </div>
         
         <div class="step-content" id="step-${step.id}">
-          <div class="time-info-box">
+          <div class="time-info-box" id="time-box-${step.id}">
             ${!isStarted ? `
               <button type="button" class="btn" style="padding:6px 12px; font-size:0.8rem;" onclick="startModule(event, '${step.id}')">▶ Iniciar Módulo</button>
             ` : `
@@ -1067,7 +1044,7 @@
           <p style="margin-bottom:10px; color:#475569; font-size:0.9rem;">${step.desc}</p>
 
           ${embedVideo ? `
-            <div class="media-container-locked">
+            <div class="media-container-locked" id="media-lock-${step.id}">
               ${!isStarted ? `<div class="media-overlay-lock" onclick="alert('⚠️ Clique em \'▶ Iniciar Módulo\' para liberar o vídeo!')"><span style="font-size:1.5rem;">🔒</span><span>Vídeo Bloqueado</span></div>` : ''}
               <iframe width="100%" height="300" src="${embedVideo}" allowfullscreen style="border-radius:8px; border:none;"></iframe>
             </div>
@@ -1110,14 +1087,39 @@
     document.getElementById(id).classList.toggle('active');
   }
 
+  /* REGRA v4.1: INICIA O MÓDULO NA NUVEM SEM RECARREGAR NEM RECOLHER A TELA DO ALUNO */
   async function startModule(event, stepId) {
     if (event) { event.preventDefault(); event.stopPropagation(); }
     if (!currentStudent.times) currentStudent.times = {};
     if (!currentStudent.times[stepId]) {
-      currentStudent.times[stepId] = { start: new Date().toISOString() };
+      const nowIso = new Date().toISOString();
+      currentStudent.times[stepId] = { start: nowIso };
+
+      // Atualização Dinâmica Local para Evitar Recarregar a Tela
+      const timeBox = document.getElementById(`time-box-${stepId}`);
+      if (timeBox) {
+        timeBox.innerHTML = `
+          <p>🗓 <strong>Iniciado em:</strong> ${formatDate(nowIso)}</p>
+          <p style="margin-top:4px; color:#d97706;">⏳ Em andamento...</p>
+        `;
+      }
+
+      // Desbloqueia Overlays e Links na Tela do Aluno Instantaneamente
+      const mediaLock = document.getElementById(`media-lock-${stepId}`);
+      if (mediaLock) {
+        const overlay = mediaLock.querySelector('.media-overlay-lock');
+        if (overlay) overlay.remove();
+      }
+
+      // Habilita Links e Checkboxes Internos
+      const contentBox = document.getElementById(`step-${stepId}`);
+      if (contentBox) {
+        contentBox.querySelectorAll('.link-disabled').forEach(l => l.classList.remove('link-disabled'));
+        contentBox.querySelectorAll('input[type="checkbox"]').forEach(c => c.removeAttribute('disabled'));
+      }
+
+      // Atualiza Firestore em Segundo Plano
       await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
-      renderStudentCourses();
-      document.getElementById(`step-${stepId}`).classList.add('active');
     }
   }
 
@@ -1129,7 +1131,7 @@
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
-    document.getElementById(`step-${stepId}`).classList.add('active');
+    document.getElementById(`step-${stepId}`)?.classList.add('active');
   }
 
   async function markSubStep(stepId, subIdx, isChecked) {
@@ -1140,7 +1142,7 @@
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
-    document.getElementById(`step-${stepId}`).classList.add('active');
+    document.getElementById(`step-${stepId}`)?.classList.add('active');
   }
 
   function checkAndFinalizeStepTimer(stepId) {
@@ -1175,7 +1177,7 @@
     await db.collection('users').doc(currentStudent.email).set(currentStudent, { merge: true });
 
     renderStudentCourses();
-    document.getElementById(`step-${stepId}`).classList.add('active');
+    document.getElementById(`step-${stepId}`)?.classList.add('active');
   }
 
   // ==========================================
@@ -1702,7 +1704,7 @@
     switchAdminTab('modules-list');
   });
 
-  // GESTÃO E EDIÇÃO DE COLABORADORES
+  // CADASTRAR / EDITAR / RESETAR / GERENCIAR ALUNOS E CERTIFICADOS
   document.getElementById('form-add-user').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('admin-user-name').value.trim();
